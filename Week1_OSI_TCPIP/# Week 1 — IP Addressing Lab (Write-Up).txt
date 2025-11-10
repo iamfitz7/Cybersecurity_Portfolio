@@ -1,0 +1,33 @@
+# Week 1 — IP Addressing Lab (Packet Tracer)
+
+**Objective:** Assign static IPv4 addresses to two PCs in the same subnet, verify connectivity.
+
+**Topology:** Two PCs connected directly with a copper crossover cable.
+
+**Devices & Software:**
+- Cisco Packet Tracer
+- PC0 (Desktop)
+- PC1 (Desktop)
+
+**IP scheme:**
+- PC0: 192.168.1.10 /24
+- PC1: 192.168.1.11 /24
+- Subnet mask: 255.255.255.0
+- Gateway: (none used for this lab — same subnet)
+
+**Steps performed:**
+1. Launched Packet Tracer, added 2 PCs (PC0, PC1).
+2. Connected PCs using copper crossover cable (auto-select).
+3. On each PC → Desktop → IP Configuration: set static IPv4 addresses as above.
+4. From PC0: `ping 192.168.1.11` — received replies (4/4).
+5. Captured screenshot: `PC0_cmd_ping_192.168.1.11.png` and `PacketTracer_topology.png`.
+
+**Verification:**  
+Ping replies show 0% packet loss and TTL responses, confirming Layer 3 connectivity within the same subnet.
+
+**What I learned / notes:**
+- IP address and subnet mask determine whether two hosts are local (same subnet).
+- No gateway needed when both hosts are on the same subnet and directly connected.
+- APIPA (169.254.x.x) appears when DHCP fails but it's just not being used here.
+
+
