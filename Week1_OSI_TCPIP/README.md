@@ -14,7 +14,7 @@ This lab demonstrates basic IP addressing and connectivity between two PCs on th
 
 ## Verification
 - Ping from PC1 to PC2 was successful  
-- Screenshots and `.pkt` file included for reference
+- Screenshots included
 
 ---
 
