@@ -1,98 +1,117 @@
-# Week 1 – Networking Foundations
+# 🌐 Networking Fundamentals — OSI, TCP/IP, IP Addressing & Subnetting
 
-This week focused on building a strong foundation in basic IP addressing and inter-VLAN routing using Cisco Packet Tracer. The labs demonstrate both same-network communication and communication across different VLANs using router-on-a-stick.
+This repository documents hands-on labs focused on **core networking fundamentals** that underpin all modern networking and security work.
 
----
+The emphasis of these labs is not memorization alone, but **understanding how data moves through networks**, how addressing and subnetting shape communication, and how foundational concepts appear in real troubleshooting scenarios.
 
-## Lab 1 – IP Addressing Basics Lab
-
-### Objectives
-- Assign IP addresses to two PCs in the same /24 subnet  
-- Test connectivity using `ping`  
-- Understand basic same-network device communication  
-
-### Key Steps
-1. Assigned IP addresses to PC0 and PC1.
-2. Verified both devices were in the same subnet.
-3. Used `ping` to test connectivity between the two PCs.
-
-### Validation
-- Successful ping replies confirmed:
-  - Correct IP addressing
-  - Proper network connectivity
-  - Devices communicating within the same subnet
+These skills form the baseline for networking, security operations, and infrastructure roles.
 
 ---
 
-## Lab 2 – Inter-VLAN Routing, Ping & Traceroute (Router-on-a-Stick)
+## 🎯 Learning Goals
 
-### Objectives
-- Create VLAN 10 and VLAN 20
-- Assign switch ports to correct VLANs
-- Configure trunking between switch and router
-- Configure router subinterfaces
-- Verify inter-VLAN connectivity using `ping` and `traceroute`
+Through these labs, the objectives are to:
 
-### Network Design
-- **VLAN 10** → 192.168.10.0/24  
-- **VLAN 20** → 192.168.20.0/24  
-- One Layer 2 switch  
-- One router using router-on-a-stick  
-- One trunk link between switch and router  
-
-### Key Configuration Steps
-
-**On the Switch**
-- Created VLAN 10 and VLAN 20
-- Assigned access ports to the correct VLANs
-- Configured the router-facing port as a trunk
-
-**On the Router**
-- Created subinterfaces for each VLAN
-- Assigned default gateway IPs to each VLAN
-- Enabled 802.1Q encapsulation on each subinterface
-
-**On the PCs**
-- Assigned IP addresses in the correct subnet
-- Configured the correct default gateway
+- Understand the **OSI and TCP/IP models** and how they relate
+- Identify **protocols and responsibilities at each layer**
+- Assign and validate **IPv4 addressing**
+- Distinguish between public, private, and special-use IP ranges
+- Perform **subnetting without calculators**
+- Use basic tools like **ping and traceroute** to validate connectivity
+- Explain observed network behavior clearly and accurately
 
 ---
 
-### Testing & Verification
+## 🧠 OSI Model & Layered Communication
 
-- `ping` from VLAN 10 to VLAN 20 was successful  
-- `traceroute` showed:
-  - Hop 1 → Router subinterface (default gateway)
-  - Hop 2 → Destination PC in the other VLAN  
+These labs focus on the **7-layer OSI model** and how it structures network communication:
 
-✅ This confirms:
-- VLANs are correctly configured  
-- The trunk is functioning  
-- Subinterfaces are correct  
-- Inter-VLAN routing is working  
-- ICMP is successfully validating connectivity  
+- Identifying each OSI layer and its function
+- Mapping common protocols to the correct layers
+- Understanding how data flows top-down and bottom-up
+- Recognizing where issues occur when troubleshooting
+
+🧠 **Why this matters:**  
+The OSI model provides a shared language for diagnosing problems. Knowing *where* something breaks is often more important than knowing *what* breaks.
 
 ---
 
-## Files Included in This Lab
+## 🔁 OSI vs TCP/IP Model
 
-- `PC0_IP_Config.png` – PC0 IP configuration  
-- `PC1_IP_Config.png` – PC1 IP configuration  
-- `Switch_VLAN_Creation.png` – VLAN creation on the switch  
-- `Switch_VLAN_Assignment.png` – Port assignments  
-- `Switch_Trunk_Config.png` – Trunk configuration  
-- `Router_Subinterface_Config.png` – Router-on-a-stick configuration  
-- `Ping_Test_PC0_to_Router.png` – Ping verification  
-- `Ping_Test_PC1_to_Router.png` – Ping verification  
-- `Week1_PingTraceroute_Topology.png` – Network topology  
-- `Week1_PingTraceroute_VLAN_Lab.pkt` – Packet Tracer lab file  
+These labs examine how the **TCP/IP model** relates to OSI:
+
+- Comparing OSI’s 7 layers to TCP/IP’s condensed structure
+- Mapping OSI layers to their TCP/IP equivalents
+- Understanding why TCP/IP is used in practice
+- Learning how both models are referenced in real environments
+
+🧠 **Why this matters:**  
+Engineers and analysts move between both models constantly. Understanding the mapping prevents confusion during troubleshooting and documentation.
 
 ---
 
-## Skills Demonstrated (Week 1)
+## 🖧 IP Addressing Fundamentals
 
-- IP addressing (/24)
-- VLAN creation & port assignment
-- Trunk configuration
-- Router-on-a-stick inter-VLAN routing
-- ICMP testing (`ping`, `traceroute`)
+These labs focus on IPv4 addressing concepts:
+
+- Understanding IP classes
+- Distinguishing between public and private address ranges
+- Identifying special-use addresses (e.g., APIPA)
+- Assigning IP addresses to hosts within the same subnet
+- Verifying connectivity between devices
+
+📸 *Artifacts added:*  
+- IP configuration screenshots  
+- Successful ping validation  
+
+🧠 **Why this matters:**  
+Incorrect IP addressing is one of the most common causes of network failure. Clear addressing prevents outages and simplifies troubleshooting.
+
+---
+
+## 📐 Subnetting & Network Segmentation
+
+These labs build subnetting skills incrementally:
+
+- Subnetting common CIDR ranges (/24, /25, /26, /28)
+- Calculating network IDs, usable hosts, and broadcast addresses
+- Practicing subnetting **without calculators**
+- Applying subnetting to practical network scenarios
+- Using VLAN-based labs to reinforce segmentation concepts
+
+📸 *Artifacts added:*  
+- Subnetting examples  
+- IP configuration and validation screenshots  
+- Ping tests across defined segments  
+
+🧠 **Why this matters:**  
+Subnetting controls scale, performance, and security. Engineers must be able to reason about address space quickly and accurately.
+
+---
+
+## 📡 ICMP, Ping & Traceroute
+
+These labs use basic diagnostic tools to observe network behavior:
+
+- Understanding ICMP’s role in connectivity testing
+- Using `ping` to verify reachability
+- Using `traceroute` to observe packet paths
+- Interpreting latency, timeouts, and unreachable responses
+- Testing connectivity across VLANs
+
+📸 *Artifacts added:*  
+- Ping and traceroute outputs  
+- VLAN connectivity validation  
+
+🧠 **Why this matters:**  
+Ping and traceroute are often the **first tools used in incident response**. Correct interpretation is essential to avoid false conclusions.
+
+---
+
+## 🛠️ Tools & Technologies
+
+- **Cisco Packet Tracer** — Network simulation and validation  
+- **ICMP utilities** — Ping and traceroute  
+- **IPv4 addressing & CIDR notation**
+
+---
