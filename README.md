@@ -157,7 +157,7 @@ I do not test or scan systems that I do not own or have permission to test.
 
 If you want to connect or have suggestions for improving my documentation:
 
-- GitHub: (you can add your profile link here)
-- LinkedIn: (you can add your LinkedIn link here)
+- GitHub: https://github.com/iamfitz7
+- LinkedIn: https://www.linkedin.com/in/fitzgerald-afari-minta-868177352/?trk=public-profile-join-page
 
 Thanks for checking out my work! 🙌
