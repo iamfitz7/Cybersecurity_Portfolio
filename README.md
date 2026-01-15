@@ -1,9 +1,10 @@
 # 🔐 Cybersecurity & Networking Labs Portfolio
 
 Welcome! 👋
+
 This repository is my personal hands-on lab portfolio documenting practical work in networking, cybersecurity, and defensive security fundamentals. Every lab here follows a learning-by-doing approach: I design environments, configure systems, test scenarios, break things intentionally, troubleshoot them, and document what I learn.
 
-This repository is not a code library — it is evidence of real technical practice, problem-solving, and security thinking.
+This repository is not a code library. It is evidence of real technical practice, problem-solving, and security thinking.
 
 🎯 Purpose of This Repository
 
