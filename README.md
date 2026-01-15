@@ -1,13 +1,23 @@
 # 🔐 Cybersecurity & Networking Labs Portfolio
 
-Welcome! 👋  
-This repository is my personal lab portfolio where I document hands-on work in **networking** and **cybersecurity**. Everything here is built for learning-by-doing: I set things up, test them, break them, fix them, and then write down what I learned.
+Welcome! 👋
+This repository is my personal hands-on lab portfolio documenting practical work in networking, cybersecurity, and defensive security fundamentals. Every lab here follows a learning-by-doing approach: I design environments, configure systems, test scenarios, break things intentionally, troubleshoot them, and document what I learn.
 
-The goal of this repo is simple:  
-✅ Show real technical practice  
-✅ Keep clear proof (screenshots, configs, notes)  
-✅ Build strong fundamentals in networking + security  
-✅ Improve my troubleshooting and investigation skills  
+This repository is not a code library — it is evidence of real technical practice, problem-solving, and security thinking.
+
+🎯 Purpose of This Repository
+
+The goals of this portfolio are to:
+
+✅ Demonstrate real, hands-on technical practice (not theory-only work)
+
+✅ Provide clear proof of work (screenshots, configurations, logs, notes)
+
+✅ Build and reinforce strong networking & security fundamentals
+
+✅ Show how I think through problems, alerts, and investigations
+
+This repo is intentionally detailed so others can learn from the process, not just the final result.
 
 ---
 
@@ -148,12 +158,19 @@ If you’re reviewing this repo, here are easy ways to navigate:
 
 ## 📌 Notes & Safety
 
-⚠️ Everything here is for learning and is done in **isolated lab environments**.  
-I do not test or scan systems that I do not own or have permission to test.
+⚠️ All work in this repository is performed in isolated lab environments.
+
+❌ No scanning or testing of systems I do not own
+
+❌ No unauthorized or real‑world attacks
+
+✅ All activities are strictly for educational and defensive learning purposes
+
+This repository is intended for learning, documentation, and professional development.
 
 ---
 
-## 📫 Contact
+## 📫 Contact & Links
 
 If you want to connect or have suggestions for improving my documentation:
 
