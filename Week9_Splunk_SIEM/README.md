@@ -1,113 +1,71 @@
 # Week 9 — SIEM Basics with Splunk
 
-## Overview
-This folder documents hands-on work with a SIEM using Splunk. The focus is on installing Splunk, ingesting Windows Event Logs, running searches, building dashboards, and creating alerts based on security-related activity. All work is supported with screenshots and log evidence.
+This folder documents hands-on work with a SIEM platform, focusing on log collection, searching, alerts, and basic reporting. The goal is to show how security data is ingested, reviewed, and used to detect activity in a Windows environment.
 
 ## Learning Goals
-- Understand how a SIEM is used for security monitoring  
-- Install and configure Splunk in a lab environment  
-- Ingest and analyze Windows Event Logs  
-- Create searches, dashboards, and alerts  
-- Practice filtering and reporting on log data  
+- Understand how a SIEM collects and stores logs
+- Practice writing basic search queries
+- Build simple dashboards for visibility
+- Create alerts for suspicious activity
+- Review and filter logs for investigation
 
----
+## SIEM Setup and Access
+**What I did:**  
+Set up the SIEM platform and confirmed it was running and accessible on the system.
 
-## Splunk Installation and Setup
-**What I did**
-- Installed Splunk on a virtual machine  
-- Completed initial setup and verified Splunk access  
-- Confirmed Splunk services were running correctly  
+**Artifacts added:**  
+- Setup confirmation screenshots
 
-**Artifacts added**
-- Screenshot of Splunk web interface after login  
+**Why this matters:**  
+A SIEM must be properly running before logs, searches, and alerts can work correctly.
 
-**Why this matters**
-- A functioning SIEM is required before logs, alerts, and dashboards can be created.
+## Log Ingestion (Windows Event Logs)
+**What I did:**  
+Ingested Windows Event Logs into the SIEM to collect real system activity.
 
----
+**Artifacts added:**  
+- Screenshot showing event logs being received
 
-## Windows Event Log Ingestion
-**What I did**
-- Configured Splunk to collect Windows Event Logs  
-- Verified logs were successfully ingested  
-- Reviewed key log fields such as event ID, user, source, and time  
-
-**Artifacts added**
-- Screenshot showing Windows Event Logs in Splunk  
-- Screenshot highlighting important log fields  
-
-**Why this matters**
-- Windows Event Logs are essential for detecting login failures and system activity.
-
----
+**Why this matters:**  
+Event logs are a key data source for detecting logins, errors, and security events.
 
 ## Searches and Dashboards
-**What I did**
-- Created basic Splunk search queries  
-- Focused searches on failed login events  
-- Built a dashboard to visualize security data  
+**What I did:**  
+Created basic search queries and built dashboards to display important events, such as failed login attempts.
 
-**Artifacts added**
-- Screenshot of search queries  
-- Screenshot of completed dashboard  
+**Artifacts added:**  
+- Dashboard screenshots
+- Search result screenshots
 
-**Why this matters**
-- Dashboards provide quick visibility into system and user activity.
+**Why this matters:**  
+Searches and dashboards help analysts quickly see patterns and potential issues.
 
----
+## Alerts and Monitoring
+**What I did:**  
+Set up alerts to trigger when suspicious activity, such as port scans, is detected.
 
-## Alerts and Detection
-**What I did**
-- Created an alert for suspicious activity such as port scanning  
-- Configured alert conditions and trigger thresholds  
-- Reviewed alert behavior when conditions are met  
+**Artifacts added:**  
+- Screenshot of alert configuration
+- Alert trigger evidence
 
-**Artifacts added**
-- Screenshot of alert configuration  
-- Screenshot showing alert trigger logic  
+**Why this matters:**  
+Alerts allow faster response by notifying analysts when something needs attention.
 
-**Why this matters**
-- Alerts allow security teams to respond quickly to potential threats.
+## Filtering and Reporting
+**What I did:**  
+Practiced filtering logs by IP address and severity to narrow down results and review specific activity.
 
----
+**Artifacts added:**  
+- Filtered search screenshots
 
-## SIEM Filtering and Reporting
-**What I did**
-- Filtered logs by IP address and severity  
-- Ran targeted searches to reduce noise  
-- Documented example queries used for filtering  
-
-**Artifacts added**
-- Screenshot of filtered search results  
-- Screenshot of query details  
-
-**Why this matters**
-- Filtering helps analysts focus on meaningful security events.
-
----
-
-## Dashboard and Alert Integration
-**What I did**
-- Combined dashboards and alerts into a unified view  
-- Verified that visualizations and alerts work together  
-
-**Artifacts added**
-- Screenshot showing dashboards and active alerts  
-
-**Why this matters**
-- Integrated monitoring improves investigation and response efficiency.
-
----
-
-## Tools & Technologies
-- Splunk  
-- Windows Event Logs  
-- Virtual Machines (Windows/Linux)  
+**Why this matters:**  
+Filtering helps reduce noise and focus on relevant security events.
 
 ## Repository Structure
+
 Week_9_SIEM_Splunk/
-├── configs/       # Files related to SIEM and log settings
-├── searches/      # Saved search queries and filters
-├── dashboards/    # Dashboard views and related files
-├── alerts/        # Alert rules and trigger details
-└── screenshots/   # Images showing dashboards, alerts, and logs
+├── configs/ # Configuration files related to SIEM and logs
+├── searches/ # Saved search queries and filters
+├── dashboards/ # Dashboard views and layouts
+├── alerts/ # Alert rules and related details
+└── screenshots/ # Visual proof of setup, searches, and alerts
