@@ -106,8 +106,9 @@ This folder documents hands-on work with a SIEM using Splunk. The focus is on in
 
 ## Repository Structure
 Week_9_SIEM_Splunk/
-├── dashboards/
-├── alerts/
-├── searches/
-├── screenshots/
-└── notes/
+├── dashboards/ # Saved dashboards and visualizations
+├── alerts/ # Alert configurations and trigger details
+├── searches/ # SPL queries used for detection and filtering
+├── logs/ # Notes related to ingested log sources
+├── screenshots/ # Proof of dashboards, alerts, and searches
+└── notes/ # Short explanations and observations
