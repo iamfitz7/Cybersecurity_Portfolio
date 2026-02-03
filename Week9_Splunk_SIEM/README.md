@@ -79,9 +79,19 @@ Following proper workflow ensures alerts are handled consistently and metrics re
 ---
 
 ## 📁 Repository Structure
-Week_9_SIEM_Splunk/
-├── configs/ # SIEM and log-related configuration files
-├── searches/ # Saved search queries and logic examples
-├── alerts/ # Alert details and workflow references
-├── analysis/ # Notes on log sources and field observations
-└── screenshots/ # Visual proof of searches, alerts, and logs
+
+```text
+/
+├── siem-setup/
+│   ├── configs/
+│   └── screenshots/
+├── index-discovery/
+│   ├── notes/
+│   └── screenshots/
+├── searches/
+│   ├── spl-examples/
+│   └── screenshots/
+├── alerts-workflow/
+│   ├── mission-control/
+│   └── screenshots/
+└── README.md
