@@ -1,78 +1,87 @@
-# 🛡️ Week 9 — SIEM Basics with Splunk
+# 🛡️ Week 9 — SIEM Fundamentals with Splunk
 
-This folder documents hands-on work with a SIEM platform, focusing on log collection, searching, alerting, and basic reporting using security event data from a Windows system. The goal is to show how security activity is monitored and reviewed in a centralized tool.
+This folder documents hands-on SIEM work focused on understanding where security data lives, how to search it correctly, and how alerts are handled in a real SOC-style workflow. The emphasis is on accuracy, data awareness, and proper investigation habits.
 
 ---
 
 ## 🎯 Learning Goals
-- Understand how a SIEM collects and displays logs  
-- Practice writing basic search queries  
-- Build simple dashboards for visibility  
-- Create alerts for suspicious behavior  
-- Review and filter logs during investigation  
+- Identify and validate available log sources in a SIEM  
+- Understand how indexes map to real security telemetry  
+- Write accurate search queries using correct logic  
+- Recognize parsed fields and why they matter  
+- Follow proper alert handling and workflow discipline  
 
 ---
 
-## ⚙️ SIEM Setup
+## ⚙️ SIEM Setup and Access
 **What I did:**  
-Set up the SIEM platform and confirmed it was running and accessible.
+Installed and accessed the SIEM platform to confirm it was running and ready for log analysis.
 
 **Artifacts added:**  
 - Screenshot showing the SIEM interface running
 
 **Why this matters:**  
-A working SIEM is required before logs, searches, and alerts can function properly.
+A SIEM must be accessible and stable before any investigation or monitoring can happen.
 
 ---
 
-## 📥 Windows Event Log Ingestion
+## 🗂️ Index and Log Source Discovery
 **What I did:**  
-Collected Windows Event Logs and sent them into the SIEM for monitoring.
+Reviewed available indexes and identified which ones contain security-relevant data. Explored log sources to understand what type of events each index represents.
 
 **Artifacts added:**  
-- Screenshot showing Windows Event Logs being received
+- Screenshot of available indexes  
+- Screenshot of raw and parsed events from a security index
 
 **Why this matters:**  
-Event logs provide key security data such as login activity and system events.
+Knowing where data lives prevents wasted time and missed evidence during investigations.
 
 ---
 
-## 🔍 Searches and Dashboards
+## 🔍 SPL Fundamentals and Search Logic
 **What I did:**  
-Created search queries and dashboards to display important events, including failed login attempts.
+Ran search queries using different logic types and field-based filtering. Compared typed searches with GUI-based filtering to validate results.
 
 **Artifacts added:**  
-- Search result screenshots  
-- Dashboard screenshots  
+- Screenshots showing search logic differences  
+- Screenshots of filtered results
 
 **Why this matters:**  
-Dashboards and searches help quickly identify patterns and potential issues.
+Incorrect logic can lead to false conclusions and missed security events.
 
 ---
 
-## 🚨 Alerts and Detection
+## 🧩 Log Parsing and Field Awareness
 **What I did:**  
-Set up alerts to trigger when suspicious activity, such as port scans, is detected.
+Reviewed raw logs and parsed fields to understand how event data is structured. Used fields like usernames and hostnames to filter results accurately.
 
 **Artifacts added:**  
-- Screenshot of alert configuration  
-- Screenshot showing the alert trigger  
+- Screenshot showing raw vs parsed event views  
+- Screenshot of field-based filtering
 
 **Why this matters:**  
-Alerts help detect threats without constant manual monitoring.
+Understanding fields and schemas explains why some searches work and others fail.
 
 ---
 
-## 📊 Filtering and Reporting
+## 🚨 Mission Control Workflow and Alert Handling
 **What I did:**  
-Filtered logs by IP address and severity to focus on specific security events.
+Reviewed alerts in the SIEM workflow interface, assigned ownership, updated alert status, and inspected the related detection logic.
 
 **Artifacts added:**  
-- Screenshots of filtered searches  
+- Screenshot of alert overview  
+- Screenshot showing alert status changes  
+- Screenshot of detection rule and search results
 
 **Why this matters:**  
-Filtering reduces noise and helps narrow down relevant activity faster.
+Following proper workflow ensures alerts are handled consistently and metrics remain accurate.
 
 ---
 
-
+## 📁 Repository Structure
+Week_9_SIEM_Splunk/
+├── configs/ # SIEM and log-related configuration files
+├── searches/ # Saved search queries and logic examples
+├── alerts/ # Alert details and workflow references
+├── analysis/ # Notes on log sources and field observations
+└── screenshots/ # Visual proof of searches, alerts, and logs
