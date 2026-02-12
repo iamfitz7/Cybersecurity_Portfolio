@@ -96,23 +96,6 @@ Typical contents you’ll see inside a lab folder:
 - `screenshots/` (evidence images, consistently named)
 - supporting notes / exports (when used)
 
-Example of the current structure:
-
-```text`
-Cybersecurity_Portfolio/
-├─ Week1_OSI_TCPIP/
-├─ Week2_Subnetting_PacketTracer/
-├─ Week3_DNS_HTTP_DHCP/
-├─ Week4_WiresharkDeepDive/
-├─ Week5_pfSense/
-├─ Week6_Firewall_Advanced_VPN/
-├─ Week7_Windows_Active_Directory/
-├─ Week8_CryptographyFundamentals/
-├─ Week9_Splunk_SIEM/
-├─ Week10_SplunkSIEM2/
-├─ Week11_SIEM_Investigations_&_Alert_Prioritization/
-└─ README.md
-
 🧾 Evidence Standards I Follow
 
 Most labs include:
@@ -186,3 +169,76 @@ GitHub: https://github.com/iamfitz7
 LinkedIn: https://www.linkedin.com/in/fitzgerald-afari-minta-868177352/
 
 Thanks for checking out my work! 🙌
+
+## 🗂️ My Repository Structure
+
+```text
+Cybersecurity_Portfolio/
+├── README.md
+
+├── networking-fundamentals/
+│   ├── packet-tracer-labs/
+│   ├── subnetting-exercises/
+│   ├── screenshots/
+│   └── README.md
+
+├── traffic-analysis/
+│   ├── wireshark-handshakes/
+│   ├── dns-http-analysis/
+│   ├── filters-notes/
+│   ├── screenshots/
+│   └── README.md
+
+├── defensive-network-security/
+│   ├── firewall-rules/
+│   ├── nat-analysis/
+│   ├── ids-alert-testing/
+│   ├── vpn-validation/
+│   ├── screenshots/
+│   └── README.md
+
+├── identity-and-endpoint-security/
+│   ├── active-directory/
+│   ├── group-policy/
+│   ├── windows-event-logs/
+│   ├── screenshots/
+│   └── README.md
+
+├── cryptography-and-tls/
+│   ├── hashing-integrity/
+│   ├── certificates-pki/
+│   ├── tls-handshake-validation/
+│   ├── screenshots/
+│   └── README.md
+
+├── siem-and-detections/
+│   ├── index-validation/
+│   ├── spl-workflows/
+│   ├── alert-logic/
+│   ├── screenshots/
+│   └── README.md
+
+├── soc-investigations/
+│   ├── volume-detection/
+│   │   ├── spl-workflows/
+│   │   ├── screenshots/
+│   │   └── README.md
+│   │
+│   ├── vulnerable-software/
+│   │   ├── notepadpp-analysis/
+│   │   ├── screenshots/
+│   │   └── README.md
+│   │
+│   ├── alert-enrichment/
+│   │   ├── web-log-pivots/
+│   │   ├── osint-enrichment/
+│   │   ├── screenshots/
+│   │   └── README.md
+│   │
+│   ├── decision-notes/
+│   │   ├── escalation-summaries/
+│   │   ├── false-positive-closures/
+│   │   ├── tuning-recommendations/
+│   │   └── README.md
+│
+└── screenshots-guidelines.md
