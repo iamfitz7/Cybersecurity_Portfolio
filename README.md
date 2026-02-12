@@ -63,7 +63,7 @@ The goals of this portfolio are to:
 
 ## ⭐ Featured SOC Investigations (High-Signal Work)
 
-These are examples of the strongest “SOC-ready” projects in this repo:
+These are examples of my strongest “SOC-ready” projects:
 
 - **Suspicious PowerShell LOLBAS Investigation**
   - Alert → rule → SPL → evidence review → OSINT enrichment → escalation decision
