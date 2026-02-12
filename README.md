@@ -96,9 +96,12 @@ Typical contents you’ll see inside a lab folder:
 - `screenshots/` (evidence images, consistently named)
 - supporting notes / exports (when used)
 
-Example of the current structure:
 
 ```text
+## 📁 Repository Structure
+
+```text
+/
 Cybersecurity_Portfolio/
 ├─ Week1_OSI_TCPIP/
 ├─ Week2_Subnetting_PacketTracer/
@@ -127,51 +130,78 @@ Most labs include:
 
 ---
 
-## 🧰 Tools I Commonly Use
+🧾 Evidence Standards I Follow
 
-These may appear throughout the repo:
+Most labs include:
 
-- 🖥️ VirtualBox / VMware (virtual lab environments)
-- 🧪 Kali Linux + Windows + Linux VMs
-- 🌐 Wireshark (packet capture + analysis)
-- 🧱 pfSense (firewall + NAT practice)
-- 🛡️ Suricata (IDS alert testing)
-- 🧠 Packet Tracer (network builds + simulations)
-- 📊 Log tools / SIEM practice (searching + alerts)
-- 🔎 Scanning tools (only in controlled environments)
+✅ Goal (what I’m trying to learn)
 
----
+✅ Tools used
 
-## ✅ How To Use This Repo
+✅ Steps taken (repeatable)
 
-If you’re reviewing this repo, here are easy ways to navigate:
+✅ Screenshots / logs (proof)
 
-1. Start with **Networking Foundations** if you want basics
-2. Check **Wireshark** folders if you like traffic analysis
-3. Look at **Firewall/IDS** if you want defensive work
-4. Open the **Investigation write-ups** if you want to see how I think through alerts
+✅ Findings + what they mean
 
----
+✅ A clear outcome (what I would do next in a real environment)
 
-## 📌 Notes & Safety
+I avoid exaggerating results. If something cannot be proven from the available telemetry, I document that limitation instead of guessing.
+
+🧰 Tools & Platforms Used
+
+You may see these tools across different weeks:
+
+Splunk Enterprise / Splunk ES (Search & Reporting, Mission Control)
+
+Wireshark + tcpdump
+
+Cisco Packet Tracer
+
+pfSense firewall
+
+Suricata IDS
+
+OpenVPN concepts + VPN validation workflows
+
+Windows Server (Active Directory, Group Policy)
+
+Windows Event Viewer / Security logs
+
+Linux CLI utilities (permissions, hashing, OpenSSL)
+
+OSINT tools (used for enrichment in investigations):
+
+VirusTotal
+
+urlscan.io
+
+✅ How To Review This Repo
+
+If you’re browsing this as a reviewer:
+
+Start with Weeks 1–4 for networking + packet analysis fundamentals
+
+Check Weeks 5–8 for defense-in-depth (firewall/IDS/VPN/AD/TLS)
+
+Go to Weeks 9–11 for SIEM + SOC investigation work (highest job relevance)
+
+📌 Safety & Ethics
 
 ⚠️ All work in this repository is performed in isolated lab environments.
 
-❌ No scanning or testing of systems I do not own
+❌ No unauthorized scanning or testing of real systems
 
-❌ No unauthorized or real‑world attacks
+❌ No real-world attacks
 
-✅ All activities are strictly for educational and defensive learning purposes
+✅ Activities are strictly educational and defensive
 
-This repository is intended for learning, documentation, and professional development.
+📫 Contact & Links
 
----
+GitHub: https://github.com/iamfitz7
 
-## 📫 Contact & Links
+LinkedIn: www.linkedin.com/in/fitzgerald-afari-minta-868177352
 
-If you want to connect or have suggestions for improving my documentation:
 
-- GitHub: https://github.com/iamfitz7
-- LinkedIn: https://www.linkedin.com/in/fitzgerald-afari-minta-868177352/?trk=public-profile-join-page
 
 Thanks for checking out my work! 🙌
