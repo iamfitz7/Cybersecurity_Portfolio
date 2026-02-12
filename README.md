@@ -64,7 +64,7 @@ This portfolio exists to:
 
 ## ⭐ Featured SOC Investigations (High-Signal Work)
 
-Examples of the most SOC-relevant projects in this repository include:
+Examples of the most SOC-relevant projects in my repository include:
 
 - **Suspicious PowerShell LOLBAS Investigation**
   - Alert → detection rule → SPL → evidence review → OSINT enrichment → escalation decision
