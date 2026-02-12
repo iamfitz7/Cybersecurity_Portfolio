@@ -4,7 +4,7 @@ Welcome! 👋
 This repository documents my hands-on work in **networking, cybersecurity, and SOC-style defensive investigations**.
 
 This is **not a code repository**.  
-It is **evidence of practical technical work**—how I build environments, validate behavior, investigate security signals, and document findings using screenshots, logs, configurations, and structured write-ups.
+It is **evidence of practical technical work on how I build environments, validate behavior, investigate security signals, and document findings using screenshots, logs, configurations, and structured write-ups.**
 
 ---
 
