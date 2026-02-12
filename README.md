@@ -1,121 +1,117 @@
 # 🔐 Cybersecurity & Networking Labs Portfolio
 
-Welcome! 👋
+Welcome! 👋  
+This repository is my hands-on lab portfolio where I document practical work in networking, cybersecurity, and SOC-style defensive investigations.
 
-This repository is my personal hands-on lab portfolio documenting practical work in networking, cybersecurity, and defensive security fundamentals. Every lab here follows a learning-by-doing approach: I design environments, configure systems, test scenarios, break things intentionally, troubleshoot them, and document what I learn.
+This is **not a code library**. It is **evidence of real technical practice**: how I build, test, troubleshoot, investigate, and document what I learn using screenshots, logs, configurations, and clear write-ups.
 
-This repository is not a code library. It is evidence of real technical practice, problem-solving, and security thinking.
+---
 
-🎯 Purpose of This Repository
+## 🎯 Why This Repository Exists
 
 The goals of this portfolio are to:
 
-✅ Demonstrate real, hands-on technical practice (not theory-only work)
-
-✅ Provide clear proof of work (screenshots, configurations, logs, notes)
-
-✅ Build and reinforce strong networking & security fundamentals
-
-✅ Show how I think through problems, alerts, and investigations
-
-This repo is intentionally detailed so others can learn from the process, not just the final result.
+- ✅ Show real hands-on practice (not theory-only learning)
+- ✅ Prove work with evidence (screenshots, configs, logs, investigation notes)
+- ✅ Build strong networking + security fundamentals
+- ✅ Practice SOC thinking: **observe → validate → investigate → document → decide**
+- ✅ Write in a clear, repeatable way that others can follow
 
 ---
 
-## 🎯 What You’ll Find In This Repo
+## 🧭 What You’ll Find Here
 
-This repo includes labs and notes in areas like:
+### 🌐 Networking Foundations
+- OSI & TCP/IP mapping (with real traffic examples)
+- IP addressing, subnetting, network/broadcast/usable ranges
+- VLAN segmentation and basic routing behavior
+- Packet Tracer topology builds + connectivity validation (ping/traceroute)
 
-### 🌐 Networking
-- OSI & TCP/IP concepts (how traffic moves)
-- IP addressing + subnetting practice
-- VLANs and network segmentation
-- Routing concepts (and troubleshooting paths)
-- NAT basics
-- Packet Tracer network builds + diagrams
+### 🕵️ Traffic Analysis (Wireshark / tcpdump)
+- TCP 3-way handshake evidence (SYN → SYN/ACK → ACK)
+- UDP behavior and investigation differences vs TCP
+- DNS query/response visibility (SOC-relevant)
+- HTTP request/response behavior (GET/POST) and what changes under HTTPS
+- Filtering skills (protocol, port, IP, fields)
 
-### 🕵️ Traffic Analysis (Wireshark)
-- Capturing DNS, HTTP/HTTPS, TCP, UDP
-- TCP 3-way handshake analysis (SYN → SYN/ACK → ACK)
-- Filtering traffic by IP, port, and protocol
-- Explaining packets in a simple, readable way
+### 🧱 Defensive Network Security (pfSense / Suricata / VPN)
+- Firewall policy building: allow/deny rules, rule order, testing before/after
+- NAT configuration understanding and documentation
+- IDS alert generation (controlled scans) + tuning to reduce noise
+- VPN deployment and encryption validation using packet capture evidence
+- Defense-in-depth: firewall + IDS + VPN working together
 
-### 🧱 Firewalls + Network Defense
-- Firewall rules (allow/deny, inbound/outbound)
-- NAT rules and why they matter
-- pfSense configurations and screenshots
-- IDS/IPS concepts + alert testing (example: scans generating alerts)
+### 🧩 Identity & Windows Security (Active Directory / Logs)
+- AD basics: users, groups, OUs
+- Group Policy creation and enforcement (security hardening examples)
+- Windows Security log review (failed logons and audit evidence)
 
-### 🧩 Identity & System Security
-- Windows user/group basics
-- Basic policy hardening examples (like password rules)
-- Event log review (login failures, suspicious activity)
+### 🔐 Cryptography & TLS / PKI
+- Symmetric vs asymmetric encryption (practical understanding)
+- Hashing (SHA-256 vs MD5) and integrity validation
+- Self-signed certificates and basic PKI concepts
+- TLS enablement + verification using browser + Wireshark handshake evidence
 
-### 📊 Logging & Alerting
-- Searching logs to find suspicious behavior
-- Creating simple alerts (example: failed login patterns)
-- Writing short investigation notes based on evidence
-
-### 🧪 Security Testing (Controlled Labs)
-- Port/service scanning in isolated environments
-- Vulnerability scanning practice (reporting + remediation notes)
-- Web app security practice (learning common vulnerabilities)
+### 📊 SIEM + SOC Investigations (Splunk)
+- Index discovery and log source validation (avoiding “wrong index” mistakes)
+- SPL fundamentals and logic validation (AND/OR, grouping, field-based searches)
+- Raw vs parsed log understanding (field extraction awareness)
+- Mission Control workflow discipline (ownership, status tracking, rule validation)
+- SOC-style investigations with defensible conclusions and correct language
 
 ---
 
-## 🗂️ Repository Structure (How It’s Organized)
+## ⭐ Featured SOC Investigations (High-Signal Work)
 
-Folders are organized by topic so it’s easy to browse:
+These are examples of the strongest “SOC-ready” projects in this repo:
 
-- `01_Networking_Foundations/`
-  - subnetting practice
-  - VLAN labs
-  - routing labs
-  - Packet Tracer files + screenshots
+- **Suspicious PowerShell LOLBAS Investigation**
+  - Alert → rule → SPL → evidence review → OSINT enrichment → escalation decision
 
-- `02_Wireshark_Traffic_Analysis/`
-  - DNS capture + explanation
-  - HTTP capture + explanation
-  - TCP handshake screenshots
-  - filters used + what I learned
+- **Malicious Domain Access Allowed (Proxy + OSINT)**
+  - Focused on *allowed* traffic risk using proxy/Zscaler logs  
+  - Multi-user correlation + VirusTotal/urlscan enrichment + decision outcomes
 
-- `03_Firewalls_pfSense/`
-  - firewall rule screenshots
-  - NAT examples
-  - short notes explaining rule logic
+- **True Positive vs False Positive vs Tuning Decisions**
+  - Structured decision-making with clear role boundaries (what L1 does vs escalates)
 
-- `04_IDS_Suricata/`
-  - alert screenshots
-  - testing steps (what caused the alert)
-  - notes on reducing false positives
+- **High-Volume Outbound Transfer Detection & Prioritization**
+  - Built a reusable SPL workflow to convert raw bytes → MB, apply thresholds, and rank top offenders  
+  - Correct framing: “potential exfiltration patterns” (not confirmed theft)
 
-- `05_VPN_and_Encryption/`
-  - VPN setup notes
-  - proof of encrypted traffic
-  - screenshots + verification steps
+- **Vulnerable Notepad++ Execution Investigation (Sysmon / Splunk)**
+  - Scoped impacted hosts, ranked by frequency, checked lineage + execution context  
+  - Documented telemetry limitations honestly and produced a defensible conclusion
 
-- `06_Active_Directory_and_Logs/`
-  - user/group examples
-  - log review screenshots
-  - short notes: what happened + why it matters
+---
 
-- `07_SIEM_and_Investigations/`
-  - searches and alerts
-  - investigation write-ups
-  - “what I saw, what it means, what I would do next”
+## 🗂️ Repository Structure
 
-- `08_Vulnerability_Scanning/`
-  - scan results
-  - risk notes (high/medium/low)
-  - recommended fixes
+This repo is organized mainly by **week-based folders**, with each week containing one or more labs and their deliverables (write-ups, screenshots, notes, and sometimes case files).
 
-- `09_Attack_Defense_Practice/`
-  - controlled simulations
-  - detection evidence
-  - response notes and lessons learned
+Typical contents you’ll see inside a lab folder:
 
-(If you don’t see all folders yet, that just means I’m still building and uploading labs over time ✅)
+- `README.md` (the lab write-up)
+- `Case_File.md` (when the lab is written as an investigation case file)
+- `screenshots/` (evidence images, consistently named)
+- supporting notes / exports (when used)
 
+Example of the current structure:
+
+```text
+Cybersecurity_Portfolio/
+├─ Week1_OSI_TCPIP/
+├─ Week2_Subnetting_PacketTracer/
+├─ Week3_DNS_HTTP_DHCP/
+├─ Week4_WiresharkDeepDive/
+├─ Week5_pfSense/
+├─ Week6_Firewall_Advanced_VPN/
+├─ Week7_Windows_Active_Directory/
+├─ Week8_CryptographyFundamentals/
+├─ Week9_Splunk_SIEM/
+├─ Week10_SplunkSIEM2/
+├─ Week11_SIEM_Investigations_&_Alert_Prioritization/
+└─ README.md
 ---
 
 ## 🧾 What Each Lab Includes
