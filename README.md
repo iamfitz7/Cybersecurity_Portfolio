@@ -489,5 +489,4 @@ Cybersecurity_Portfolio/
     ├── network-ir-traffic-analysis/
     ├── compliance-controls-assessment/
     ├── web-app-incident-response/
-    ├── kc7-scenarios/
     └── README.md
