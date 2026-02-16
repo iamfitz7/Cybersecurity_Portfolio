@@ -238,7 +238,7 @@ What this proves:
 
 ---
 
-## 🛡️ NEW: Week 12 — Potential Data Exfiltration (Splunk)
+## 🛡️ Potential Data Exfiltration (Splunk)
 
 Week 12 is a full SOC-style case folder built around a single alert and expanded into a complete investigation package.  
 This work reflects how an L1 analyst investigates potential exfiltration in a real SOC: **validate the alert, reduce noise, enrich with context, identify indicators, and escalate with defensible evidence**.
