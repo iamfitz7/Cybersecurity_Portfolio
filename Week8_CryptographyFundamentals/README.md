@@ -124,9 +124,66 @@ Strong security comes from layering controls. Cryptography plays a key role in p
 - Certificate generation utilities  
 - Local web server  
 - Wireshark  
-- Virtual machine lab environment  
+- Virtual machine lab environment
+  
+---
+
+## 🔐 GPG Encryption & Integrity Validation (Week 8 Lab)
+
+This lab focused on using public key cryptography to encrypt files and verify software integrity in a controlled environment.
+
+The main goal was not just to encrypt data, but to understand how encryption, key management, and integrity validation work together in real systems.
 
 ---
+
+### 🧪 What Was Done
+
+- Generated a public/private key pair using GPG (Kleopatra)
+- Created a plaintext file and encrypted it using my key
+- Verified that encrypted output was unreadable without decryption
+- Exported a public key for sharing and trust establishment
+- Validated the integrity of a downloaded file using SHA256 hashing in PowerShell
+- Executed a script that generated an additional encrypted output file
+
+📸 *Artifacts added:*  
+- Checksum validation screenshot  
+- PowerShell command and output  
+- Encrypted `.gpg` file  
+- Exported public key (`.asc`)  
+- Script-generated encrypted output  
+
+---
+
+### 🧠 Key Observations
+
+- Encryption alone is not enough — correct key usage determines who can access the data  
+- Encrypted output confirms transformation, but not necessarily correct configuration  
+- Hash validation plays a critical role in ensuring software has not been altered  
+- Small syntax errors (like incorrect hash algorithm formatting) can break validation steps  
+
+---
+
+### ⚠️ Challenges Faced
+
+- PowerShell checksum command initially failed due to incorrect syntax (`SHA 256` vs `SHA256`)
+- Multiple encrypted file outputs required careful validation to confirm which file was correct
+- Understanding when encryption is properly applied vs. just successfully executed
+
+---
+
+### 🧠 Why This Matters
+
+This lab reflects real-world security practices where:
+
+- Sensitive files must be encrypted before storage or transfer  
+- Public keys are shared to enable secure communication  
+- Software integrity must be verified before installation  
+- Misconfigurations can silently introduce risk even when systems appear to work  
+
+Understanding these concepts helps build a foundation for secure system design and data protection.
+
+---
+
 
 ## 📁 Repository Structure
 
@@ -134,9 +191,9 @@ Strong security comes from layering controls. Cryptography plays a key role in p
 /
 ├── encryption/
 │   ├── symmetric-asymmetric/
-│   └── examples/
+│   └── gpg-encryption/
 ├── hashing/
-│   └── hash-examples/
+│   └── integrity-validation/
 ├── pki/
 │   └── certificates/
 ├── tls/
