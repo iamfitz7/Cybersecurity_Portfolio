@@ -230,16 +230,3 @@ This is a **thinking and workflow lab**, which is often more valuable.
 
 This lab simulated a multi-host PowerShell investigation to practice incident response workflows. The project focused on transforming an alert into a structured case, tracking observables, analyzing endpoint behavior, expanding scope, and making containment decisions. The investigation emphasized structured thinking, documentation, and proportional response — core skills used in real-world SOC and incident response environments.
 ---
-
-## 📁 Lab Structure
-
-Week15_Endpoint_Investigation_Workflows/
-└── Lab01_Multi_Host_PowerShell_Investigation/
-├── README.md
-├── case_file/
-│ └── Case_File_Multi_Host_PowerShell_Investigation.md
-├── notes/
-│ └── Investigation_Notes.md
-├── artifacts/
-│ └── Observables_and_Timeline.md
-└── screenshots/
