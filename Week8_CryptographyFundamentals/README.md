@@ -183,6 +183,110 @@ This lab reflects real-world security practices where:
 Understanding these concepts helps build a foundation for secure system design and data protection.
 
 ---
+# 🔐 Week 8 Lab #7: Public Key Infrastructure (PKI) — Certificate Authority Chain Creation
+
+## 1. Context: What Area This Touches & Why It Matters
+
+This work focuses on Public Key Infrastructure (PKI), which is responsible for establishing trust and enabling secure communication between systems. PKI is used in things like HTTPS, VPNs, and authentication systems.
+
+If this process is misunderstood or misconfigured, systems may trust the wrong entities or fail to validate identity correctly, which can lead to serious security risks.
+
+---
+
+## 2. Realistic Scenario: When This Is Actually Used
+
+A realistic situation is when a system is failing to establish a secure connection, or a certificate is being rejected unexpectedly.
+
+At that point, the question becomes:
+- Is the certificate valid?
+- Is the trust chain correct?
+- Is the issuing authority trusted?
+
+This type of issue requires understanding how certificates are created and verified across a full trust chain.
+
+---
+
+## 3. Thinking Process: How I Approached the Problem
+
+Going into this, I expected that creating certificates would be straightforward, but I quickly realized that small mistakes (like file paths, config issues, or naming inconsistencies) could break the entire chain.
+
+I focused on:
+- Making sure each step logically built on the previous one
+- Verifying outputs instead of assuming they worked
+- Watching for errors in OpenSSL commands and correcting them early
+
+At times, things didn’t work immediately, especially with configuration files and signing steps. That forced me to slow down and actually understand what each command was doing instead of just running it.
+
+---
+
+## 4. Signals That Actually Mattered
+
+Two key signals stood out:
+
+- Successful certificate verification (`openssl verify`)
+  → Confirmed that the trust chain was correctly built
+
+- Certificate inspection output (`openssl x509 -text`)
+  → Showed details like issuer, subject, and key usage, which helped confirm each certificate’s role
+
+Instead of focusing on all output, I paid attention to whether:
+- The issuer matched the expected authority
+- The chain validated correctly
+
+---
+
+## 5. Decision: What Action Made Sense
+
+Based on the outputs, the correct action was to:
+- Confirm the trust chain is valid
+- Document the results clearly
+- Package the files for submission and future reference
+
+If this were a real environment, the next step would be to deploy the certificates into a system and test real connections.
+
+---
+
+## 6. Risks, Trade-Offs, and Limitations
+
+One major risk is trusting a certificate without verifying its chain. If a root CA is compromised or misused, everything signed by it becomes untrusted.
+
+There’s also a trade-off between:
+- Security (strict validation)
+- Usability (ease of deployment)
+
+This lab focuses on creation and validation, but not full enterprise-scale certificate management.
+
+---
+
+## 7. Common Beginner Mistake
+
+A common mistake is thinking certificates “just work” after being created.
+
+In reality:
+- Trust depends on the full chain
+- Every certificate must be validated properly
+- Misconfigured files or paths can silently break trust
+
+Understanding the chain is more important than just generating keys.
+
+---
+
+## 8. One Practical Improvement
+
+A practical improvement would be adding structured logging or documentation for certificate creation steps.
+
+In real environments, this helps:
+- Track certificate usage
+- Prevent misconfiguration
+- Support troubleshooting when things fail
+
+---
+
+## 9. Summary
+
+This work helped me understand how trust is actually built between systems using certificates. Instead of just generating keys, I focused on verifying the full chain and understanding how each part connects.
+
+It showed me that small configuration details can have a big impact on whether systems trust each other. This is something I would approach carefully in a real environment, especially when dealing with secure communications.
 
 
 ## 📁 Repository Structure
