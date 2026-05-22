@@ -1,58 +1,48 @@
 # 🖥️ Week 15 — Endpoint Investigation Workflows
 
-This section of the repository focuses on:
+This section focuses on **endpoint investigation methodology**, **incident response thinking**, **SIEM correlation**, **EDR-style endpoint analysis**, **authentication review**, **malware execution investigation**, and **structured case documentation**.
 
-- Endpoint investigation methodology
-- Incident response thinking
-- SIEM correlation workflows
-- EDR-style endpoint analysis
-- Authentication review
-- Lateral movement investigation
-- Blast radius assessment
-- Structured case handling
-- Evidence validation
-- Escalation and containment reasoning
-
-The projects in this week are designed to simulate how real SOC analysts and incident responders investigate suspicious behavior across systems, validate findings, connect evidence across multiple telemetry sources, and make careful response decisions based on available information.
+The labs in this week are designed to show how SOC analysts and incident responders investigate suspicious activity across systems, validate evidence, connect multiple telemetry sources, assess scope, and make careful escalation or containment decisions.
 
 Rather than focusing only on alerts or individual tools, these labs focus heavily on:
 
 - Investigation structure
 - Process behavior analysis
 - Observable tracking
-- SIEM + EDR correlation
+- SIEM and EDR correlation
 - Authentication analysis
 - Service creation review
 - Remote execution indicators
+- Malware execution analysis
 - Signal vs noise analysis
+- Blast radius thinking
 - Documentation discipline
 - Professional investigation workflows
 
-These projects are intentionally workflow-focused and investigation-focused to better reflect how real SOC and incident response environments operate.
+These projects are intentionally workflow-focused to better reflect how real SOC and incident response environments operate.
 
 ---
 
-# 📁 Labs Included
+## 📁 Labs Included
 
 | Lab | Project |
 |---|---|
 | Lab 01 | Multi-Host PowerShell Investigation |
 | Lab 02 | Elastic + Splunk Malicious Domain Investigation |
 | Lab 03 | SMB & RDP Port Scanning / Lateral Movement Investigation |
+| Lab 04 | Suspicious File Drop & Malware Execution Analysis |
 
 ---
 
 # 🖥️ Lab 01 — Multi-Host PowerShell Investigation
 
----
-
 ## 🛡️ Overview
 
 This lab simulates a **multi-host endpoint investigation** involving suspicious PowerShell execution across multiple Windows workstations.
 
-The focus of this project is incident response thinking, not tool usage.
+The focus of this project is **incident response thinking**, not tool usage.
 
-Rather than simply reviewing an alert, this lab follows a realistic investigation workflow:
+Instead of simply reviewing one alert, this lab follows a realistic investigation workflow:
 
 - Alert appears
 - Case is created
@@ -65,19 +55,9 @@ Rather than simply reviewing an alert, this lab follows a realistic investigatio
 
 This lab represents the shift from simply reviewing alerts to actually handling incidents.
 
-That shift matters because real SOC and IR work depends heavily on:
-
-- structure
-- investigation logic
-- evidence handling
-- documentation
-- proportional response decisions
-
 ---
 
 ## 🎯 Objectives
-
-This lab was designed to practice real-world incident response thinking:
 
 - Transition from alert review to incident handling
 - Build a structured case investigation workflow
@@ -91,9 +71,7 @@ This lab was designed to practice real-world incident response thinking:
 
 ## 🧠 Why This Lab Matters
 
-PowerShell is commonly used for legitimate administration.
-
-However, it is also heavily abused in real-world attacks.
+PowerShell is commonly used for legitimate administration, but it is also heavily abused in real-world attacks.
 
 A weaker investigation might stop at:
 
@@ -148,31 +126,29 @@ This scenario simulates:
 - TLP classification applied as Amber
 - Initial facts documented
 
----
-
 ### 2️⃣ Observable Tracking
 
-Tracked observables included:
-
 #### URLs
+
 - `hxxps://example-malicious-site[.]com/payload`
 - `hxxps://example-clean-site[.]com/update`
 
 #### Hostnames
+
 - `workstation1`
 - `workstation2`
 
 #### Users
+
 - `userA`
 - `userB`
 - `Administrator`
 
 #### Files
+
 - `invoice.pdf.exe`
 - `update.txt.exe`
 - `suspicious.dmg`
-
----
 
 ### 3️⃣ Investigation Scope Expansion
 
@@ -184,8 +160,6 @@ Key investigation areas:
 - Temp directory usage
 - User account involvement
 - Repeated execution patterns
-
----
 
 ### 4️⃣ Process Chain Analysis
 
@@ -205,8 +179,6 @@ High-risk behaviors reviewed:
 - File creation in Temp directory
 - Repeated behavior across hosts
 
----
-
 ### 5️⃣ Blast Radius Assessment
 
 Indicators that increased severity:
@@ -219,14 +191,12 @@ Indicators that increased severity:
 
 These factors increased risk from a single-host alert to a potential multi-host incident.
 
----
-
 ### 6️⃣ Containment Decision
 
-#### Decision
-**Isolate affected hosts and escalate**
+**Decision:** Isolate affected hosts and escalate.
 
-#### Justification
+**Justification:**
+
 - Multi-host behavior observed
 - Suspicious PowerShell execution
 - Temp directory file creation
@@ -250,7 +220,7 @@ These factors increased risk from a single-host alert to a potential multi-host 
 
 - PowerShell may still represent legitimate administrative activity
 - Multi-host behavior increases suspicion but does not automatically confirm compromise
-- Investigation based on simulated environment
+- Investigation is based on a simulated environment
 - Real enterprise environments contain significantly more telemetry sources
 
 ---
@@ -279,8 +249,6 @@ The investigation emphasized structured thinking, documentation, and proportiona
 ---
 
 # 🌐 Lab 02 — Elastic + Splunk Malicious Domain Investigation
-
----
 
 ## 🛡️ Project Overview
 
@@ -343,8 +311,6 @@ VirusTotal was used to:
 - Identify vendor detections
 - Support investigative decisions
 
----
-
 ### 2️⃣ SIEM Correlation
 
 Splunk searches were used to:
@@ -358,8 +324,6 @@ Splunk searches were used to:
 
 This transformed the investigation from simple alert review into evidence-based analysis.
 
----
-
 ### 3️⃣ Endpoint Investigation
 
 Elastic Security telemetry was used to investigate suspicious process activity involving:
@@ -372,8 +336,6 @@ Elastic Security telemetry was used to investigate suspicious process activity i
 
 The investigation focused heavily on determining whether observed behavior matched legitimate Windows activity or suspicious execution patterns.
 
----
-
 ### 4️⃣ Process Validation
 
 Windows Task Manager was used to validate:
@@ -384,8 +346,6 @@ Windows Task Manager was used to validate:
 - Running process behavior
 
 This helped validate evidence observed in SIEM and endpoint telemetry.
-
----
 
 ### 5️⃣ Memory Dump Review
 
@@ -431,11 +391,9 @@ Large amounts of SIEM and endpoint data can become distracting during investigat
 
 The important skill is identifying which evidence actually supports the concern.
 
----
-
 ### Validation Is Critical
 
-The project reinforced that alerts should not automatically be trusted without validation.
+Alerts should not automatically be trusted without validation.
 
 Evidence was validated through:
 
@@ -444,8 +402,6 @@ Evidence was validated through:
 - endpoint telemetry
 - Task Manager validation
 - memory dump review
-
----
 
 ### Multiple Data Sources Improve Investigations
 
@@ -499,8 +455,6 @@ The most valuable part of the project was learning how to think through uncertai
 
 # 🔎 Lab 03 — SMB & RDP Port Scanning / Lateral Movement Investigation
 
----
-
 ## 🛡️ Overview
 
 This lab investigated a potential SMB and RDP port scanning alert and expanded it into a larger multi-stage investigation involving:
@@ -525,11 +479,7 @@ The source IP involved was:
 10.1.2.45
 ```
 
-The primary goal was determining whether the activity represented:
-
-- simple scanning behavior
-- administrative activity
-- or evidence of potential lateral movement
+The primary goal was determining whether the activity represented simple scanning, administrative activity, or evidence of potential lateral movement.
 
 ---
 
@@ -577,8 +527,6 @@ The alert showed SMB/RDP-related connections to multiple internal systems.
 
 The first objective was validating whether the detection logic matched actual behavior before escalating.
 
----
-
 ### 2️⃣ Case Creation & Investigation Management
 
 Hive was used to create and manage the investigation case.
@@ -592,8 +540,6 @@ Case management included:
 - Task management
 
 This helped organize the investigation into a structured workflow rather than isolated searches.
-
----
 
 ### 3️⃣ SIEM Detection Validation
 
@@ -609,8 +555,6 @@ Key finding:
 - `10.1.2.45` connected to **six unique internal systems**
 
 This confirmed the alert was not simple noise.
-
----
 
 ### 4️⃣ Windows Authentication Analysis
 
@@ -632,8 +576,6 @@ Accounts reviewed included:
 
 This helped determine whether the network activity connected to actual authentication attempts or credential use.
 
----
-
 ### 5️⃣ Explicit Credential Use Review
 
 Event ID `4648` was particularly important because it may indicate credentials being used to access another system or service.
@@ -644,8 +586,6 @@ Explicit credential usage involving:
 - `administrator`
 
 increased investigative concern because it linked network activity with credential-based behavior.
-
----
 
 ### 6️⃣ Service Creation & PsExec-Style Behavior
 
@@ -665,8 +605,6 @@ The investigation reviewed:
 - remote execution indicators
 
 This moved the investigation beyond simple scanning into possible remote execution activity.
-
----
 
 ### 7️⃣ Endpoint Correlation in Elastic Security
 
@@ -791,6 +729,344 @@ The most important lesson from this project was learning that network alerts bec
 
 ---
 
+# 🧪 Lab 04 — Suspicious File Drop & Malware Execution Analysis
+
+## 🛡️ Overview
+
+This lab investigated a suspicious file drop and malware execution event using **Splunk Enterprise Security**, **VirusTotal**, **Excel-based hash deduplication**, and **Elastic EDR**.
+
+The investigation began with a suspicious executable activity alert involving risky directories such as:
+
+- `C:\Users\Public`
+- `AppData\Roaming`
+- `Temp`
+
+The investigation then narrowed from broad suspicious executable activity into a confirmed malicious endpoint event supported by hash reputation, process lineage, outbound network behavior, Defender-related changes, DLL activity, and persistence-related execution.
+
+---
+
+## 🎯 Purpose
+
+The purpose of this lab was to practice an end-to-end malware investigation workflow involving:
+
+- SIEM alert triage
+- Noise reduction and filtering
+- Executable path analysis
+- Parent process review
+- SHA256 hash extraction
+- Hash deduplication
+- VirusTotal enrichment
+- Elastic EDR pivoting
+- Endpoint process tree analysis
+- Outbound network review
+- Persistence-related activity review
+- Escalation and containment reasoning
+
+---
+
+## 🛠️ Tools & Technologies Used
+
+| Tool / Data Source | Purpose |
+|---|---|
+| Splunk Enterprise Security | SIEM alert review and initial investigation |
+| Splunk Mission Control | Alert intake and workflow tracking |
+| Microsoft Excel | SHA256 hash deduplication and indicator organization |
+| VirusTotal | Hash reputation validation |
+| Elastic EDR | Endpoint process tree and telemetry analysis |
+| Elastic Discover | Raw endpoint telemetry review |
+| Elastic Timeline | Endpoint event timeline correlation |
+| Windows Endpoint Telemetry | Process, network, Defender, DLL, and persistence review |
+| SHA256 Hash Analysis | Indicator validation and enrichment |
+| Windows Defender Events | Security configuration change review |
+| DLL / Persistence Analysis | Post-execution behavior analysis |
+
+---
+
+## 🔍 Investigation Workflow
+
+### 1️⃣ Mission Control Alert Review
+
+The investigation began by reviewing a suspicious file execution alert in Splunk Mission Control.
+
+The alert focused on executable activity in risky directories, including:
+
+- `C:\Users\Public`
+- `AppData\Roaming`
+- `Temp`
+
+These locations are important because malware and attacker tooling often use writable directories to stage payloads or evade casual review.
+
+### 2️⃣ Initial Splunk Analysis
+
+Splunk was used to review broad executable activity and identify useful fields, including:
+
+- hostnames
+- usernames
+- executable paths
+- parent processes
+- command-line arguments
+- SHA256 hashes
+
+At this stage, the goal was not to escalate immediately. The goal was to understand the data and reduce noise.
+
+### 3️⃣ Noise Reduction and Filtering
+
+The investigation reduced noise by filtering out common or less useful patterns, including:
+
+- common parent processes such as `explorer.exe`
+- common service-related parent processes such as `services.exe`
+- installer-style filenames
+- binaries with less suspicious characteristics
+
+The focus was narrowed toward:
+
+- unsigned binaries
+- missing-signature binaries
+- suspicious executable paths
+- suspicious hashes
+- risky parent-child relationships
+
+This step was important because broad suspicious file alerts can contain many results, and a strong analyst must reduce the dataset before making conclusions.
+
+### 4️⃣ Hash Extraction and Deduplication
+
+SHA256 hashes were exported into Excel and deduplicated to isolate unique file indicators.
+
+This helped avoid repeatedly investigating the same hash and made the workflow more efficient.
+
+The deduplicated hash list was then used for external reputation validation.
+
+### 5️⃣ VirusTotal Hash Validation
+
+VirusTotal was used to validate suspicious hashes.
+
+One file hash was identified as malicious and was flagged by:
+
+```text
+63/72 security vendors
+```
+
+The malicious hash was correlated back to the file:
+
+```text
+C:\Users\Public\9m5sap.exe
+```
+
+on host:
+
+```text
+win-3470
+```
+
+This moved the investigation from broad suspicious executable activity to a confirmed malicious file requiring deeper endpoint investigation.
+
+### 6️⃣ Elastic EDR Pivot
+
+The investigation pivoted into Elastic EDR to analyze endpoint behavior connected to the malicious file.
+
+Elastic EDR was used to review:
+
+- process trees
+- endpoint alerts
+- outbound network connections
+- process metadata
+- timeline events
+- persistence indicators
+- post-execution behavior
+
+### 7️⃣ Process Lineage Analysis
+
+Elastic EDR showed process lineage involving:
+
+```text
+explorer.exe
+↓
+cmd.exe
+↓
+9m5sap.exe
+```
+
+This chain suggested that the malicious file was not simply a dormant artifact. It appeared to execute through an interactive or scripted process chain.
+
+This increased the severity of the investigation because execution was confirmed.
+
+### 8️⃣ Outbound Network Communication Review
+
+Endpoint telemetry showed outbound communication to:
+
+```text
+103.86.47.221
+```
+
+This added another layer of concern because the malicious executable was associated with network activity after execution.
+
+The network behavior supported the possibility of command-and-control, payload retrieval, or other malicious communication.
+
+### 9️⃣ Defender Configuration and Post-Execution Activity
+
+The investigation reviewed endpoint evidence involving:
+
+- Defender configuration changes
+- DLL load behavior
+- `rundll32.exe`
+- `regsvr32.exe`
+- suspicious persistence-related execution
+
+These behaviors were important because malware often attempts to weaken defenses, load additional components, or establish persistence after execution.
+
+---
+
+## 📊 Key Findings
+
+- A malicious executable named `9m5sap.exe` was identified on host `win-3470`
+- The file was located in:
+
+```text
+C:\Users\Public
+```
+
+- The SHA256 hash associated with the file was flagged by:
+
+```text
+63/72 VirusTotal vendors
+```
+
+- Elastic EDR telemetry showed:
+  - malware detection activity
+  - outbound communication to `103.86.47.221`
+  - suspicious process execution
+  - DLL load behavior
+  - Defender configuration changes
+  - possible persistence activity involving `regsvr32.exe`
+
+- The execution chain showed:
+
+```text
+explorer.exe → cmd.exe → 9m5sap.exe
+```
+
+- Combined SIEM, OSINT, and EDR evidence supported treating the activity as a confirmed malicious endpoint event requiring escalation and containment.
+
+---
+
+## 🚨 Why This Was a Confirmed Malicious Endpoint Event
+
+This investigation became more serious because multiple evidence sources aligned:
+
+- Suspicious executable path
+- Malicious hash reputation
+- VirusTotal detection ratio of `63/72`
+- Confirmed host and file path
+- Process execution chain
+- Outbound network communication
+- Defender configuration changes
+- DLL and persistence-related behavior
+- Elastic EDR process and timeline evidence
+
+This was stronger than a simple suspicious file alert because the investigation connected file reputation, execution behavior, endpoint telemetry, and post-execution activity.
+
+---
+
+## 🧠 Investigation Thinking
+
+A weaker investigation might stop at:
+
+> “VirusTotal says it is malicious.”
+
+A stronger investigation asks:
+
+- Where did the file execute from?
+- Which host was affected?
+- What parent process launched it?
+- Was the file actually executed?
+- Did it communicate externally?
+- Did it modify Defender settings?
+- Did it load DLLs or use Windows utilities?
+- Is there evidence of persistence-related behavior?
+- Does EDR telemetry support the SIEM finding?
+
+This lab focused on building that stronger investigation story.
+
+---
+
+## 🧭 MITRE ATT&CK Concepts Observed
+
+| Technique | Description |
+|---|---|
+| T1204 | User Execution |
+| T1059 | Command and Scripting Interpreter |
+| T1105 | Ingress Tool Transfer |
+| T1071 | Application Layer Protocol |
+| T1112 | Modify Registry |
+| T1562.001 | Impair Defenses: Disable or Modify Tools |
+| T1218.010 | Signed Binary Proxy Execution: Regsvr32 |
+| T1218.011 | Signed Binary Proxy Execution: Rundll32 |
+| T1547 | Boot or Logon Autostart Execution |
+
+---
+
+## 🛠️ Skills Demonstrated
+
+- Splunk Mission Control alert triage
+- SIEM noise reduction and filtering
+- Suspicious executable path analysis
+- Parent process review
+- SHA256 hash extraction
+- Excel-based hash deduplication
+- VirusTotal OSINT enrichment
+- Elastic EDR process tree analysis
+- Endpoint timeline correlation
+- Outbound network communication review
+- Defender configuration change review
+- DLL and persistence behavior analysis
+- Malware escalation reasoning
+- Evidence-based documentation
+
+---
+
+## 📸 Investigation Evidence
+
+This lab includes structured screenshot evidence covering:
+
+- Mission Control alert review
+- Splunk filtering workflow
+- Suspicious executable path analysis
+- SHA256 hash review
+- Excel hash deduplication
+- VirusTotal enrichment
+- Elastic EDR process tree analysis
+- Endpoint network activity
+- Timeline correlation
+- Defender modification activity
+- DLL activity
+- Persistence-related evidence
+
+---
+
+## ✅ Outcome
+
+This lab developed practical experience performing an end-to-end malware investigation using:
+
+- Splunk SIEM
+- Excel-based hash analysis
+- VirusTotal enrichment
+- Elastic EDR telemetry
+- Endpoint timeline correlation
+
+The investigation strengthened my ability to move from broad suspicious file alerts into focused malware investigations supported by behavioral evidence, endpoint telemetry, and structured escalation reasoning.
+
+---
+
+## 🧾 Professional Summary
+
+This lab investigated a suspicious malware execution event using Splunk, VirusTotal, and Elastic EDR.
+
+The investigation validated a malicious hash, correlated it to `C:\Users\Public\9m5sap.exe` on `win-3470`, reviewed endpoint process behavior, identified outbound communication to `103.86.47.221`, and analyzed post-execution activity including Defender configuration changes, DLL behavior, and possible persistence-related execution.
+
+The most important lesson from this project was learning how to reduce SIEM noise, validate indicators, pivot into EDR telemetry, and build a complete malware investigation story from multiple evidence sources.
+
+---
+
 # 🧾 Week 15 Summary
 
 Week 15 focused heavily on endpoint investigations and incident response reasoning.
@@ -805,6 +1081,10 @@ Across these labs, I practiced:
 - Reviewing authentication activity
 - Investigating service creation behavior
 - Identifying remote execution indicators
+- Investigating suspicious file execution
+- Validating malicious file hashes
+- Reviewing outbound network activity
+- Analyzing post-execution behavior
 - Thinking through blast radius and containment
 - Building evidence-based escalation decisions
 - Documenting investigations professionally
@@ -813,3 +1093,5 @@ The biggest lesson from this week is:
 
 > An alert is only the beginning.  
 > A strong analyst builds the full investigation story before making a decision.
+````
+
