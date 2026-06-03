@@ -1,8 +1,8 @@
-# 🔍 Data Exfiltration Investigation Through Cloud Storage
+# ☁️ Data Exfiltration Investigation Through Cloud Storage
 
-## Incident Overview
+## 📖 Incident Overview
 
-This project documents the investigation of a potential data exfiltration incident involving cloud storage services. The investigation began after a security alert identified unusually large outbound data transfers associated with a user account.
+This project documents the investigation of a potential data exfiltration incident involving cloud storage services. The investigation began after a security alert identified unusually large outbound data transfers to a cloud-based file sharing platform.
 
 The objective was to determine:
 
@@ -11,7 +11,7 @@ The objective was to determine:
 - What files were involved
 - How the transfer occurred
 - Whether the behavior was legitimate or suspicious
-- What response actions would be appropriate
+- What response actions were appropriate
 
 This investigation follows a realistic Security Operations Center (SOC) and Incident Response (IR) workflow by correlating evidence across multiple security tools and data sources.
 
@@ -22,284 +22,257 @@ This investigation follows a realistic Security Operations Center (SOC) and Inci
 The investigation focused on answering the following questions:
 
 ### Validation
+
 - Is the alert legitimate?
-- Is there evidence of actual data transfer?
+- Is outbound traffic actually occurring?
 
-### Attribution
+### User Attribution
+
 - Which user initiated the activity?
-- Which system was involved?
+- Is the activity associated with a known employee?
 
-### Scope
-- What files were affected?
-- How much data was transferred?
-- Were additional systems involved?
+### Threat Intelligence
 
-### Response
+- Is the destination known to be malicious?
+- Are there any indicators of compromise associated with the destination?
+
+### Endpoint Investigation
+
+- What processes were responsible for the activity?
+- Were suspicious tools or executables involved?
+
+### Host Artifact Review
+
+- What files were accessed or transferred?
+- Are the files business-related or sensitive?
+
+### Incident Response
+
 - Does the activity require containment?
-- What evidence should be preserved?
-- What actions should be recommended?
+- What actions should be taken next?
 
 ---
 
-# 🧭 Investigation Workflow
+# 🔄 Investigation Workflow
+
+The investigation followed the workflow below:
 
 ```text
 Splunk Alert
-        ↓
+      ↓
 Proxy Log Analysis
-        ↓
-Threat Intelligence Enrichment
-        ↓
+      ↓
+Threat Intelligence Validation
+      ↓
 EDR Investigation
-        ↓
-Host Artifact Analysis
-        ↓
-Evidence Correlation
-        ↓
+      ↓
+Host Artifact Review
+      ↓
 Containment Decision
 ```
 
+This workflow mirrors how many SOC and Incident Response teams validate and investigate potential exfiltration events in production environments.
+
 ---
 
-# 🛠 Technologies Used
+# 🛠 Tools Used
 
-| Technology | Purpose |
-|------------|----------|
-| Splunk | Alert validation and log correlation |
-| Zscaler (ZIA) | Web and cloud activity analysis |
+| Tool | Purpose |
+|--------|---------|
+| Splunk | Alert validation and log analysis |
+| Proxy Logs | Outbound connection review |
+| Threat Intelligence Platforms | Reputation validation |
 | Elastic EDR | Endpoint investigation |
-| VirusTotal | Threat intelligence enrichment |
-| Mission Control | Alert management |
-| TheHive | Case management workflow |
+| Windows Host Artifacts | File activity review |
+| Incident Response Methodology | Containment decision making |
 
 ---
 
-# 🔎 Investigation Areas
+# 🔎 Investigation Process
 
-## 1. Alert Validation
+## 1. Splunk Alert Validation
 
-The investigation began by reviewing a cloud storage data exfiltration alert.
+The investigation began with a Splunk security alert indicating unusual outbound traffic to a cloud storage provider.
 
-Initial analysis focused on:
+The alert was reviewed to determine:
 
-- Transfer volume
-- Alert thresholds
-- User activity
-- Network destinations
+- Source host
+- Source user
+- Destination service
+- Data transfer volume
+- Alert severity
 
-The objective was to determine whether the alert represented legitimate business activity or suspicious behavior.
+The objective was to validate that the alert represented real activity rather than a false positive.
 
 ---
 
 ## 2. Proxy Log Analysis
 
-Proxy logs were reviewed to identify:
+Proxy logs were analyzed to identify:
 
 - Upload destinations
-- File transfer activity
-- User agents
-- Cloud storage services
+- Data transfer size
+- User activity
+- Connection timing
+- Frequency of uploads
 
-This stage provided visibility into how data was leaving the environment and whether the transfer method appeared normal.
+This step helped establish whether data was actually being transferred outside the organization.
 
 ---
 
-## 3. Threat Intelligence Enrichment
+## 3. Threat Intelligence Review
 
-Threat intelligence was used to investigate:
+Threat intelligence sources were consulted to determine:
 
-- Destination infrastructure
-- IP reputation
-- Historical associations
-- Related files and domains
+- Domain reputation
+- Historical malicious activity
+- Known abuse reports
+- Security vendor classifications
 
-A key lesson from this stage was:
-
-> A clean reputation score does not automatically mean an indicator is safe.
-
-Historical context often provides valuable investigative insight.
+The goal was to determine whether the destination itself represented a known threat.
 
 ---
 
 ## 4. Endpoint Investigation
 
-Endpoint telemetry was analyzed to determine:
+Elastic EDR telemetry was reviewed to identify:
 
-- What processes executed
-- Which commands were run
-- Whether reconnaissance activity occurred
-- If data staging behavior existed
+- Responsible processes
+- Parent-child process relationships
+- User context
+- Execution history
+- Associated alerts
 
-Special attention was given to:
-
-- `whoami.exe`
-- `curl.exe`
-- Process arguments
-- Interactive logon activity
+The investigation focused on understanding how the upload activity originated from the endpoint.
 
 ---
 
-## 5. Host Artifact Analysis
+## 5. Host Artifact Review
 
-Host artifacts helped identify:
+Host artifacts were examined to determine:
 
-- Staged files
-- Sensitive document names
-- Transfer preparation activity
-- Timeline evidence
+- Files involved
+- File locations
+- File ownership
+- Data sensitivity
+- Recent file activity
 
-This stage helped answer an important question:
+This step provided visibility into exactly what content may have been transferred.
 
-> What data was actually being prepared for transfer?
+---
+
+## 6. Containment Decision
+
+Based on all available evidence, a determination was made regarding:
+
+- Potential business impact
+- Data exposure risk
+- User intent
+- Need for host isolation
+- Escalation requirements
+
+Appropriate response actions were then documented.
+
+---
+
+# 📂 Repository Structure
+
+```text
+Week16_Incident_Response_Investigations/
+│
+├── README.md
+├── Data_Exfiltration_Incident_Case_File.md
+├── Technical_Investigation_Writeup.md
+│
+└── screenshots/
+    ├── 01_Splunk_Alert.png
+    ├── 02_Proxy_Log_Analysis.png
+    ├── 03_Threat_Intelligence_Review.png
+    ├── 04_EDR_Investigation.png
+    ├── 05_Host_Artifact_Review.png
+    └── 06_Containment_Decision.png
+```
 
 ---
 
 # 📸 Investigation Evidence
 
-## Alert Detection
+## Alert Validation
 
-| Screenshot |
-|------------|
-| Mission Control Data Exfiltration Alert |
-| Detection Rule Configuration |
+Evidence showing the initial Splunk security alert.
 
 ---
 
-## Proxy Log Evidence
+## Proxy Analysis
 
-| Screenshot |
-|------------|
-| Splunk Exfiltration Threshold Query |
-| ZIA Cloud Storage Upload Activity |
-| User Department and Location Analysis |
+Evidence showing outbound cloud storage activity.
 
 ---
 
-## Threat Intelligence Evidence
+## Threat Intelligence Validation
 
-| Screenshot |
-|------------|
-| VirusTotal Initial Reputation Check |
-| VirusTotal Passive DNS Relationships |
-| VirusTotal Communicating Files Analysis |
+Evidence showing reputation analysis of the destination.
 
 ---
 
-## Endpoint Investigation Evidence
+## Endpoint Investigation
 
-| Screenshot |
-|------------|
-| Elastic Alert Correlation |
-| Process Tree – Whoami Reconnaissance Activity |
-| Process Tree – Curl Exfiltration Execution |
-| Remote Interactive Logon Evidence |
+Evidence showing process execution and endpoint telemetry.
 
 ---
 
-## Host Artifact Evidence
+## Host Artifact Review
 
-| Screenshot |
-|------------|
-| Staged Finance, HR, and Legal Files |
-| File Staging Timeline Evidence |
-| Curl Process Arguments Referencing Stolen Data |
+Evidence showing files associated with the activity.
 
 ---
 
-# 🚨 Key Findings
+## Containment Decision
 
-The investigation revealed several indicators that increased the likelihood of malicious activity:
-
-### Network Findings
-
-- Large outbound transfers exceeded detection thresholds
-- Cloud storage services were used as destinations
-- Upload activity was observed
-
-### Behavioral Findings
-
-- User activity appeared across multiple departments
-- Activity appeared across multiple locations
-- Reconnaissance commands were observed
-
-### Endpoint Findings
-
-- Suspicious command-line activity was identified
-- File staging behavior was observed
-- Remote interactive logons were present
-
-### Evidence Findings
-
-- Sensitive file names appeared in process arguments
-- Multiple data categories appeared targeted
-- Evidence supported possible data exfiltration activity
+Evidence supporting the final response determination.
 
 ---
 
-# 📚 Lessons Learned
+# 🧠 Key Skills Demonstrated
 
-This investigation reinforced several important security operations concepts:
-
-- Alerts are starting points, not conclusions
-- Evidence must be validated across multiple sources
-- Process arguments often reveal attacker intent
-- Threat intelligence requires context
-- Cloud storage services can be abused for exfiltration
-- Strong investigations focus on evidence, not assumptions
-
----
-
-# ⚠ Common Analyst Mistake
-
-One common mistake is assuming:
-
-```text
-0 detections on VirusTotal = Safe
-```
-
-This can lead investigators to miss malicious infrastructure that has not yet been widely identified.
-
-Effective investigations always consider:
-
-- Historical context
-- Behavioral evidence
-- Endpoint activity
-- Supporting artifacts
-
-rather than relying on reputation alone.
-
----
-
-# 🧠 Skills Demonstrated
-
-- Incident Response
-- Threat Hunting
-- Data Exfiltration Analysis
-- Security Operations
+- Security Alert Validation
+- Incident Response Workflow
+- Splunk Investigation
+- Proxy Log Analysis
 - Threat Intelligence Analysis
-- Endpoint Investigation
-- Process Analysis
-- Log Correlation
-- Evidence Collection
-- Incident Documentation
+- Endpoint Detection and Response (EDR)
+- Host Artifact Investigation
+- Data Exfiltration Detection
+- Evidence Correlation
+- Security Documentation
+- SOC Operations
+- Incident Escalation Decision Making
 
 ---
 
-# 🏁 Conclusion
+# 📚 Learning Outcomes
 
-This project demonstrates a full investigation workflow beginning with a data exfiltration alert and ending with evidence-based conclusions and response recommendations.
+Through this investigation I strengthened my ability to:
 
-Rather than relying on a single alert, the investigation correlated proxy logs, threat intelligence, endpoint telemetry, and host artifacts to build a clearer understanding of the activity.
-
-The strongest lesson from this investigation was that effective incident response depends on connecting multiple sources of evidence to understand what happened, why it happened, and what actions should be taken next.
+- Validate potential security incidents
+- Correlate evidence across multiple tools
+- Investigate potential data exfiltration activity
+- Analyze endpoint telemetry
+- Review host-level artifacts
+- Evaluate business impact
+- Make containment recommendations
+- Document investigations using professional SOC methodologies
 
 ---
 
-## 👤 Author
+# ⚠️ Disclaimer
+
+This project was completed in a controlled educational and cybersecurity training environment. All logs, alerts, indicators, and investigation artifacts were used strictly for learning and professional development purposes.
+
+---
+
+# 👨‍💻 Author
 
 **Fitzgerald Afari-Minta**
 
-B.S. Information Systems  
-University of Maryland, Baltimore County (UMBC)
-
-Cybersecurity • Security Operations • Incident Response • Threat Hunting
+Cybersecurity | SOC Operations | Incident Response | Threat Investigation
