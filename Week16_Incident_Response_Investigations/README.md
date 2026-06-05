@@ -1,8 +1,42 @@
-# ☁️ Data Exfiltration Investigation Through Cloud Storage
+# ☁️ Week 16 — Incident Response Investigations
 
-## 📖 Incident Overview
+This section of the repository focuses on realistic incident response investigations involving data exfiltration, denial-of-service activity, insider threats, privileged account abuse, endpoint investigations, and evidence correlation across multiple security data sources.
 
-This project documents the investigation of a potential data exfiltration incident involving cloud storage services. The investigation began after a security alert identified unusually large outbound data transfers to a cloud-based file sharing platform.
+The projects in this week are designed to simulate how SOC analysts, incident responders, threat hunters, and DFIR teams investigate suspicious activity, validate alerts, determine scope, assess impact, and make response decisions based on evidence rather than assumptions.
+
+Throughout these investigations, the focus is not simply on identifying alerts. Instead, the emphasis is placed on understanding:
+
+- What happened
+- How it happened
+- Who was involved
+- What systems were affected
+- Whether the activity was legitimate or malicious
+- What evidence supports the conclusion
+- What response actions make sense
+
+These labs closely mirror the thought process used during real-world incident response investigations.
+
+---
+
+# 📁 Labs Included
+
+| Lab | Project |
+|------|----------|
+| Lab 01 | Data Exfiltration Investigation Through Cloud Storage |
+| Lab 02 | Layer 7 HTTP Flood / DDoS Investigation |
+| Lab 03 | Insider Threat, Privileged Account Abuse, & Data Exfiltration Investigation |
+
+---
+
+# ☁️ Lab 01 — Data Exfiltration Investigation Through Cloud Storage
+
+---
+
+## 🛡️ Incident Overview
+
+This project documents the investigation of a potential data exfiltration incident involving cloud storage services.
+
+The investigation began after a security alert identified unusually large outbound data transfers to a cloud-based file sharing platform.
 
 The objective was to determine:
 
@@ -13,13 +47,13 @@ The objective was to determine:
 - Whether the behavior was legitimate or suspicious
 - What response actions were appropriate
 
-This investigation follows a realistic Security Operations Center (SOC) and Incident Response (IR) workflow by correlating evidence across multiple security tools and data sources.
+The investigation followed a realistic SOC and Incident Response workflow by correlating evidence across multiple security tools and data sources.
 
 ---
 
-# 🎯 Investigation Goals
+## 🎯 Investigation Goals
 
-The investigation focused on answering the following questions:
+The investigation focused on answering:
 
 ### Validation
 
@@ -34,17 +68,17 @@ The investigation focused on answering the following questions:
 ### Threat Intelligence
 
 - Is the destination known to be malicious?
-- Are there any indicators of compromise associated with the destination?
+- Are there indicators of compromise associated with the destination?
 
 ### Endpoint Investigation
 
-- What processes were responsible for the activity?
-- Were suspicious tools or executables involved?
+- What processes were responsible?
+- Were suspicious tools involved?
 
 ### Host Artifact Review
 
-- What files were accessed or transferred?
-- Are the files business-related or sensitive?
+- What files were transferred?
+- Were sensitive files involved?
 
 ### Incident Response
 
@@ -53,9 +87,7 @@ The investigation focused on answering the following questions:
 
 ---
 
-# 🔄 Investigation Workflow
-
-The investigation followed the workflow below:
+## 🔄 Investigation Workflow
 
 ```text
 Splunk Alert
@@ -71,197 +103,25 @@ Host Artifact Review
 Containment Decision
 ```
 
-This workflow mirrors how many SOC and Incident Response teams validate and investigate potential exfiltration events in production environments.
+---
+
+## 🛠️ Skills Demonstrated
+
+- Data exfiltration investigation
+- Alert validation
+- Proxy log analysis
+- Threat intelligence review
+- Endpoint investigation
+- Host artifact review
+- Incident response decision-making
+- Evidence correlation
+- Security documentation
 
 ---
 
-# 🛠 Tools Used
+## 🧾 Professional Summary
 
-| Tool | Purpose |
-|--------|---------|
-| Splunk | Alert validation and log analysis |
-| Proxy Logs | Outbound connection review |
-| Threat Intelligence Platforms | Reputation validation |
-| Elastic EDR | Endpoint investigation |
-| Windows Host Artifacts | File activity review |
-| Incident Response Methodology | Containment decision making |
-
----
-
-# 🔎 Investigation Process
-
-## 1. Splunk Alert Validation
-
-The investigation began with a Splunk security alert indicating unusual outbound traffic to a cloud storage provider.
-
-The alert was reviewed to determine:
-
-- Source host
-- Source user
-- Destination service
-- Data transfer volume
-- Alert severity
-
-The objective was to validate that the alert represented real activity rather than a false positive.
-
----
-
-## 2. Proxy Log Analysis
-
-Proxy logs were analyzed to identify:
-
-- Upload destinations
-- Data transfer size
-- User activity
-- Connection timing
-- Frequency of uploads
-
-This step helped establish whether data was actually being transferred outside the organization.
-
----
-
-## 3. Threat Intelligence Review
-
-Threat intelligence sources were consulted to determine:
-
-- Domain reputation
-- Historical malicious activity
-- Known abuse reports
-- Security vendor classifications
-
-The goal was to determine whether the destination itself represented a known threat.
-
----
-
-## 4. Endpoint Investigation
-
-Elastic EDR telemetry was reviewed to identify:
-
-- Responsible processes
-- Parent-child process relationships
-- User context
-- Execution history
-- Associated alerts
-
-The investigation focused on understanding how the upload activity originated from the endpoint.
-
----
-
-## 5. Host Artifact Review
-
-Host artifacts were examined to determine:
-
-- Files involved
-- File locations
-- File ownership
-- Data sensitivity
-- Recent file activity
-
-This step provided visibility into exactly what content may have been transferred.
-
----
-
-## 6. Containment Decision
-
-Based on all available evidence, a determination was made regarding:
-
-- Potential business impact
-- Data exposure risk
-- User intent
-- Need for host isolation
-- Escalation requirements
-
-Appropriate response actions were then documented.
-
----
-
-# 📂 Repository Structure
-
-```text
-Week16_Incident_Response_Investigations/
-│
-├── README.md
-├── Data_Exfiltration_Incident_Case_File.md
-├── Technical_Investigation_Writeup.md
-│
-└── screenshots/
-    ├── 01_Splunk_Alert.png
-    ├── 02_Proxy_Log_Analysis.png
-    ├── 03_Threat_Intelligence_Review.png
-    ├── 04_EDR_Investigation.png
-    ├── 05_Host_Artifact_Review.png
-    └── 06_Containment_Decision.png
-```
-
----
-
-# 📸 Investigation Evidence
-
-## Alert Validation
-
-Evidence showing the initial Splunk security alert.
-
----
-
-## Proxy Analysis
-
-Evidence showing outbound cloud storage activity.
-
----
-
-## Threat Intelligence Validation
-
-Evidence showing reputation analysis of the destination.
-
----
-
-## Endpoint Investigation
-
-Evidence showing process execution and endpoint telemetry.
-
----
-
-## Host Artifact Review
-
-Evidence showing files associated with the activity.
-
----
-
-## Containment Decision
-
-Evidence supporting the final response determination.
-
----
-
-# 🧠 Key Skills Demonstrated
-
-- Security Alert Validation
-- Incident Response Workflow
-- Splunk Investigation
-- Proxy Log Analysis
-- Threat Intelligence Analysis
-- Endpoint Detection and Response (EDR)
-- Host Artifact Investigation
-- Data Exfiltration Detection
-- Evidence Correlation
-- Security Documentation
-- SOC Operations
-- Incident Escalation Decision Making
-
----
-
-# 📚 Learning Outcomes
-
-Through this investigation I strengthened my ability to:
-
-- Validate potential security incidents
-- Correlate evidence across multiple tools
-- Investigate potential data exfiltration activity
-- Analyze endpoint telemetry
-- Review host-level artifacts
-- Evaluate business impact
-- Make containment recommendations
-- Document investigations using professional SOC methodologies
+This project strengthened my understanding of how security teams investigate potential data exfiltration activity by validating alerts, reviewing outbound communications, analyzing endpoint telemetry, and examining host artifacts. The investigation reinforced the importance of correlating multiple evidence sources before making containment decisions.
 
 ---
 
@@ -271,296 +131,97 @@ Through this investigation I strengthened my ability to:
 
 ## 🛡️ Incident Overview
 
-This project documents a structured investigation into potential **Layer 7 HTTP flood activity** identified through abnormal web traffic patterns.
+This project documents a structured investigation into potential Layer 7 HTTP flood activity identified through abnormal web traffic behavior.
 
-The investigation began after monitoring systems detected a significant increase in HTTP requests targeting a web application environment. Rather than assuming a denial-of-service attack was occurring, the objective was to validate the activity through evidence collection, traffic analysis, source attribution, endpoint targeting review, application impact assessment, and threat validation.
+The investigation began after monitoring systems detected a significant increase in HTTP requests targeting a web application environment.
 
-The goal of the investigation was to determine:
+Rather than assuming a DDoS attack was occurring, the objective was to validate the activity through:
 
-- Whether traffic behavior was actually abnormal
-- Whether requests originated from a single source or multiple systems
-- Which application resources were being targeted
-- Whether the activity appeared automated
-- Whether application performance was affected
-- Whether evidence supported a Layer 7 DDoS hypothesis
-- What response actions would be appropriate
+- Traffic analysis
+- Source attribution
+- Endpoint targeting review
+- Application impact assessment
+- User-Agent investigation
+- Threat validation
 
-This project mirrors a realistic SOC and Incident Response workflow used to investigate potential web application attacks.
+The goal was determining whether the activity represented:
+
+- Legitimate traffic
+- Misconfiguration
+- Automated activity
+- Layer 7 DDoS behavior
 
 ---
 
 ## 🎯 Investigation Goals
 
-The investigation focused on answering several key questions:
+The investigation focused on determining:
 
-### Traffic Validation
-
-- Is the increase in requests legitimate?
-- Does activity exceed the normal baseline?
-
-### Source Attribution
-
-- Which systems are generating requests?
-- Is the activity distributed?
-
-### Endpoint Targeting
-
-- Which application resources are being accessed?
-- Are login pages or APIs being targeted?
-
-### Application Impact
-
-- Is the web application showing signs of stress?
-- Are HTTP errors increasing?
-
-### Automation Analysis
-
-- Does User-Agent data indicate automation?
-- Are tools such as curl or python-requests involved?
-
-### Threat Validation
-
-- Does threat intelligence support the investigation?
-- Does available evidence support a DDoS conclusion?
+- Whether traffic exceeded normal baselines
+- Whether traffic originated from one source or many
+- What resources were being targeted
+- Whether the application was impacted
+- Whether traffic appeared automated
+- Whether evidence supported a DDoS conclusion
 
 ---
 
 ## 🔄 Investigation Workflow
 
 ```text
-Initial Security Finding
-          ↓
+Security Finding
+        ↓
 Traffic Baseline Analysis
-          ↓
+        ↓
 Requests-Per-Minute Review
-          ↓
-Source IP Attribution
-          ↓
+        ↓
+Source Attribution
+        ↓
 Distributed Traffic Analysis
-          ↓
-Endpoint Targeting Investigation
-          ↓
+        ↓
+Endpoint Target Analysis
+        ↓
 HTTP Error Correlation
-          ↓
-User-Agent Analysis
-          ↓
-Threat Intelligence Validation
-          ↓
-Evidence Correlation & Conclusion
+        ↓
+User-Agent Review
+        ↓
+Threat Validation
+        ↓
+Investigation Conclusion
 ```
-
-This workflow reflects how many SOC and Incident Response teams validate potential denial-of-service events in production environments.
-
----
-
-## 🛠️ Tools & Data Sources Used
-
-| Tool / Data Source | Purpose |
-|--------------------|----------|
-| Web Server Logs | Request analysis |
-| HTTP Request Data | Traffic volume review |
-| Source IP Analysis | Attribution and distribution review |
-| Endpoint Request Analysis | Resource targeting investigation |
-| User-Agent Analysis | Automation detection |
-| Threat Intelligence Platforms | Indicator validation |
-| Incident Response Methodology | Investigation and decision making |
-
----
-
-## 🔍 Investigation Process
-
-### 1. Initial Security Finding Review
-
-The investigation began with a security alert indicating potentially suspicious web traffic activity.
-
-The alert served as a starting point but was not treated as proof of malicious activity.
-
-The objective was to validate the alert using supporting evidence.
-
----
-
-### 2. Traffic Baseline Analysis
-
-Requests-per-minute data was reviewed to determine whether traffic levels exceeded normal operating patterns.
-
-The analysis identified a significant spike above baseline activity.
-
-This established that abnormal behavior was occurring and justified deeper investigation.
-
----
-
-### 3. Source IP Attribution
-
-Source analysis was performed to identify which systems generated the elevated traffic.
-
-Multiple external IP addresses were observed contributing significant request volumes.
-
-Examples included:
-
-- `203.0.113.10`
-- `203.0.113.5`
-- `203.0.113.8`
-
-This suggested the activity was not isolated to a single host.
-
----
-
-### 4. Distributed Traffic Analysis
-
-Further analysis showed multiple systems generating similar request volumes.
-
-This finding was important because it shifted the investigation from:
-
-```text
-Possible Single-Source DoS
-```
-
-to:
-
-```text
-Potential Distributed Denial-of-Service Activity
-```
-
-The distributed nature of the traffic strengthened the DDoS hypothesis.
-
----
-
-### 5. Endpoint Targeting Investigation
-
-The investigation identified repeated requests against:
-
-- `/`
-- `/login`
-- `/api/v1/data`
-
-These resources are commonly targeted because they require application-side processing and can consume server resources under high request volumes.
-
-Understanding what was being targeted helped determine attacker intent and potential impact.
-
----
-
-### 6. HTTP Error Correlation
-
-HTTP status code analysis identified elevated server-side error activity.
-
-The investigation observed:
-
-- Increased HTTP 5xx responses
-- Elevated application error rates
-- Signs of operational stress
-
-This provided evidence that the traffic was affecting application performance.
-
----
-
-### 7. User-Agent Analysis
-
-User-Agent review identified indicators associated with automated tooling.
-
-Observed values included:
-
-- `curl`
-- `python-requests`
-- `Mozilla`
-
-This helped distinguish likely human activity from scripted request generation.
-
-The presence of automation indicators significantly increased confidence in the investigation findings.
-
----
-
-### 8. Threat Intelligence Validation
-
-Threat intelligence enrichment was performed to validate indicators identified during the investigation.
-
-This helped provide additional context regarding observed activity and strengthened the overall evidence set.
 
 ---
 
 ## 📊 Key Findings
 
-The investigation identified:
-
-- Significant traffic volume increases above baseline activity
-- Multiple source IP addresses generating elevated request volumes
-- Distributed traffic patterns consistent with DDoS behavior
-- Repeated targeting of:
+- Significant increase in requests-per-minute
+- Multiple source IPs generated elevated traffic
+- Requests targeted:
   - `/`
   - `/login`
   - `/api/v1/data`
 - Increased HTTP 5xx server errors
-- User-Agent indicators associated with automated tools
-- Evidence supporting Layer 7 HTTP flood activity
+- User-Agent indicators included:
+  - curl
+  - python-requests
+- Evidence supported Layer 7 HTTP flood activity
 
 ---
 
 ## 🧠 Investigation Thinking
 
-One of the most important lessons from this project was learning that:
+One major lesson from this project was learning that:
 
-> High traffic volume alone does not prove a DDoS attack.
+> A traffic spike alone does not prove a DDoS attack.
 
-A weaker investigation might conclude:
+The investigation focused on validating:
 
-> "Traffic spiked, therefore it must be DDoS."
+- Source distribution
+- Targeted resources
+- Application impact
+- Automation indicators
 
-A stronger investigation asks:
-
-- Is traffic actually abnormal?
-- Is the activity distributed?
-- What resources are being targeted?
-- Is the application impacted?
-- Is automation involved?
-- Do multiple evidence sources support the conclusion?
-
-This project reinforced the importance of validating evidence before reaching conclusions.
-
----
-
-## 🚨 Why This Was More Than a Traffic Spike
-
-Several independent findings supported the DDoS hypothesis:
-
-- Requests significantly exceeded baseline levels
-- Traffic originated from multiple systems
-- Critical application resources were targeted
-- HTTP error rates increased
-- Automated User-Agent indicators were observed
-- Threat intelligence supported investigative findings
-
-Together, these indicators created a stronger evidence-based case than traffic volume alone.
-
----
-
-## 📸 Featured Investigation Evidence
-
-### Traffic Anomaly Detection
-
-Evidence showing a significant increase in requests-per-minute above normal baseline activity.
-
-**Screenshot:**  
-`Week16_Lab2_02_Traffic_Anomaly_Detection.png`
-
----
-
-### Distributed Traffic Evidence
-
-Evidence showing multiple source IP addresses generating elevated request volumes.
-
-**Screenshot:**  
-`Week16_Lab2_04_Distributed_Traffic_Evidence.png`
-
----
-
-### Automated Traffic Confirmation
-
-Evidence showing User-Agent indicators associated with automated tools including:
-
-- curl
-- python-requests
-
-**Screenshot:**  
-`Week16_Lab2_09_Automated_Traffic_Confirmation.png`
+before reaching a conclusion.
 
 ---
 
@@ -568,15 +229,400 @@ Evidence showing User-Agent indicators associated with automated tools including
 
 - Traffic anomaly detection
 - Requests-per-minute analysis
-- Source IP attribution
-- Distributed traffic analysis
-- Endpoint targeting review
-- HTTP error correlation
+- Source attribution
+- DDoS investigation workflows
 - User-Agent analysis
-- Threat intelligence enrichment
-- Evidence correlation
-- Detection validation
-- Incident response workflow execution
+- Application impact assessment
+- Threat validation
+- Incident response reasoning
+
+---
+
+## 🧾 Professional Summary
+
+This project strengthened my understanding of how security teams validate potential denial-of-service activity using evidence rather than assumptions. By reviewing traffic volume, source distribution, targeted resources, application impact, and automation indicators, I developed a stronger understanding of Layer 7 DDoS investigation workflows.
+
+---
+
+# 🔐 Lab 03 — Insider Threat, Privileged Account Abuse, & Data Exfiltration Investigation
+
+---
+
+## 🛡️ Incident Overview
+
+This investigation focused on determining whether unusual privileged account activity represented legitimate administrative behavior or potential insider misuse resulting in data theft.
+
+The investigation began after a security alert identified abnormal activity associated with the privileged account:
+
+```text
+corp\admin
+```
+
+Initial evidence suggested that the account was:
+
+- Logging into multiple systems
+- Receiving elevated privileges
+- Executing encoded PowerShell commands
+- Accessing sensitive files
+- Launching Rclone
+- Potentially transferring organizational data externally
+
+The objective was not simply determining whether the account logged in successfully.
+
+Instead, the investigation focused on understanding:
+
+- What actions occurred after authentication
+- Whether privileges were abused
+- Whether sensitive files were accessed
+- Whether data left the organization
+- Whether containment was necessary
+
+This project closely mirrors real insider threat and privileged account abuse investigations performed by SOC and Incident Response teams.
+
+---
+
+## 🎯 Investigation Goals
+
+The investigation focused on answering several critical questions:
+
+### Authentication Review
+
+- Who logged in?
+- Where did they log in from?
+- Which systems were accessed?
+
+### Privilege Validation
+
+- Were elevated privileges assigned?
+- What level of access existed?
+
+### Process Investigation
+
+- What processes executed?
+- Were suspicious commands used?
+
+### Sensitive File Access
+
+- Which files were accessed?
+- Did the account interact with confidential information?
+
+### Data Exfiltration Validation
+
+- Was data transferred externally?
+- Which tools were used?
+- What evidence supports exfiltration?
+
+### Incident Response
+
+- Does the activity require escalation?
+- Should containment occur?
+
+---
+
+## 🔄 Investigation Workflow
+
+```text
+Security Alert
+        ↓
+Detection Validation
+        ↓
+Authentication Review
+        ↓
+Privilege Assignment Analysis
+        ↓
+Process Creation Investigation
+        ↓
+PowerShell Abuse Analysis
+        ↓
+Sensitive File Access Review
+        ↓
+Rclone Investigation
+        ↓
+EDR Correlation
+        ↓
+Exfiltration Validation
+        ↓
+Containment Decision
+```
+
+---
+
+## 🔍 Key Investigation Areas
+
+### 1️⃣ Authentication Investigation
+
+The investigation began by reviewing:
+
+| Event ID | Description |
+|-----------|-------------|
+| 4624 | Successful Logon |
+
+The objective was determining:
+
+- Which systems were accessed
+- Which accounts were involved
+- Whether authentication behavior appeared unusual
+
+Observed activity occurred across multiple systems, increasing investigative concern.
+
+---
+
+### 2️⃣ Privileged Access Validation
+
+The investigation reviewed:
+
+| Event ID | Description |
+|-----------|-------------|
+| 4672 | Special Privileges Assigned |
+
+This confirmed that the account possessed elevated administrative privileges.
+
+This finding was important because privileged accounts can access sensitive resources that standard users cannot.
+
+---
+
+### 3️⃣ Process Creation Investigation
+
+The investigation reviewed:
+
+| Event ID | Description |
+|-----------|-------------|
+| 4688 | Process Creation |
+
+Processes observed included:
+
+```text
+cmd.exe
+powershell.exe
+rclone.exe
+```
+
+This shifted the investigation from authentication activity to behavioral analysis.
+
+---
+
+### 4️⃣ Encoded PowerShell Analysis
+
+One of the strongest findings involved PowerShell execution using:
+
+```text
+-NoProfile
+-WindowStyle Hidden
+-EncodedCommand
+```
+
+Encoded PowerShell commands are commonly associated with:
+
+- Defense evasion
+- Obfuscation
+- Hidden execution
+- Reduced visibility
+
+The presence of encoded commands significantly increased investigative concern.
+
+---
+
+### 5️⃣ Sensitive File Access Investigation
+
+The investigation reviewed:
+
+| Event ID | Description |
+|-----------|-------------|
+| 4663 | Object Access |
+
+Evidence confirmed access to:
+
+```text
+Q4_Salary.xlsx
+```
+
+This represented potentially sensitive organizational information.
+
+The file access activity became especially important when combined with later findings.
+
+---
+
+### 6️⃣ Rclone Activity Investigation
+
+The investigation identified execution of:
+
+```text
+rclone.exe
+```
+
+Rclone is a legitimate cloud synchronization tool.
+
+However, attackers frequently abuse it for:
+
+- Google Drive uploads
+- Dropbox uploads
+- OneDrive uploads
+- Cloud-based data exfiltration
+
+Additional evidence showed Rclone activity referencing:
+
+```text
+Q4_Salary.xlsx
+```
+
+This dramatically increased confidence that data transfer activity may have occurred.
+
+---
+
+### 7️⃣ EDR Correlation
+
+Elastic EDR telemetry was used to validate:
+
+- Process execution
+- Command-line activity
+- Parent-child relationships
+- Timeline evidence
+
+Observed process chain:
+
+```text
+cmd.exe
+      ↓
+powershell.exe
+      ↓
+rclone.exe
+```
+
+This helped explain how the activity occurred rather than simply showing that it occurred.
+
+---
+
+## 📊 Key Findings
+
+The investigation identified:
+
+✅ Successful privileged logons
+
+✅ Administrative privilege assignment
+
+✅ Encoded PowerShell execution
+
+✅ Sensitive file access activity
+
+✅ Rclone execution
+
+✅ Potential cloud-based file transfer
+
+✅ EDR confirmation of process activity
+
+✅ Evidence supporting possible data exfiltration
+
+---
+
+## 🚨 Why This Activity Was Concerning
+
+No single event proved malicious activity.
+
+However, the investigation revealed a sequence of related actions:
+
+```text
+Privileged Logon
+        ↓
+Administrative Privileges Assigned
+        ↓
+Encoded PowerShell Execution
+        ↓
+Sensitive File Access
+        ↓
+Rclone Activity
+        ↓
+Potential Data Transfer
+```
+
+Individually, some actions could be legitimate.
+
+Together, they created a much stronger indication of privileged account misuse and possible insider threat behavior.
+
+---
+
+## 🧠 Investigation Thinking
+
+One major lesson from this project was learning that:
+
+> Authentication events rarely tell the full story.
+
+At first, the investigation appeared to involve login activity.
+
+As more evidence was reviewed, the focus shifted toward:
+
+- Process behavior
+- File access
+- Command execution
+- Data movement
+
+This reinforced the importance of investigating what happens after access is obtained.
+
+---
+
+## 🛠️ Recommended Containment Actions
+
+Based on the evidence available:
+
+- Isolate affected systems
+- Reset privileged credentials
+- Block unauthorized Rclone usage
+- Review additional file access activity
+- Investigate blast radius
+- Monitor privileged accounts
+- Review cloud storage activity
+
+---
+
+## 📸 Featured Investigation Evidence
+
+The strongest screenshots from this project include:
+
+- Initial Insider Threat Finding
+- Privileged Logon Investigation
+- Special Privileges Assigned
+- Encoded PowerShell Execution
+- Salary File Exfiltration Command
+- File Access Validation
+- Process Timeline Investigation
+- Final Exfiltration Evidence
+
+Together these screenshots tell the complete investigation story:
+
+```text
+Alert
+ ↓
+Authentication
+ ↓
+Privilege Assignment
+ ↓
+PowerShell Abuse
+ ↓
+Sensitive File Access
+ ↓
+Rclone Activity
+ ↓
+Data Exfiltration Evidence
+ ↓
+EDR Confirmation
+```
+
+---
+
+## 🛠️ Skills Demonstrated
+
+- Insider threat investigation
+- Privileged account monitoring
+- Windows Event Log analysis
+- Authentication review
+- Event ID interpretation
+- PowerShell investigation
+- Rclone analysis
+- Data exfiltration detection
+- Process tree analysis
+- EDR correlation
+- Blast radius thinking
+- Incident response reasoning
+- Containment decision-making
 - Security documentation
 
 ---
@@ -585,65 +631,54 @@ Evidence showing User-Agent indicators associated with automated tools including
 
 Through this investigation I strengthened my ability to:
 
-- Validate potential DDoS activity
-- Analyze web traffic patterns
-- Investigate application-layer attacks
-- Correlate multiple evidence sources
-- Distinguish automation from legitimate user activity
-- Assess application impact
+- Investigate privileged account activity
+- Interpret Event IDs 4624, 4672, 4688, and 4663
+- Analyze PowerShell abuse indicators
+- Review process execution behavior
+- Investigate sensitive file access
+- Correlate SIEM and EDR evidence
+- Validate potential data exfiltration activity
 - Build evidence-based conclusions
-- Document investigations using professional SOC methodologies
-
----
-
-## ⚠️ Common Beginner Mistake
-
-One common mistake is assuming that high traffic volume automatically means a DDoS attack is occurring.
-
-In reality, traffic spikes may be caused by:
-
-- legitimate user demand
-- marketing campaigns
-- automated updates
-- business operations
-- scheduled tasks
-
-Effective investigations require validating:
-
-- source distribution
-- targeted resources
-- application impact
-- automation indicators
-
-before reaching conclusions.
-
----
-
-## 🔧 Recommended Improvements
-
-Potential improvements include:
-
-- Automated baseline monitoring
-- Improved anomaly detection thresholds
-- Enhanced web traffic visibility
-- Stronger rate-limiting controls
-- WAF tuning and optimization
-- Improved alert correlation workflows
+- Document investigations using professional SOC workflows
 
 ---
 
 ## 🧾 Professional Summary
 
-This project focused on investigating potential Layer 7 HTTP flood activity through structured traffic analysis and evidence validation.
+This project focused on determining whether unusual privileged account activity represented legitimate administration or potential data theft. By reviewing authentication activity, privilege assignments, process execution, file access events, PowerShell behavior, and Rclone activity, I was able to build a clearer understanding of what occurred. The strongest findings involved encoded PowerShell execution, access to sensitive salary data, and cloud transfer activity associated with Rclone. This investigation strengthened my understanding of insider threat investigations, privileged account abuse detection, data exfiltration analysis, and evidence-based incident response decision-making.
 
-The investigation began with abnormal web traffic activity and expanded into source attribution, endpoint targeting analysis, HTTP error review, User-Agent investigation, and threat intelligence validation.
+---
 
-The most valuable lesson from this project was learning that effective incident response depends on validating evidence rather than trusting alert names alone. By correlating traffic volume, source distribution, targeted resources, application impact, and automation indicators, I was able to build a stronger understanding of how Layer 7 DDoS investigations are performed in real-world environments.
+# 🧾 Week 16 Summary
 
+Week 16 focused heavily on incident response investigations and evidence correlation.
+
+Across these projects, I practiced:
+
+- Alert validation
+- Threat intelligence review
+- Data exfiltration investigations
+- Layer 7 DDoS investigations
+- Insider threat investigations
+- Privileged account abuse analysis
+- PowerShell investigation
+- Rclone activity review
+- EDR process analysis
+- Authentication review
+- Evidence correlation
+- Containment reasoning
+- Security documentation
+
+The biggest lesson from this week is:
+
+> An alert is not the answer.  
+> It is the starting point of the investigation.
+
+Strong investigations are built by validating evidence, connecting findings across multiple data sources, understanding what actually matters, and making reasonable decisions based on the information available.
 
 # ⚠️ Disclaimer
 
-This project was completed in a controlled educational and cybersecurity training environment. All logs, alerts, indicators, and investigation artifacts were used strictly for learning and professional development purposes.
+These projects was completed in a controlled educational and cybersecurity training environment. All logs, alerts, indicators, and investigation artifacts were used strictly for learning and professional development purposes.
 
 ---
 
