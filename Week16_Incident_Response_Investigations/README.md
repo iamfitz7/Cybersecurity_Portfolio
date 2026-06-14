@@ -1,8 +1,21 @@
 # ☁️ Week 16 — Incident Response Investigations
 
-This section documents realistic incident response investigations involving **data exfiltration**, **Layer 7 DDoS activity**, **insider threat behavior**, **privileged account abuse**, **credential dumping**, **LSASS memory access**, and evidence correlation across multiple security data sources.
+This section documents realistic incident response investigations involving **data exfiltration**, **Layer 7 DDoS activity**, **insider threat behavior**, **privileged account abuse**, **credential dumping**, **LSASS memory access**, **command-and-control beaconing**, **threat intelligence enrichment**, and evidence correlation across multiple security data sources.
 
 The goal of these projects is to demonstrate how SOC analysts, incident responders, threat hunters, and DFIR teams investigate suspicious activity by validating alerts, determining scope, assessing impact, and making response decisions based on evidence rather than assumptions.
+
+Across these investigations, the focus is not simply on identifying alerts. The focus is on understanding:
+
+- What happened
+- How it happened
+- Which users, systems, or accounts were involved
+- What evidence supports the concern
+- Whether the activity was legitimate, suspicious, or malicious
+- What additional context is needed
+- What response action makes sense
+- What limitations exist in the available telemetry
+
+These labs are designed to reflect the type of thinking used during real-world Security Operations Center and Incident Response investigations.
 
 ---
 
@@ -14,6 +27,7 @@ The goal of these projects is to demonstrate how SOC analysts, incident responde
 | Lab 02 | Layer 7 HTTP Flood / DDoS Investigation |
 | Lab 03 | Insider Threat, Privileged Account Abuse, & Data Exfiltration Investigation |
 | Lab 04 | Credential Dumping & LSASS Memory Theft Investigation |
+| Lab 05 | Command-and-Control Beaconing & Threat Intelligence Investigation |
 
 ---
 
@@ -254,42 +268,6 @@ rclone.exe
 
 ---
 
-## 🚨 Why This Activity Was Concerning
-
-No single event proved malicious activity by itself.
-
-However, the sequence created a stronger concern:
-
-```text
-Privileged Logon
-        ↓
-Administrative Privileges Assigned
-        ↓
-Encoded PowerShell Execution
-        ↓
-Sensitive File Access
-        ↓
-Rclone Activity
-        ↓
-Potential Data Transfer
-```
-
----
-
-## 🛠️ Skills Demonstrated
-
-- Insider threat investigation
-- Privileged account monitoring
-- Windows Event Log analysis
-- PowerShell abuse analysis
-- Rclone investigation
-- Sensitive file access review
-- EDR correlation
-- Data exfiltration validation
-- Containment decision-making
-
----
-
 ## 🧾 Professional Summary
 
 This project strengthened my ability to investigate privileged account abuse and possible insider threat behavior. The strongest findings involved encoded PowerShell execution, sensitive file access, and Rclone activity associated with possible data transfer.
@@ -321,42 +299,6 @@ The objective was to determine whether the activity represented:
 
 ---
 
-## 🎯 Investigation Goals
-
-### Alert Validation
-
-- Did the alert accurately represent suspicious LSASS activity?
-- Was LSASS actually targeted?
-- Did the detection rule provide useful context?
-
-### Process Investigation
-
-- Which process targeted LSASS?
-- What parent process launched the suspicious activity?
-- What command-line arguments were used?
-- What account was associated with the activity?
-
-### Credential Dumping Validation
-
-- Was Procdump used?
-- Was `lsass.exe` referenced directly?
-- Was a `.dmp` file created?
-- Where was the dump file written?
-
-### External Upload Investigation
-
-- Was the dump file moved or uploaded?
-- Was `curl.exe` involved?
-- Was there communication to an external storage destination?
-
-### Endpoint Correlation
-
-- Did Elastic or CrowdStrike-style telemetry confirm the activity?
-- Did process tree evidence support the SIEM findings?
-- Were tools such as Rundll32, Curl, or Procdump observed together?
-
----
-
 ## 🔄 Investigation Workflow
 
 ```text
@@ -383,22 +325,6 @@ Containment and Credential Response Decision
 
 ---
 
-## 🛠️ Tools & Data Sources Used
-
-| Tool / Data Source | Purpose |
-|---|---|
-| Splunk | SIEM correlation and event review |
-| Splunk Detection Rule Logic | Understanding why the alert triggered |
-| Elastic Security | LSASS dump alert validation and endpoint review |
-| Elastic Discover | Searching dump file and command-line evidence |
-| CrowdStrike-style Telemetry | Process, command-line, hash, and account correlation |
-| Process Analyzer | Parent-child process relationship review |
-| Windows Endpoint Telemetry | Process execution and dump file evidence |
-| Command-Line Analysis | Validating Procdump and Curl behavior |
-| Service Account Review | Determining account risk and possible impact |
-
----
-
 ## 🔍 Key Investigation Areas
 
 ### 1️⃣ Initial Credential Dumping Alert Review
@@ -417,29 +343,9 @@ SRV-DC01
 
 Because LSASS memory can contain sensitive authentication material, this alert required immediate review.
 
-The first question was:
-
-> Did a process actually target LSASS and create a memory dump?
-
 ---
 
-### 2️⃣ Detection Rule Logic Review
-
-The detection rule was reviewed to understand why the alert fired.
-
-The rule focused on indicators such as:
-
-- LSASS process access
-- Dump file creation
-- Memory dumping behavior
-- Suspicious process execution
-- Known credential dumping tool patterns
-
-This helped define what evidence needed to be validated next.
-
----
-
-### 3️⃣ Splunk LSASS, Procdump, and Curl Correlation
+### 2️⃣ Splunk LSASS, Procdump, and Curl Correlation
 
 Splunk evidence connected several important elements:
 
@@ -452,11 +358,9 @@ curl.exe
 
 This was a major turning point because the evidence suggested more than generic suspicious activity.
 
-The presence of Procdump alone may not confirm credential theft. However, Procdump used in relation to LSASS and dump file creation is highly suspicious.
-
 ---
 
-### 4️⃣ Process and Command-Line Correlation
+### 3️⃣ Process and Command-Line Correlation
 
 CrowdStrike-style process evidence showed activity involving:
 
@@ -469,13 +373,9 @@ CrowdStrike-style process evidence showed activity involving:
 
 The investigation moved from identifying tool names to understanding how the tools were used together.
 
-The key question became:
-
-> What did each tool do in the sequence?
-
 ---
 
-### 5️⃣ Elastic LSASS Memory Dump Alert Validation
+### 4️⃣ Elastic LSASS Memory Dump Alert Validation
 
 Elastic generated an alert showing:
 
@@ -485,15 +385,9 @@ LSASS Memory Dump Creation
 
 This validated that the suspicious activity was not isolated to one telemetry source.
 
-Elastic supported the same investigation direction observed in Splunk:
-
-- LSASS was targeted
-- Memory dump behavior occurred
-- Endpoint telemetry supported the alert
-
 ---
 
-### 6️⃣ Process Tree Analysis
+### 5️⃣ Process Tree Analysis
 
 Process analyzer evidence showed a suspicious process chain:
 
@@ -505,16 +399,9 @@ procdump64.exe
 
 This was important because process lineage helps explain execution.
 
-A suspicious binary becomes more meaningful when the process tree shows:
-
-- how it launched
-- what parent process created it
-- what arguments were used
-- whether the execution context was expected
-
 ---
 
-### 7️⃣ Procdump LSASS Dump Argument Review
+### 6️⃣ Procdump LSASS Dump Argument Review
 
 One of the strongest pieces of evidence showed:
 
@@ -532,11 +419,9 @@ and creating a memory dump file.
 
 This behavior is consistent with credential dumping because LSASS contains sensitive authentication data.
 
-The key issue was not whether Procdump existed on the system. The issue was what Procdump was used to dump.
-
 ---
 
-### 8️⃣ Curl Upload and Dump File Correlation
+### 7️⃣ Curl Upload and Dump File Correlation
 
 Additional evidence showed:
 
@@ -548,8 +433,6 @@ executing shortly after LSASS dump activity.
 
 The command-line evidence connected Curl activity to external upload behavior.
 
-This changed the severity of the investigation because the concern was no longer only local credential dumping.
-
 The concern became:
 
 ```text
@@ -557,50 +440,6 @@ Credential Dumping
         +
 Possible Credential Exfiltration
 ```
-
----
-
-### 9️⃣ External Upload Evidence
-
-Curl activity showed upload behavior to an external suspicious cloud destination.
-
-This was one of the most important findings because credential dumping becomes significantly more dangerous when dumped credential material leaves the environment.
-
----
-
-### 🔟 Elastic Discover Dump File Search
-
-Elastic Discover was used to search for:
-
-```text
-.dmp
-```
-
-activity and command-line evidence.
-
-This helped validate dump file creation and provided another source of endpoint-level evidence.
-
-Searching for dump file patterns is useful because attackers often stage credential material before compressing, moving, or uploading it.
-
----
-
-### 1️⃣1️⃣ Service Account Suspicious Tool Correlation
-
-The investigation identified service account activity associated with suspicious tools and behaviors.
-
-Observed account context included:
-
-```text
-svc_adm@corp.local
-```
-
-Additional related account context included:
-
-```text
-corp\admin
-```
-
-Service account involvement increased risk because service accounts often have persistent access, elevated privileges, or access across multiple systems.
 
 ---
 
@@ -638,70 +477,7 @@ lsass.exe
 
 - Dump file creation evidence
 - Curl upload activity to an external destination
-- Elastic Discover evidence for `.dmp` and command-line activity
 - Service account activity tied to suspicious tooling
-
----
-
-## 🚨 Why This Activity Was High Risk
-
-This activity was high risk because the evidence showed a suspicious chain:
-
-```text
-LSASS Alert
-      ↓
-Procdump Execution
-      ↓
-LSASS Targeted
-      ↓
-Dump File Created
-      ↓
-Curl Upload Activity
-      ↓
-External Destination
-      ↓
-EDR Validation
-```
-
-Credential dumping is dangerous because it can expose authentication material that attackers may use for:
-
-- lateral movement
-- privilege escalation
-- account takeover
-- domain compromise
-- persistence
-- additional data theft
-
-The presence of external upload behavior made the investigation more serious because it suggested possible credential exfiltration, not only local dumping.
-
----
-
-## 🧠 Investigation Thinking
-
-One of the most important lessons from this investigation was that legitimate tools can still be abused.
-
-Tools observed included:
-
-```text
-Procdump
-Rundll32
-Curl
-```
-
-None of these are automatically malicious by name alone.
-
-The stronger investigation questions were:
-
-- What launched the tool?
-- What arguments were used?
-- What process was targeted?
-- Was a file created?
-- Where was the file written?
-- Was the file uploaded?
-- What account was involved?
-- Did another telemetry source confirm the behavior?
-
-The investigation became stronger as multiple independent data points supported the same conclusion.
 
 ---
 
@@ -720,23 +496,389 @@ The investigation became stronger as multiple independent data points supported 
 
 ---
 
+## 🧾 Professional Summary
+
+This project focused on determining whether suspicious LSASS-related activity represented credential dumping and possible credential exfiltration. By reviewing the initial alert, detection logic, Splunk events, CrowdStrike-style telemetry, Elastic alerts, process analyzer evidence, dump file creation, and Curl upload behavior, I was able to build a strong evidence chain.
+
+The strongest findings were the connection between Procdump targeting LSASS, dump file creation, and Curl uploading the file to an external destination. This investigation reinforced that legitimate tools such as Procdump, Rundll32, and Curl can still be abused when used in suspicious sequences.
+
+---
+
+# 📡 Lab 05 — Command-and-Control Beaconing & Threat Intelligence Investigation
+
+## 🛡️ Incident Overview
+
+This investigation focused on validating suspected **command-and-control (C2) beaconing activity** based on repeated outbound network communications to external IP addresses.
+
+The investigation began after a Splunk Enterprise Security notable event identified:
+
+```text
+Probable Malware Beaconing Outbound Traffic Identified
+```
+
+The objective was to determine whether the observed outbound activity represented:
+
+- Normal business communication
+- Repeated but benign external service traffic
+- Suspicious beaconing behavior
+- Malware communication with external infrastructure
+- Activity requiring escalation and deeper endpoint review
+
+C2 beaconing investigations are important because malware often communicates with attacker-controlled infrastructure at regular intervals. These communications may be used to receive commands, download additional payloads, maintain persistence, or signal that a compromised system is active.
+
+---
+
+## 🎯 Investigation Goals
+
+### Alert Validation
+
+- Did the alert represent actual repeated outbound communication?
+- Were the connection counts unusually high?
+- Did the traffic pattern support a beaconing hypothesis?
+
+### External Destination Review
+
+- Which external IP addresses were contacted?
+- How frequently were the destinations contacted?
+- What were the first seen and last seen timestamps?
+- Were the same destinations contacted repeatedly?
+
+### User and Host Attribution
+
+- Which internal users communicated with the suspicious IPs?
+- Which systems were involved?
+- Were multiple users or departments affected?
+
+### Threat Intelligence Validation
+
+- Did the external IP addresses have suspicious reputation?
+- Were there related files, malware associations, or historical detections?
+- Did threat intelligence provide supporting context?
+
+### Impact Assessment
+
+- How many users, hosts, or departments were potentially affected?
+- Was the activity isolated or widespread?
+- Did the available evidence justify escalation?
+
+---
+
+## 🔄 Investigation Workflow
+
+```text
+C2 Beaconing Alert
+        ↓
+Beaconing Detection Query Review
+        ↓
+High-Frequency Connection Analysis
+        ↓
+Suspicious External IP Identification
+        ↓
+User Attribution
+        ↓
+Multi-User Communication Analysis
+        ↓
+Threat Intelligence IP Reputation Review
+        ↓
+File and Malware Correlation
+        ↓
+Blast Radius Assessment
+        ↓
+Investigation Conclusion
+```
+
+---
+
+## 🛠️ Tools & Data Sources Used
+
+| Tool / Data Source | Purpose |
+|---|---|
+| Splunk Enterprise Security | Notable event review and alert validation |
+| Splunk Search | High-frequency outbound connection analysis |
+| Network Logs | External destination and connection count review |
+| User Attribution Data | Mapping suspicious traffic to internal users |
+| Threat Intelligence Platform | IP reputation and malware association review |
+| Community Intelligence | Historical context and external reputation validation |
+| Incident Response Methodology | Impact assessment and response decision-making |
+
+---
+
+## 🔍 Key Investigation Areas
+
+### 1️⃣ Initial C2 Beaconing Alert Review
+
+The investigation began with the notable event:
+
+```text
+Probable Malware Beaconing Outbound Traffic Identified
+```
+
+This alert represented a potential sign of malware communicating outbound to external infrastructure.
+
+However, the alert was not treated as confirmed compromise. It was treated as a hypothesis requiring validation.
+
+The first investigative question was:
+
+> Are internal systems repeatedly communicating with suspicious external destinations in a pattern consistent with beaconing?
+
+---
+
+### 2️⃣ Beaconing High-Frequency Connection Analysis
+
+A Splunk search was used to identify outbound communications with:
+
+- External destination IPs
+- High connection counts
+- Repeated communication patterns
+- First seen timestamps
+- Last seen timestamps
+
+This helped determine whether the outbound connections were isolated events or recurring activity.
+
+Repeated communication to the same destination is more meaningful than a single connection because beaconing often relies on periodic check-ins.
+
+---
+
+### 3️⃣ Suspicious External IP Connection Summary
+
+The investigation reviewed top external IP addresses and summarized:
+
+- Destination IP
+- Number of connections
+- First observed time
+- Last observed time
+- Communication frequency
+
+This helped prioritize which external destinations required further investigation.
+
+At this stage, the investigation focused on identifying the most suspicious infrastructure rather than reviewing every network event individually.
+
+---
+
+### 4️⃣ User Attribution for Suspicious IPs
+
+After identifying suspicious external IPs, the investigation shifted to attribution.
+
+The goal was to determine:
+
+- Which internal users communicated with the IPs
+- Which systems were involved
+- Whether activity was isolated to one user or seen across multiple users
+
+This step was important because an IP address by itself does not provide enough context.
+
+Attribution helped transform the investigation from:
+
+```text
+Suspicious External IP
+```
+
+to:
+
+```text
+Suspicious External IP + Internal User + Internal Host
+```
+
+That context is much more useful for incident response.
+
+---
+
+### 5️⃣ Multi-User Beaconing Communication Analysis
+
+Further analysis showed communication patterns involving:
+
+- Multiple users
+- Same destination IPs
+- Repeated connection counts
+
+This was important because repeated communication across multiple users or systems may indicate a broader issue.
+
+The investigation focused on whether the activity represented:
+
+- one compromised host
+- multiple affected systems
+- shared business application traffic
+- possible malware beaconing across several endpoints
+
+This helped support blast radius analysis.
+
+---
+
+### 6️⃣ Threat Intelligence IP Reputation Review
+
+Threat intelligence research was performed against the suspicious external IP addresses.
+
+The goal was to determine whether the infrastructure had:
+
+- malicious reputation
+- community reports
+- historical detections
+- known malware associations
+- suspicious hosting relationships
+
+Threat intelligence was used as supporting evidence, not as the only deciding factor.
+
+A clean reputation score alone does not prove safety, and a suspicious reputation score should still be validated against internal telemetry.
+
+---
+
+### 7️⃣ Threat Intelligence File and Malware Correlation
+
+One of the strongest parts of the investigation involved reviewing threat intelligence relationships.
+
+The analysis included:
+
+- connected files
+- malware associations
+- historical detections
+- related indicators
+- infrastructure relationships
+
+This helped determine whether the suspicious IPs were associated with known malicious activity or malware-related infrastructure.
+
+This stage increased the depth of the investigation because it moved beyond “IP reputation” and into relationship-based threat intelligence analysis.
+
+---
+
+### 8️⃣ Blast Radius User and Host Impact Assessment
+
+The investigation then reviewed impact across:
+
+- users
+- hostnames
+- departments
+- external IP relationships
+
+This helped determine whether the activity was isolated or potentially broader.
+
+Blast radius assessment is important because the response decision changes depending on scope.
+
+A single affected host may require endpoint containment and user review.
+
+Multiple affected hosts or users may require wider hunting, network blocking, and incident escalation.
+
+---
+
+## 📊 Key Findings
+
+The investigation identified:
+
+- A Splunk ES notable event for probable malware beaconing
+- Repeated outbound communications to suspicious external IP addresses
+- High-frequency connection patterns
+- First seen and last seen timestamps supporting recurring activity
+- External IPs mapped back to internal users
+- Multiple users communicating with the same destination IPs
+- Threat intelligence context for suspicious infrastructure
+- File and malware relationships connected to external indicators
+- Blast radius evidence involving users, hosts, departments, and external destinations
+
+---
+
+## 🚨 Why This Activity Was Concerning
+
+This activity was concerning because several findings aligned:
+
+```text
+Beaconing Alert
+      ↓
+Repeated Outbound Connections
+      ↓
+Suspicious External IPs
+      ↓
+Internal User Attribution
+      ↓
+Multi-User Communication Patterns
+      ↓
+Threat Intelligence Correlation
+      ↓
+Blast Radius Review
+```
+
+Repeated outbound communications alone do not prove malware.
+
+However, repeated communications combined with suspicious infrastructure, user attribution, threat intelligence relationships, and impact assessment create a stronger case for further investigation.
+
+---
+
+## 🧠 Investigation Thinking
+
+One of the biggest lessons from this lab was that C2 beaconing investigations require context.
+
+A weaker investigation might stop at:
+
+> “This IP looks suspicious.”
+
+A stronger investigation asks:
+
+- How often was the IP contacted?
+- Which users contacted it?
+- Which hosts were involved?
+- Was the communication repeated?
+- Was the same destination contacted by multiple users?
+- Does threat intelligence show malware relationships?
+- Is the behavior isolated or widespread?
+- What additional endpoint evidence is needed?
+
+This lab reinforced that an external IP address alone rarely tells the full story. The value comes from connecting network behavior, attribution, threat intelligence, and impact.
+
+---
+
+## ⚠️ Risks, Trade-Offs, and Limitations
+
+One risk in beaconing investigations is overreacting to repeated outbound connections.
+
+Many legitimate applications communicate regularly with external services, including:
+
+- cloud platforms
+- software update services
+- authentication providers
+- telemetry services
+- business applications
+
+Another risk is relying too heavily on threat intelligence reputation scores. Newly created attacker infrastructure may not have enough historical reputation data to appear malicious.
+
+This investigation was based on available lab evidence. In a real environment, additional data sources would likely be reviewed, including:
+
+- DNS logs
+- firewall logs
+- proxy logs
+- EDR process telemetry
+- packet captures
+- endpoint timelines
+- malware sandbox results
+
+---
+
+## 🧭 MITRE ATT&CK Concepts Observed
+
+| Technique | Description |
+|---|---|
+| T1071 | Application Layer Protocol |
+| T1102 | Web Service |
+| T1571 | Non-Standard Port |
+| T1095 | Non-Application Layer Protocol |
+| T1041 | Exfiltration Over C2 Channel |
+| T1059 | Command and Scripting Interpreter |
+| T1583 | Acquire Infrastructure |
+| T1595 | Active Scanning |
+
+---
+
 ## 🛠️ Recommended Response Actions
 
-Based on the available evidence, recommended actions include:
+Based on the evidence available, recommended next steps include:
 
-- Isolate `SRV-DC01` from the network
-- Preserve logs and endpoint evidence
-- Preserve the timeline before containment changes system state
-- Disable or reset the affected service account
-- Review recent logons from involved accounts
-- Rotate privileged credentials
-- Review Tier-0 and administrative account exposure
-- Block the external upload destination
-- Hunt for similar Procdump, Rundll32, and Curl behavior across other hosts
-- Search for `.dmp` files and LSASS access patterns across the environment
-- Review lateral movement indicators
-- Validate whether the dump file was successfully exfiltrated
-- Document the complete evidence chain for escalation
+- Continue monitoring affected users and hosts
+- Review endpoint telemetry for suspicious processes
+- Correlate with DNS and proxy logs
+- Block confirmed malicious IPs where operationally safe
+- Enrich indicators using multiple threat intelligence sources
+- Review whether the same IPs appear across other environments
+- Hunt for related file hashes and malware indicators
+- Determine whether outbound traffic matches known business services
+- Escalate if endpoint telemetry supports compromise
+- Document all findings in a formal case file
 
 ---
 
@@ -744,26 +886,51 @@ Based on the available evidence, recommended actions include:
 
 | Screenshot | Description |
 |---|---|
-| `Week16_Lab4_01_LSASS_Credential_Dumping_Alert.png` | Initial LSASS credential dumping alert on `SRV-DC01` |
-| `Week16_Lab4_02_Detection_Rule_Logic_And_Description.png` | Detection rule logic explaining LSASS dumping indicators |
-| `Week16_Lab4_03_Splunk_LSASS_Procdump_Curl_Evidence.png` | Splunk correlation showing `procdump.exe`, `lsass.exe`, dump file activity, and `curl.exe` |
-| `Week16_Lab4_04_CrowdStrike_Process_And_Commandline_Correlation.png` | CrowdStrike-style process evidence with Procdump, Rundll32, Curl, command lines, hashes, and suspicious activity |
-| `Week16_Lab4_05_Elastic_LSASS_Memory_Dump_Alert.png` | Elastic alert showing LSASS memory dump creation |
-| `Week16_Lab4_06_Process_Analyzer_Procdump_Execution.png` | Process analyzer evidence showing `cmd.exe` leading to `procdump64.exe` |
-| `Week16_Lab4_07_Process_Tree_System_And_Smss_Context.png` | Wider process tree context around system processes |
-| `Week16_Lab4_08_Procdump64_LSASS_Dump_Arguments.png` | `procdump64.exe` arguments targeting `lsass.exe` and creating a dump file |
-| `Week16_Lab4_09_Curl_Upload_And_Procdump_Dump_Correlation.png` | Curl upload activity correlated with Procdump dump creation |
-| `Week16_Lab4_10_Curl_External_Upload_Evidence.png` | Curl upload to external suspicious cloud destination |
-| `Week16_Lab4_11_Elastic_Discover_LSASS_Dump_Search.png` | Elastic Discover search for `.dmp` and command-line evidence |
-| `Week16_Lab4_12_Service_Account_Suspicious_Tool_Correlation.png` | Service account activity tied to Curl, Rundll32, Procdump, LSASS dump behavior, and hashes |
+| `Week16_Lab5_01_C2_Beaconing_Detection_Alert.png` | Initial Splunk notable event showing probable malware beaconing outbound traffic |
+| `Week16_Lab5_02_Beaconing_High_Frequency_Connection_Analysis.png` | Splunk query identifying external destination IPs, high connection counts, and repeated outbound communications |
+| `Week16_Lab5_03_Suspicious_External_IP_Connection_Summary.png` | Summary of suspicious external IPs, connection counts, first seen, and last seen values |
+| `Week16_Lab5_04_User_Attribution_For_Suspicious_IPs.png` | Mapping of suspicious external IP addresses to internal users |
+| `Week16_Lab5_05_Multi_User_Beaconing_Communication_Analysis.png` | Multi-user communication analysis showing shared destination IPs and connection counts |
+| `Week16_Lab5_06_Threat_Intelligence_IP_Reputation_Review.png` | Threat intelligence reputation review for suspicious external IP infrastructure |
+| `Week16_Lab5_07_Threat_Intelligence_File_And_Malware_Correlation.png` | Threat intelligence relationships showing connected files, detections, and malware associations |
+| `Week16_Lab5_08_Blast_Radius_User_And_Host_Impact_Assessment.png` | Impact assessment showing departments, hostnames, users, and external IP relationships |
+
+---
+
+## 📸 Recommended LinkedIn Screenshots
+
+The strongest screenshots for LinkedIn are:
+
+1. `Week16_Lab5_01_C2_Beaconing_Detection_Alert.png`  
+   Shows the initial C2 beaconing detection alert.
+
+2. `Week16_Lab5_03_Suspicious_External_IP_Connection_Summary.png`  
+   Shows the repeated outbound communication evidence.
+
+3. `Week16_Lab5_07_Threat_Intelligence_File_And_Malware_Correlation.png`  
+   Shows threat intelligence enrichment and malware relationship analysis.
+
+These three screenshots tell the public-facing investigation story:
+
+```text
+Detection Alert
+      ↓
+Repeated External Connections
+      ↓
+Threat Intelligence Correlation
+      ↓
+C2 Beaconing Investigation
+```
 
 ---
 
 ## 📁 Supporting Files
 
+Recommended file names for this lab:
+
 ```text
-Cybersecurity-Technical-Analysis-Credential-Dumping-LSASS-Investigation.md
-Security-Operations-Case-File-LSASS-Credential-Dumping-Investigation.md
+Cybersecurity-Technical-Analysis-C2-Beaconing-And-Threat-Intelligence-Investigation.md
+SOC-Case-Study-C2-Beaconing-And-Threat-Intelligence-Investigation.md
 ```
 
 ---
@@ -772,13 +939,12 @@ Security-Operations-Case-File-LSASS-Credential-Dumping-Investigation.md
 
 | Field | Value |
 |---|---|
-| Case Status | True Positive |
-| Risk Level | High |
-| Primary Concern | LSASS credential dumping |
-| Secondary Concern | External upload / possible credential exfiltration |
-| Affected Host | `SRV-DC01` |
-| Account Context | `svc_adm@corp.local`, `corp\admin` |
-| Recommended Action | Escalate, contain, preserve evidence, rotate credentials |
+| Case Type | Probable Malware Beaconing / C2 Investigation |
+| Primary Concern | Repeated outbound communication to suspicious external IPs |
+| Supporting Evidence | High-frequency connections, user attribution, threat intelligence relationships |
+| Risk Level | Medium to High |
+| Status | Requires continued investigation and endpoint validation |
+| Recommended Action | Monitor, enrich, correlate with endpoint telemetry, escalate if compromise indicators are confirmed |
 
 ---
 
@@ -786,27 +952,26 @@ Security-Operations-Case-File-LSASS-Credential-Dumping-Investigation.md
 
 Through this investigation I strengthened my ability to:
 
-- Validate credential dumping alerts
-- Investigate LSASS memory access
-- Analyze Procdump abuse
-- Review suspicious command-line arguments
-- Correlate SIEM and EDR telemetry
-- Identify dump file creation
-- Investigate Curl-based upload behavior
-- Review service account risk
-- Build an evidence chain from multiple data sources
-- Make evidence-based containment decisions
-- Document credential theft investigations professionally
+- Validate suspected C2 beaconing alerts
+- Analyze high-frequency outbound network connections
+- Identify suspicious external IP destinations
+- Attribute network activity to internal users and systems
+- Use threat intelligence to enrich indicators
+- Review file and malware relationships
+- Assess user, host, and department impact
+- Distinguish repeated business traffic from suspicious beaconing patterns
+- Build evidence-based conclusions
+- Document network-based investigations professionally
 
 ---
 
 ## 🧾 Professional Summary
 
-This project focused on determining whether suspicious LSASS-related activity represented credential dumping and possible credential exfiltration. By reviewing the initial alert, detection logic, Splunk events, CrowdStrike-style telemetry, Elastic alerts, process analyzer evidence, dump file creation, and Curl upload behavior, I was able to build a strong evidence chain.
+This project focused on investigating suspected command-and-control beaconing activity through outbound network analysis and threat intelligence correlation. The investigation began with a Splunk notable event and expanded into high-frequency connection review, suspicious external IP analysis, user attribution, multi-user communication analysis, IP reputation review, malware relationship research, and blast radius assessment.
 
-The strongest findings were the connection between Procdump targeting LSASS, dump file creation, and Curl uploading the file to an external destination. This investigation reinforced that legitimate tools such as Procdump, Rundll32, and Curl can still be abused when used in suspicious sequences.
+The strongest lesson from this project was that repeated outbound communication is not enough by itself to confirm compromise. A stronger investigation comes from connecting communication frequency, external destination context, internal attribution, threat intelligence relationships, and impact assessment.
 
-This lab strengthened my understanding of credential dumping investigations, LSASS security, Windows authentication risk, service account exposure, SIEM/EDR correlation, and containment decision-making.
+This lab strengthened my understanding of C2 beaconing investigations, network traffic analysis, threat intelligence enrichment, user attribution, blast radius review, and incident response decision-making.
 
 ---
 
@@ -824,13 +989,17 @@ Across these projects, I practiced:
 - Privileged account abuse analysis
 - Credential dumping investigations
 - LSASS memory access review
+- Command-and-control beaconing investigations
 - Procdump abuse analysis
 - Curl upload investigation
 - PowerShell investigation
 - Rclone activity review
 - EDR process analysis
 - Authentication review
+- User attribution
+- External IP reputation analysis
 - Evidence correlation
+- Blast radius assessment
 - Containment reasoning
 - Security documentation
 
@@ -840,10 +1009,7 @@ The biggest lesson from this week is:
 > It is the starting point of the investigation.
 
 Strong investigations are built by validating evidence, connecting findings across multiple data sources, understanding what actually matters, and making reasonable decisions based on the information available.
-````
 
-
-Strong investigations are built by validating evidence, connecting findings across multiple data sources, understanding what actually matters, and making reasonable decisions based on the information available.
 
 # ⚠️ Disclaimer
 
