@@ -1,34 +1,34 @@
-# Microsoft Defender XDR: End-to-End Enterprise EDR Investigation Lab
+# Week 17 — Microsoft Defender XDR: Enterprise EDR Investigation Series
 
-> A comprehensive Microsoft Defender XDR home lab demonstrating enterprise endpoint detection and response (EDR) workflows, advanced investigations, threat hunting, and incident response using Microsoft Defender XDR, Microsoft Defender for Endpoint, Microsoft Sentinel, and Kusto Query Language (KQL).
+> A multi-lab series focused on developing practical experience with **Microsoft Defender XDR**, Microsoft's enterprise Endpoint Detection and Response (EDR) platform. These labs simulate real-world Security Operations Center (SOC) investigations by covering endpoint alerts, process analysis, advanced hunting, device investigations, user investigations, threat intelligence correlation, and incident response workflows.
 
 ---
 
 # Overview
 
-Modern Security Operations Centers (SOCs) rely heavily on Endpoint Detection and Response (EDR) platforms to detect, investigate, contain, and respond to cyber threats. Unlike traditional SIEM platforms that primarily aggregate logs, EDR solutions provide rich endpoint telemetry, process visibility, behavioral analytics, and response capabilities.
+Endpoint Detection and Response (EDR) platforms have become one of the most critical technologies within modern Security Operations Centers (SOCs). While SIEM platforms collect and correlate security logs across an environment, EDR solutions provide deep visibility into endpoint activity, allowing analysts to investigate attacks at the device level and respond quickly to malicious behavior.
 
-This lab focuses on building practical experience with **Microsoft Defender XDR**, one of the industry's leading enterprise EDR platforms. Throughout this project, I investigated endpoint alerts, analyzed process trees, hunted for suspicious activity using KQL, reviewed device and user timelines, correlated threat intelligence, and documented incident response decisions.
+This week consists of a series of hands-on Microsoft Defender XDR labs designed to build proficiency with Microsoft's enterprise security ecosystem. Throughout these labs, I investigated endpoint alerts, analyzed process trees, reviewed device and user timelines, performed Advanced Hunting using Kusto Query Language (KQL), correlated threat intelligence, and practiced incident response workflows that closely resemble those used by enterprise security teams.
 
-The objective was to simulate how Security Analysts investigate and respond to endpoint threats within an enterprise environment.
+The goal of this lab series is to develop practical experience with Microsoft Defender XDR while strengthening the skills required for Security Operations, Incident Response, Threat Hunting, and Security Engineering roles.
 
 ---
 
-# Objectives
+# Learning Objectives
 
-- Understand the Microsoft Defender XDR interface
-- Investigate endpoint security alerts
-- Analyze process trees and process lineage
+By completing this lab series, I will:
+
+- Develop proficiency with Microsoft Defender XDR
+- Understand enterprise EDR workflows
+- Investigate endpoint security incidents
+- Analyze process execution and process trees
 - Examine device timelines
 - Investigate user activity
-- Perform Advanced Hunting using KQL
-- Investigate suspicious files
-- Analyze malware behavior
-- Review persistence mechanisms
-- Investigate credential theft activity
+- Perform Advanced Hunting with KQL
+- Investigate malicious files
 - Correlate endpoint telemetry with threat intelligence
 - Make containment and remediation decisions
-- Document an enterprise incident investigation
+- Document enterprise incident investigations
 
 ---
 
@@ -39,28 +39,24 @@ The objective was to simulate how Security Analysts investigate and respond to e
 - Microsoft Sentinel
 - Microsoft Entra ID
 - Microsoft 365 Defender
-- Kusto Query Language (KQL)
 - Windows 11
-- Microsoft Security Portal
+- Kusto Query Language (KQL)
 
 ---
 
 # Skills Demonstrated
 
-## Endpoint Detection and Response (EDR)
+## Endpoint Detection & Response (EDR)
 
 - Endpoint investigations
 - Alert triage
 - Incident response
 - Threat hunting
-- Behavioral analysis
+- Malware investigations
 - Process analysis
-- Malware investigation
 - Device investigations
 - User investigations
-- Evidence collection
-
----
+- File investigations
 
 ## Microsoft Defender XDR
 
@@ -72,25 +68,8 @@ The objective was to simulate how Security Analysts investigate and respond to e
 - Endpoint Alerts
 - Process Trees
 - Device Isolation
-- File Investigation
 - Live Response
-- Threat Intelligence Correlation
-
----
-
-## Threat Hunting
-
-- KQL queries
-- Endpoint telemetry analysis
-- Process creation events
-- Network connection events
-- File creation events
-- Registry modification events
-- Persistence hunting
-- PowerShell hunting
-- Suspicious authentication hunting
-
----
+- Threat Intelligence Integration
 
 ## Incident Response
 
@@ -99,296 +78,295 @@ The objective was to simulate how Security Analysts investigate and respond to e
 - Investigation
 - Scoping
 - Containment
-- Eradication
-- Recovery
-- Lessons Learned
+- Remediation
+- Documentation
 
 ---
 
 # Enterprise Investigation Workflow
 
 ```text
-Alert Generated
-       │
-       ▼
-Incident Queue Review
-       │
-       ▼
+Security Alert
+      │
+      ▼
+Incident Queue
+      │
+      ▼
 Alert Validation
-       │
-       ▼
-Device Timeline Analysis
-       │
-       ▼
-User Timeline Analysis
-       │
-       ▼
-Process Tree Investigation
-       │
-       ▼
-File Investigation
-       │
-       ▼
-Threat Intelligence Correlation
-       │
-       ▼
+      │
+      ▼
+Device Investigation
+      │
+      ▼
+User Investigation
+      │
+      ▼
+Process Tree Analysis
+      │
+      ▼
 Advanced Hunting (KQL)
-       │
-       ▼
+      │
+      ▼
+Threat Intelligence Correlation
+      │
+      ▼
 Determine Scope
-       │
-       ▼
+      │
+      ▼
 Containment Decision
-       │
-       ▼
-Remediation
-       │
-       ▼
+      │
+      ▼
 Incident Report
 ```
 
 ---
 
-# Lab Scenarios
+# Lab Series
 
-## Scenario 1 – Suspicious PowerShell Investigation
+## Lab 1 — Microsoft Defender XDR Portal Overview
 
 ### Objectives
 
-- Investigate suspicious PowerShell activity
-- Identify encoded commands
-- Analyze parent processes
-- Review command-line arguments
+- Explore the Microsoft Defender XDR portal
+- Understand the security dashboard
+- Navigate the Incident Queue
+- Review Devices, Users, and Assets
+- Familiarize yourself with investigation tools
+
+**Topics Covered**
+
+- Microsoft Defender XDR Portal
+- Security Dashboard
+- Incident Queue
+- Devices
+- Users
+- Assets
+- Security Alerts
+
+---
+
+## Lab 2 — Endpoint Alert Investigation
+
+### Objectives
+
+- Investigate endpoint security alerts
+- Validate detections
+- Determine alert severity
+- Review evidence collected by Defender
+
+**Topics Covered**
+
+- Endpoint Alerts
+- Alert Details
+- Alert Evidence
+- Alert Correlation
+- Incident Prioritization
+
+---
+
+## Lab 3 — Device Timeline Investigation
+
+### Objectives
+
+- Analyze endpoint telemetry
+- Review device activity
+- Build an attack timeline
+- Identify suspicious behavior
+
+**Topics Covered**
+
+- Device Timeline
+- Process Events
+- File Events
+- Network Events
+- Registry Activity
+- Logon Events
+
+---
+
+## Lab 4 — User Timeline Investigation
+
+### Objectives
+
+- Investigate user behavior
+- Review authentication activity
+- Analyze account usage
+- Identify suspicious sign-in activity
+
+**Topics Covered**
+
+- User Timeline
+- Authentication Events
+- Account Activity
+- Privilege Changes
+- Identity Investigation
+
+---
+
+## Lab 5 — Process Tree Investigation
+
+### Objectives
+
+- Analyze parent-child process relationships
+- Identify malicious execution chains
+- Detect Living-off-the-Land techniques (LOLBins)
+
+**Topics Covered**
+
+- Process Trees
+- Parent Processes
+- Child Processes
+- Command-Line Analysis
+- LOLBins
+- Process Lineage
+
+---
+
+## Lab 6 — Suspicious PowerShell Investigation
+
+### Objectives
+
+- Investigate suspicious PowerShell execution
+- Analyze encoded commands
 - Determine attacker intent
 
-### Investigation Tasks
+**Topics Covered**
 
-- Review endpoint alert
-- Examine process tree
-- Analyze PowerShell command line
-- Investigate child processes
-- Review network connections
-- Determine persistence attempts
-
-### Skills Practiced
-
-- PowerShell analysis
-- Living-off-the-Land (LOLBins)
-- Command-line analysis
-- Process lineage
-- Threat validation
+- PowerShell
+- Encoded Commands
+- Script Execution
+- Command-Line Analysis
+- Behavioral Detection
 
 ---
 
-## Scenario 2 – Malware Execution Investigation
+## Lab 7 — Malware Execution Investigation
 
 ### Objectives
 
-- Investigate malicious executable activity
-- Analyze execution timeline
-- Review Defender detections
-- Identify impacted devices
+- Investigate malicious file execution
+- Analyze malware behavior
+- Review endpoint detections
 
-### Investigation Tasks
+**Topics Covered**
 
-- Review malware alert
-- Analyze file hash
-- Review VirusTotal reputation
-- Examine execution history
-- Analyze child processes
-- Review persistence artifacts
-
-### Skills Practiced
-
-- Malware triage
-- File investigation
-- Threat intelligence
-- Device compromise analysis
+- Malware Alerts
+- File Reputation
+- Hash Analysis
+- Execution History
+- Threat Intelligence
 
 ---
 
-## Scenario 3 – Credential Theft Investigation
+## Lab 8 — Credential Theft Investigation
 
 ### Objectives
 
-- Investigate credential access activity
-- Detect suspicious authentication
-- Review lateral movement indicators
+- Investigate credential access techniques
+- Review suspicious authentication activity
+- Detect lateral movement indicators
 
-### Investigation Tasks
+**Topics Covered**
 
-- Review login events
-- Analyze authentication logs
-- Investigate LSASS access
-- Review suspicious PowerShell
-- Analyze remote connections
-
-### Skills Practiced
-
-- Credential theft detection
-- Authentication investigations
-- Lateral movement analysis
+- Credential Access
+- Authentication Logs
+- LSASS Investigation
+- Remote Access
+- Lateral Movement
 
 ---
 
-## Scenario 4 – Persistence Investigation
+## Lab 9 — Persistence Investigation
 
 ### Objectives
 
 - Detect persistence mechanisms
-- Identify attacker survival techniques
+- Investigate attacker survival techniques
 
-### Investigation Tasks
+**Topics Covered**
 
-- Registry analysis
-- Scheduled task investigation
-- Startup folder review
-- Service creation analysis
-- Autorun investigation
-
-### Skills Practiced
-
-- Persistence analysis
-- Windows internals
-- Registry investigations
+- Registry Persistence
+- Scheduled Tasks
+- Startup Programs
+- Services
+- Autoruns
 
 ---
 
-## Scenario 5 – Device Compromise Investigation
+## Lab 10 — Advanced Hunting with KQL
 
 ### Objectives
 
-Perform a complete endpoint investigation from initial alert through containment.
+- Hunt for suspicious activity across the environment
+- Build custom KQL queries
+- Investigate endpoint telemetry
 
-### Investigation Tasks
+**Topics Covered**
 
-- Review incident
-- Analyze alerts
-- Investigate device timeline
-- Investigate user timeline
-- Analyze process trees
-- Hunt for related activity
-- Determine blast radius
-- Recommend containment
-
----
-
-## Scenario 6 – End-to-End Defender XDR Investigation
-
-This project combines every previous investigation into one complete enterprise case study.
-
-The investigation follows the same workflow used by modern Security Operations Centers.
-
-### Workflow
-
-- Initial alert review
-- Incident validation
-- Scope determination
-- Device investigation
-- User investigation
-- Process analysis
-- Threat hunting
-- Containment decision
-- Recovery
-- Incident documentation
+- KQL Fundamentals
+- DeviceEvents
+- DeviceProcessEvents
+- DeviceFileEvents
+- DeviceNetworkEvents
+- DeviceRegistryEvents
+- DeviceLogonEvents
 
 ---
 
-# Advanced Hunting (KQL)
+## Lab 11 — Threat Intelligence Investigation
 
-Throughout this project I performed Advanced Hunting using Kusto Query Language (KQL) to search enterprise telemetry for suspicious activity.
+### Objectives
 
-Example hunting categories included:
+- Correlate endpoint evidence with threat intelligence
+- Validate indicators of compromise (IOCs)
+- Investigate known malicious artifacts
 
-- Suspicious PowerShell execution
-- Encoded PowerShell commands
-- Process creation events
-- Network connections
-- File creation
-- Registry changes
-- User logins
-- Device events
-- Malware detections
-- Persistence indicators
-- Scheduled tasks
-- Service creation
+**Topics Covered**
 
----
-
-# Key Defender XDR Components Explored
-
-## Incident Queue
-
-- Incident prioritization
-- Alert correlation
-- Severity assessment
-- Incident ownership
-
----
-
-## Device Timeline
-
-Reviewed endpoint telemetry including:
-
-- Process execution
-- Network connections
-- Registry changes
-- File creation
-- User logins
-- Defender detections
-
----
-
-## User Timeline
-
-Investigated:
-
-- Authentication activity
-- Device access
-- Account usage
-- Privilege changes
-- Suspicious behavior
-
----
-
-## Process Trees
-
-Analyzed:
-
-- Parent-child relationships
-- Suspicious spawning
-- Process lineage
-- LOLBins
-- Malicious execution chains
-
----
-
-## File Investigation
-
-Examined:
-
-- SHA-256 hashes
-- File reputation
-- Digital signatures
-- Detection history
-- Execution history
-
----
-
-## Threat Intelligence
-
-Correlated endpoint evidence with:
-
-- Known malicious hashes
+- Threat Intelligence
+- File Hashes
 - Indicators of Compromise (IOCs)
-- Threat intelligence feeds
-- Microsoft threat intelligence
+- Reputation Analysis
+- Threat Correlation
 
 ---
 
-## Device Isolation
+## Lab 12 — Device Isolation & Incident Response
 
-Evaluated when endpoint isolation would be appropriate to prevent lateral movement while preserving forensic evidence.
+### Objectives
+
+- Evaluate containment options
+- Determine when device isolation is appropriate
+- Practice incident response decision-making
+
+**Topics Covered**
+
+- Device Isolation
+- Containment
+- Remediation
+- Recovery
+- Incident Documentation
+
+---
+
+## Lab 13 — End-to-End Microsoft Defender XDR Investigation
+
+### Objectives
+
+Conduct a complete enterprise investigation from the initial security alert through containment and documentation.
+
+**Topics Covered**
+
+- Incident Queue
+- Alert Investigation
+- Device Timeline
+- User Timeline
+- Process Trees
+- Advanced Hunting
+- Threat Intelligence
+- Scope Determination
+- Containment
+- Incident Reporting
 
 ---
 
@@ -396,126 +374,59 @@ Evaluated when endpoint isolation would be appropriate to prevent lateral moveme
 
 - Enterprise EDR operations
 - Endpoint telemetry analysis
-- Incident prioritization
-- Threat hunting methodology
-- Behavioral detection
-- Process analysis
-- Endpoint containment
-- Threat intelligence integration
-- Enterprise investigation workflow
-- Security operations best practices
-
----
-
-# Project Outcomes
-
-Through this lab I developed hands-on experience using Microsoft Defender XDR to investigate enterprise endpoint incidents from initial alert through containment.
-
-This project strengthened my understanding of:
-
-- Enterprise Security Operations
-- Endpoint Detection and Response (EDR)
-- Microsoft Defender XDR
-- Microsoft Defender for Endpoint
-- Microsoft Sentinel integration
-- Advanced Hunting with KQL
-- Process tree investigations
-- Device and user timeline analysis
+- Behavioral threat detection
+- Process tree analysis
+- Threat hunting with KQL
 - Malware investigations
-- Threat intelligence correlation
-- Incident response workflows
-
----
-
-# Future Improvements
-
-Future enhancements to this lab include:
-
-- Automated response playbooks
-- Microsoft Sentinel analytics rules
-- SOAR automation
-- Attack simulation
-- MITRE ATT&CK mapping
-- Live Response investigations
-- Threat Intelligence enrichment
-- Advanced KQL detection engineering
-- Custom detection rules
-- Multi-device incident investigations
-
----
-
-# MITRE ATT&CK Coverage
-
-This lab demonstrates investigations across numerous MITRE ATT&CK techniques including:
-
-- Initial Access
-- Execution
-- Persistence
-- Privilege Escalation
-- Defense Evasion
-- Credential Access
-- Discovery
-- Lateral Movement
-- Collection
-- Command and Control
-- Impact
+- Credential theft investigations
+- Persistence analysis
+- Threat intelligence integration
+- Enterprise incident response workflows
 
 ---
 
 # Portfolio Value
 
-This project demonstrates practical experience with an enterprise-grade EDR platform and mirrors investigative workflows performed by Security Operations Center (SOC) analysts.
+This repository demonstrates hands-on experience with Microsoft's enterprise Endpoint Detection and Response platform through a structured series of investigative labs that simulate real-world Security Operations Center workflows.
 
-The repository showcases the ability to:
+The completed lab series showcases practical skills in:
 
-- Investigate endpoint alerts
-- Analyze process execution
-- Hunt threats using KQL
-- Correlate endpoint telemetry
-- Perform enterprise incident response
-- Document investigations professionally
-- Apply security operations methodologies
-- Work with Microsoft Defender XDR in realistic enterprise scenarios
+- Microsoft Defender XDR
+- Endpoint Detection & Response (EDR)
+- Threat Hunting
+- Incident Response
+- Advanced Hunting with KQL
+- Process Analysis
+- Device Investigations
+- User Investigations
+- Threat Intelligence Correlation
+- Enterprise Security Operations
 
 ---
 
 # Repository Structure
 
 ```
-Microsoft-Defender-XDR-Lab/
+Week-17-Microsoft-Defender-XDR/
 │
-├── README.md
+├── Lab-01-Portal-Overview/
+├── Lab-02-Endpoint-Alert-Investigation/
+├── Lab-03-Device-Timeline-Investigation/
+├── Lab-04-User-Timeline-Investigation/
+├── Lab-05-Process-Tree-Investigation/
+├── Lab-06-Suspicious-PowerShell-Investigation/
+├── Lab-07-Malware-Execution-Investigation/
+├── Lab-08-Credential-Theft-Investigation/
+├── Lab-09-Persistence-Investigation/
+├── Lab-10-Advanced-Hunting-KQL/
+├── Lab-11-Threat-Intelligence-Investigation/
+├── Lab-12-Device-Isolation-Incident-Response/
+├── Lab-13-End-to-End-Defender-XDR-Investigation/
 ├── Screenshots/
-├── Investigation-Notes/
 ├── KQL-Queries/
-├── Case-Studies/
+├── Investigation-Notes/
 ├── Incident-Reports/
-├── Threat-Hunting/
-├── MITRE-Mapping/
-└── Evidence/
+└── README.md
 ```
 
----
 
-# Author
-
-**Fitzgerald Afari-Minta**
-
-Information Systems Student | Cybersecurity
-
-Focused on:
-
-- Security Operations (SOC)
-- Incident Response
-- Threat Hunting
-- Endpoint Detection & Response (EDR)
-- Microsoft Defender XDR
-- Microsoft Sentinel
-- SIEM Engineering
-- Cloud Security
-- Security Engineering
-
----
-
-*This project was created for educational purposes to develop practical skills in enterprise endpoint detection, threat hunting, and incident response using Microsoft Defender XDR.*
-````
