@@ -1,0 +1,254 @@
+Elastic Security Process Tree & Process Lineage Investigation - Case Study
+
+Investigation Type: Process Lineage Analysis
+
+Operating System: Windows
+
+Investigation Status: Closed – Activity Determined to be Legitimate
+
+Executive Summary
+
+Process lineage analysis is an important part of endpoint investigations because attackers often rely on legitimate Windows processes to perform malicious actions. Looking at a single process rarely provides enough information to determine whether activity is normal or suspicious. Instead, security analysts must understand how a process was created, which process launched it, and whether the overall execution chain follows expected Windows behavior.
+
+During this investigation, Elastic Security's Process Analyzer was used to review the execution path of several Windows processes beginning with the operating system initialization process and continuing through an interactive user session. The investigation focused on validating parent-child process relationships, reviewing process metadata, examining command-line arguments, and confirming that each process appeared in its expected location within the execution chain.
+
+Rather than searching for malware immediately, the objective was to determine whether the observed activity represented legitimate operating system behavior or required additional investigation.
+
+Investigation Objectives
+
+The primary goals of this investigation were to:
+
+Examine the complete Windows process execution chain.
+Validate parent-child process relationships.
+Review process metadata collected by Elastic Security.
+Inspect command-line arguments associated with each process.
+Confirm expected Windows startup behavior.
+Differentiate normal operating system activity from potentially suspicious execution.
+Practice documenting investigative findings using evidence rather than assumptions.
+Investigation Scope
+
+The investigation focused on the following Windows processes:
+
+System
+
+↓
+
+smss.exe
+
+↓
+
+winlogon.exe
+
+↓
+
+userinit.exe
+
+↓
+
+explorer.exe
+
+↓
+
+cmd.exe
+
+↓
+
+ipconfig.exe
+
+Each process was reviewed individually while also considering its relationship to the processes before and after it.
+
+Initial Observations
+
+The investigation began by opening the Elastic Security Process Analyzer to visualize the complete process tree.
+
+Rather than viewing isolated events, the Process Analyzer displayed how each process was connected through parent-child relationships.
+
+At first glance, the execution chain appeared consistent with a normal Windows user logon session.
+
+No immediately unusual processes, unexpected executables, or abnormal branching behavior were observed within the displayed process tree.
+
+Because legitimate Windows processes are frequently abused by attackers, further validation was still necessary before drawing any conclusions.
+
+Process Lineage Analysis
+System
+
+The investigation began with the System process, which serves as the starting point for many operating system activities.
+
+This established the expected root of the process tree.
+
+smss.exe
+
+The next process observed was smss.exe (Session Manager Subsystem).
+
+Elastic Security showed that this process originated from the System process and executed using expected Windows paths.
+
+Process metadata including:
+
+Process ID
+Entity ID
+User context
+Command-line arguments
+Process hash
+
+were reviewed to verify consistency with normal system behavior.
+
+No anomalies were identified.
+
+winlogon.exe
+
+The investigation then moved to winlogon.exe.
+
+Winlogon is responsible for handling interactive logon sessions and launching user initialization processes.
+
+Elastic Security showed:
+
+Expected parent process
+Normal execution path
+Appropriate command-line information
+Expected SYSTEM account context
+
+No unusual execution behavior was observed.
+
+userinit.exe
+
+The next stage involved reviewing userinit.exe.
+
+This process is responsible for preparing the user's environment after authentication.
+
+The Process Analyzer showed that userinit.exe was launched by winlogon.exe as expected.
+
+The associated process information matched expected Windows behavior.
+
+No unexpected child processes or suspicious deviations were identified.
+
+explorer.exe
+
+The investigation continued by reviewing explorer.exe, which represents the Windows desktop environment.
+
+Explorer.exe was shown as the child process of userinit.exe.
+
+This relationship is commonly expected during normal Windows logon.
+
+Elastic Security provided additional information including:
+
+Executable path
+Process ID
+User account
+Parent process
+Process hash
+
+The execution path aligned with standard Windows behavior.
+
+cmd.exe
+
+The investigation then shifted to cmd.exe.
+
+Because command-line interpreters are frequently used by both administrators and attackers, additional attention was given to this process.
+
+Rather than assuming malicious activity, the investigation focused on answering several questions:
+
+Who launched cmd.exe?
+Was the parent process expected?
+Did the command-line arguments appear legitimate?
+Was the execution timeline reasonable?
+
+Elastic Security showed that cmd.exe was launched from explorer.exe.
+
+This relationship is common when a user manually opens Command Prompt.
+
+No unusual parent-child behavior was observed.
+
+ipconfig.exe
+
+Finally, the investigation reviewed ipconfig.exe.
+
+Elastic Security showed:
+
+Parent process: cmd.exe
+Expected executable location
+Normal command-line argument
+Short execution duration
+
+Running ipconfig from an interactive command prompt is a common administrative action used to display network configuration information.
+
+No evidence suggested malicious execution.
+
+Evidence Reviewed
+
+Throughout the investigation, the following artifacts were reviewed:
+
+Parent-child process relationships
+Process IDs
+Entity IDs
+Executable paths
+User accounts
+Process hashes
+Command-line arguments
+Process timestamps
+Process execution timeline
+
+Reviewing multiple evidence sources helped build confidence in the assessment instead of relying on a single indicator.
+
+Analysis
+
+The most significant observation during this investigation was that every process appeared within an expected Windows execution chain.
+
+Each parent-child relationship followed the standard sequence typically observed during an interactive Windows logon session.
+
+No unexpected parent processes were identified.
+
+No suspicious executable locations were observed.
+
+Command-line arguments remained consistent with legitimate system activity.
+
+The investigation demonstrated the importance of analyzing execution context instead of evaluating processes individually.
+
+Although processes such as cmd.exe are frequently associated with attacker activity, they are also legitimate Windows utilities used daily by administrators and end users.
+
+Without examining the surrounding process lineage, it would be easy to incorrectly classify normal activity as malicious.
+
+Assessment
+
+Based on the available evidence, the observed activity was determined to be consistent with legitimate Windows operating system behavior.
+
+No evidence suggested:
+
+Process injection
+Suspicious parent-child relationships
+Unusual executable locations
+Abnormal command-line arguments
+Unexpected process creation
+Malicious execution flow
+
+At the conclusion of the investigation, no indicators justified escalation.
+
+Decision
+
+Based on the evidence collected during the investigation, the most appropriate response would be to:
+
+Document the investigation findings.
+Record the validated process lineage.
+Close the investigation as expected operating system activity.
+Continue normal monitoring for future endpoint events.
+
+This decision was supported by the consistency of the execution chain and the absence of indicators suggesting malicious behavior.
+
+Lessons Learned
+
+This investigation reinforced several important concepts:
+
+Individual processes rarely provide enough context on their own.
+Parent-child relationships are often more valuable than process names alone.
+Legitimate Windows utilities should always be evaluated within their execution context.
+Process metadata provides valuable supporting evidence during investigations.
+Evidence-based analysis helps reduce false positives and improves investigation quality.
+
+Perhaps the biggest takeaway from this investigation was learning to validate assumptions before reaching conclusions.
+
+Rather than treating every command-line process as suspicious, reviewing the complete execution chain provided the context necessary to determine that the observed activity was legitimate.
+
+Conclusion
+
+This investigation provided valuable experience using Elastic Security's Process Analyzer to examine Windows process lineage and validate endpoint activity. By reviewing parent-child relationships, process metadata, executable paths, command-line arguments, and execution timelines, I was able to determine that the observed behavior aligned with expected Windows operating system activity.
+
+The investigation emphasized that effective security analysis depends on understanding context rather than reacting to isolated events. Developing the habit of validating execution chains before making decisions strengthens investigative accuracy and supports more informed incident response in real-world SOC environments.
