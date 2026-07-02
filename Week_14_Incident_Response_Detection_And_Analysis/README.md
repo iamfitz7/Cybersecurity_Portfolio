@@ -2,323 +2,75 @@
 
 ## Overview
 
-Week 14 focused on developing the mindset, investigative methodology, and technical workflow expected of a modern Security Operations Center (SOC) analyst.
+Week 14 focused on developing professional SOC investigation skills through Elastic Security alert triage, process lineage analysis, detection validation, PowerShell investigation, and evidence-based decision making.
 
-Rather than simply learning how to navigate Elastic Security or acknowledge security alerts, this week's projects emphasized **how professional analysts think during an investigation**. Throughout these investigations, every alert was treated as an investigative hypothesis that required validation through evidence collection, contextual analysis, process reconstruction, and analytical reasoning before reaching a final disposition.
-
-Across multiple endpoint investigations, I practiced reconstructing process execution, interpreting detection logic, analyzing command-line behavior, validating parent-child process relationships, reviewing user and host context, and distinguishing legitimate administrative activity from behavior that could indicate attacker techniques.
-
-The primary objective was not to determine whether every alert was malicious, but to develop a repeatable investigation methodology that produces accurate, defensible, and evidence-supported conclusions regardless of the SIEM, EDR, or XDR platform being used.
-
-This portfolio project combines three complementary investigations completed during Week 14:
-
-- Elastic Security Discovery & Enumeration Investigation
-- SOC Investigation Methodology & Evidence-Based Alert Validation Framework
-- Elastic Security Suspicious PowerShell Download Investigation
-
-Together, these projects demonstrate both the technical and analytical competencies required for effective incident triage and investigation within enterprise Security Operations Centers.
+This README separates each lab into its own section so the full week reads like a complete portfolio case study while still making each individual investigation clear.
 
 ---
 
-# Objectives
+# Labs Completed
 
-Throughout this week's investigations, I focused on developing the ability to:
-
-- Perform structured SOC alert triage
-- Validate security detections before escalating incidents
-- Interpret Elastic Security detection rules
-- Analyze Windows endpoint telemetry
-- Investigate process execution and command-line activity
-- Reconstruct complete process lineage
-- Differentiate legitimate administrative behavior from malicious techniques
-- Correlate evidence across multiple telemetry sources
-- Apply MITRE ATT&CK concepts during investigations
-- Develop repeatable investigation methodologies
-- Document professional incident findings
-- Produce evidence-based security assessments
-- Reduce false positives through contextual analysis
-- Improve analytical decision-making during incident response
+- Lab 1: Elastic Security Alert Triage and Process Lineage Investigation
+- Lab 2: SOC Investigation Methodology & Evidence-Based Alert Validation Framework
+- Lab 3: Elastic Security Suspicious PowerShell Download & Execution Analysis
 
 ---
 
-# Technologies Used
+# Lab 1 – Elastic Security Alert Triage and Process Lineage Investigation
 
-### Security Platforms
+## Lab Focus
 
-- Elastic Security
-- Elastic SIEM
-- Elastic Detection Rules
-- Elastic EQL
-- Elastic Process Analyzer
+This lab focused on investigating a high-severity Elastic Security alert related to Windows discovery and enumeration activity.
 
-### Endpoint & Windows
-
-- Windows Endpoint Telemetry
-- Windows Process Trees
-- Windows Command-Line Utilities
-- Windows Security Events
-- Windows Services
-- Windows Installer (MSI)
-
-### Investigation Frameworks
-
-- MITRE ATT&ATTCK Framework
-- Security Operations Center (SOC) Methodology
-- Incident Response Workflow
-- Process Lineage Analysis
-- Evidence Correlation
-- Threat Hunting Methodology
-
----
-
-# Skills Demonstrated
-
-## Security Operations
-
-- SOC Alert Triage
-- Detection Validation
-- Incident Investigation
-- Security Event Analysis
-- Endpoint Investigation
-- Behavioral Analysis
-- Threat Hunting Methodology
-- Alert Prioritization
-- Investigation Documentation
-- Escalation Decision Making
-
-## Endpoint Investigation
-
-- Process Lineage Analysis
-- Parent-Child Process Correlation
-- Process Tree Reconstruction
-- Windows Service Analysis
-- Windows Administrative Tool Investigation
-- Command-Line Analysis
-- Process Execution Validation
-- Endpoint Telemetry Analysis
-
-## Analytical Skills
-
-- Evidence-Based Decision Making
-- Context-Driven Investigation
-- Timeline Reconstruction
-- Root Cause Analysis
-- Confidence Assessment
-- Critical Thinking
-- Multi-Source Evidence Correlation
-- Signal-versus-Noise Analysis
-- False Positive Validation
-- Investigation Planning
-
----
-
-# Investigation Philosophy
-
-One of the primary goals of this week's work was developing a professional investigation methodology that can be applied consistently across different security platforms.
-
-Rather than assuming that a high-severity alert automatically represents malicious activity, every investigation followed several guiding principles.
-
-## Investigation over Assumption
-
-Security alerts identify behavior requiring investigation—not proof of compromise.
-
-Every alert should be validated before conclusions are reached.
-
----
-
-## Evidence over Intuition
-
-Every assessment should be supported by observable evidence.
-
-Decisions should never rely solely on instinct or assumptions.
-
----
-
-## Context over Individual Indicators
-
-Individual events rarely provide enough information.
-
-Instead, investigations should consider:
-
-- User context
-- Host context
-- Asset role
-- Process ancestry
-- Execution timing
-- Related activity
-- Detection logic
-- Operating system behavior
-
----
-
-## Correlation over Isolation
-
-Individual events often appear suspicious when viewed alone.
-
-Correlating multiple sources of evidence provides significantly greater investigative confidence.
-
----
-
-## Documentation over Memory
-
-Every investigation should clearly document:
-
-- What was observed
-- What was validated
-- What remains unknown
-- Why conclusions were reached
-
----
-
-## Defensible Conclusions
-
-Professional SOC investigations should produce conclusions that can be defended using evidence rather than confidence.
-
----
-
-# Standard Investigation Workflow
-
-Throughout Week 14, every investigation followed a structured workflow.
-
-## Phase 1 — Understand the Detection
-
-Before reviewing endpoint activity, I examined:
-
-- Detection rule
-- Detection logic
-- Alert reason
-- MITRE ATT&CK mapping
-- Alert severity
-- Risk score
-- Timestamp
-- Host
-- User
-- Asset information
-
-Understanding **why** a detection fired provides important investigative context before reviewing telemetry.
-
----
-
-## Phase 2 — Establish Initial Questions
-
-Rather than immediately assuming compromise, I developed investigative questions such as:
-
-- Why did the detection trigger?
-- What behavior was actually observed?
-- Who initiated the activity?
-- Which endpoint was affected?
-- What process executed?
-- What parent process launched it?
-- Is the behavior expected?
-- What evidence supports malicious activity?
-- What evidence supports legitimate activity?
-
----
-
-## Phase 3 — Analyze Process Execution
-
-Each investigation involved reconstructing complete process lineage.
-
-Instead of evaluating isolated processes, I examined:
-
-- Parent-child relationships
-- Process ancestry
-- Command execution
-- Windows process lifecycle
-- Interactive versus service execution
-- Operating system behavior
-
-This approach provides significantly more context than process names alone.
-
----
-
-## Phase 4 — Command-Line Analysis
-
-Process names rarely provide sufficient context.
-
-Each investigation included detailed command-line review to determine:
-
-- What action occurred
-- Which arguments were supplied
-- Intended functionality
-- Administrative purpose
-- Potential attacker objectives
-
----
-
-## Phase 5 — Context Validation
-
-Observed behavior was evaluated alongside:
-
-- User account
-- Host role
-- Installation activity
-- Administrative operations
-- Windows services
-- Related alerts
-- Endpoint telemetry
-
----
-
-## Phase 6 — Evidence Correlation
-
-Rather than relying on one observation, I correlated multiple sources of evidence including:
-
-- Alert metadata
-- Detection rule logic
-- Process execution
-- Parent-child relationships
-- Process ancestry
-- Command-line arguments
-- Windows service behavior
-- Endpoint telemetry
-
----
-
-## Phase 7 — Evidence-Based Assessment
-
-Rather than forcing binary conclusions, investigations documented:
-
-- Confirmed observations
-- Unknowns
-- Assumptions
-- Confidence level
-- Recommended next steps
-
----
-
-# Lab 1 — Discovery & Enumeration Investigation
+The main goal was to determine whether the alert represented malicious reconnaissance or legitimate administrative activity.
 
 ## Scenario
 
-Elastic Security generated a **High Severity Discovery or Enumeration** detection after observing execution of Windows administrative commands.
+Elastic Security generated a high-severity alert for a rule named:
 
-The investigation centered around determining whether the observed behavior represented attacker reconnaissance or legitimate Windows administration.
+```text
+Discovery or Enumeration
+```
 
----
+The alert involved execution of:
 
-## Investigation Highlights
+```text
+net.exe
+```
 
-During the investigation I:
+Because `net.exe` can be used by both administrators and attackers, the alert required deeper investigation before reaching a conclusion.
 
-- Reviewed Elastic detection logic
-- Examined alert metadata
-- Validated severity and risk score
-- Investigated host context
-- Reviewed user context
-- Analyzed process execution
-- Reconstructed complete process lineage
-- Examined Windows Installer activity
-- Reviewed command-line arguments
-- Correlated endpoint evidence
+## What I Investigated
 
-The investigation revealed execution of:
+I reviewed:
+
+- Detection rule details
+- Alert severity
+- Risk score
+- Alert reason
+- Affected host
+- User context
+- Process execution
+- Parent-child process relationships
+- Command-line arguments
+- Process lineage
+- Related endpoint evidence
+
+## Key Evidence
+
+```text
+Host: workstation-01
+User: NT AUTHORITY\SYSTEM
+Primary Process: net.exe
+Parent Process: cmd.exe
+Ancestor Processes: msiexec.exe, services.exe, wininit.exe
+```
+
+The command executed was:
 
 ```text
 net localgroup "Performance Monitor Users" "NT SERVICE\SplunkForwarder" /add
 ```
-
----
 
 ## Process Lineage
 
@@ -338,88 +90,239 @@ net.exe
 net1.exe
 ```
 
-Rather than indicating attacker discovery activity, process lineage demonstrated software installation initiated through Windows Installer.
+## Analysis
 
----
+The alert initially appeared suspicious because `net.exe` is commonly associated with Windows discovery, enumeration, and local group modification activity.
 
-## Findings
+However, process lineage showed that the activity originated from `msiexec.exe`, which indicated Windows Installer activity.
 
-The investigation found no supporting evidence of:
+The command-line arguments showed that the Splunk Forwarder service account was being added to the local Performance Monitor Users group. This is consistent with legitimate Splunk Forwarder installation or configuration activity because the service may require permission to collect Windows performance data.
+
+## Malicious Indicators Checked
+
+I looked for supporting evidence of:
 
 - Credential theft
 - Privilege escalation
+- Malware execution
 - Persistence
 - Lateral movement
-- Malware execution
-- Unauthorized administrative activity
+- Unauthorized administrator group changes
+- Suspicious downloads
+- Encoded PowerShell
+- Scheduled task creation
+- Registry modification
 
-Instead, the evidence supported legitimate Splunk Forwarder installation.
+No supporting malicious indicators were observed.
+
+## Outcome
+
+The alert was assessed as likely benign administrative activity related to Splunk Forwarder installation or configuration.
+
+In a production environment, I would verify the installation against change management records before closing the alert.
+
+## Skills Demonstrated
+
+- Elastic Security alert triage
+- Process lineage analysis
+- Parent-child process correlation
+- Windows administrative command investigation
+- Detection validation
+- Endpoint investigation
+- False positive validation
+- Evidence-based decision making
+- Incident documentation
 
 ---
 
-## Final Assessment
+# Lab 2 – SOC Investigation Methodology & Evidence-Based Alert Validation Framework
 
-The alert represented a legitimate administrative event associated with software installation.
+## Lab Focus
 
-Although the detection correctly identified behavior matching its rule logic, contextual evidence strongly supported benign activity.
+This lab focused on developing a repeatable SOC investigation methodology that can be applied across SIEM, EDR, and XDR platforms.
 
----
+The goal was to move beyond tool usage and build a professional investigation framework based on evidence, context, and defensible conclusions.
 
-# Lab 2 — SOC Investigation Methodology Framework
+## Purpose
 
-Rather than investigating a single alert, this project focused on developing a standardized investigation methodology applicable across SIEM, EDR, and XDR platforms.
+The purpose of this lab was to create a structured workflow for approaching security alerts as investigative hypotheses rather than confirmed incidents.
+
+This methodology can be applied to platforms such as:
+
+- Elastic Security
+- Splunk
+- Microsoft Defender XDR
+- Microsoft Sentinel
+- CrowdStrike Falcon
+- IBM QRadar
+- Google Chronicle
+
+## Investigation Principles
 
 The framework emphasized:
 
-- Structured investigations
-- Contextual reasoning
-- Evidence correlation
-- Confidence assessments
-- Reproducible workflows
-- Defensible conclusions
+```text
+Investigation over assumption
+Evidence over intuition
+Context over isolated indicators
+Correlation over individual events
+Documentation over memory
+Defensible conclusions over confident guesses
+```
 
-Key concepts included:
+## Methodology Developed
 
-- Alerts represent investigative hypotheses
-- Context determines meaning
-- Evidence outweighs assumptions
-- Documentation improves consistency
-- Confidence levels communicate uncertainty professionally
+The investigation framework included:
 
-This methodology now serves as the investigative foundation used throughout every future project.
+1. Understand the alert
+2. Review the detection rule
+3. Translate detection logic into plain language
+4. Identify the investigative question
+5. Establish host and user context
+6. Reconstruct the timeline
+7. Analyze process lineage
+8. Review command-line activity
+9. Correlate supporting evidence
+10. Compare malicious and benign explanations
+11. Document assumptions and unknowns
+12. Assign confidence level
+13. Produce final disposition
+14. Recommend next actions
+
+## Key Questions Used During Investigation
+
+For each alert, I practiced asking:
+
+- What exactly triggered this alert?
+- What behavior did the detection rule identify?
+- What evidence supports malicious activity?
+- What evidence supports legitimate activity?
+- What assumptions am I making?
+- What telemetry is missing?
+- What would change my conclusion?
+- Is the activity expected for this user, host, or service?
+- Does the process lineage make sense?
+- Does the command line explain the behavior?
+
+## Example Process Validation
+
+This methodology was applied to Windows process behavior such as:
+
+```text
+System
+smss.exe
+winlogon.exe
+userinit.exe
+explorer.exe
+cmd.exe
+ipconfig.exe
+```
+
+Instead of treating command execution as suspicious by default, I practiced validating whether the process chain matched expected Windows behavior.
+
+## Commands Evaluated
+
+The framework included analysis of common Windows discovery utilities such as:
+
+```text
+ipconfig.exe
+whoami.exe
+net.exe
+systeminfo.exe
+```
+
+These utilities can be used by both administrators and attackers, so the methodology focused on execution context instead of process names alone.
+
+## Documentation Standards Created
+
+Each investigation should document:
+
+- Trigger
+- Scope
+- Timeline
+- Evidence reviewed
+- Evidence discovered
+- Impact assessment
+- MITRE ATT&CK mapping
+- Confidence level
+- Decision
+- Recommended actions
+- Unknowns
+- Lessons learned
+
+## Outcome
+
+This lab produced a reusable SOC investigation framework focused on disciplined analysis, structured evidence collection, contextual reasoning, and professional documentation.
+
+The framework strengthens future investigations by reducing assumptions, improving escalation quality, and making conclusions more defensible.
+
+## Skills Demonstrated
+
+- SOC investigation methodology
+- Alert triage framework development
+- Detection validation
+- Timeline reconstruction
+- Context-driven analysis
+- Confidence assessment
+- Escalation decision making
+- Investigation documentation
+- Analytical reasoning
+- Security operations workflow development
 
 ---
 
-# Lab 3 — Suspicious PowerShell Download Investigation
+# Lab 3 – Elastic Security Suspicious PowerShell Download & Execution Analysis
+
+## Lab Focus
+
+This lab focused on investigating suspicious PowerShell download and execution activity in Elastic Security.
+
+The main goal was to determine whether the PowerShell behavior represented malicious execution, legitimate administration, or activity requiring additional investigation.
 
 ## Scenario
 
-Elastic Security generated a high-severity PowerShell detection involving suspicious download activity.
+Elastic Security generated a high-severity alert for:
 
-The investigation focused on determining whether the observed PowerShell behavior represented legitimate administration, laboratory activity, or malicious execution.
+```text
+Suspicious PowerShell Download and Execution Activity
+```
 
----
+PowerShell is frequently used by attackers because it can download files, execute commands, and perform actions without requiring additional malware. However, PowerShell is also a legitimate administrative tool, so the alert required careful validation.
 
-## Investigation Highlights
+## Detection Logic Reviewed
 
-The investigation included:
+I reviewed Elastic detection logic involving:
 
-- Detection rule review
-- Elastic EQL analysis
-- Process Analyzer review
-- Parent-child validation
-- Command-line interpretation
-- Endpoint telemetry review
-- Threat Intelligence review
-- Timeline reconstruction
+```text
+powershell.exe
+Invoke-WebRequest
+DownloadString
+Invoke-Expression
+IEX
+Suspicious parent processes
+```
 
-Observed PowerShell activity included:
+The goal was to understand what behavior Elastic detected before making assumptions about intent.
 
-- Invoke-WebRequest
-- OutFile
-- Nested PowerShell execution
+## What I Investigated
 
----
+I reviewed:
+
+- Alert metadata
+- Detection rule logic
+- Alert reason
+- Severity
+- Risk score
+- Host context
+- User context
+- Agent status
+- Process lineage
+- Parent-child relationships
+- Command-line arguments
+- Related alerts
+- Host insights
+- Threat Intelligence matches
+- Available endpoint telemetry
 
 ## Process Lineage
 
@@ -433,119 +336,104 @@ powershell.exe
 powershell.exe
 ```
 
-The investigation validated the observed execution chain before considering alternative explanations.
+## PowerShell Behavior Observed
+
+The observed PowerShell activity included:
+
+```text
+Invoke-WebRequest
+OutFile
+Nested PowerShell execution
+```
+
+This indicated that PowerShell was used to download content and save it to a file location.
+
+## Analysis
+
+The alert correctly identified PowerShell behavior that can be associated with malicious activity.
+
+However, the investigation separated two important concepts:
+
+```text
+A detection firing correctly does not automatically mean compromise occurred.
+```
+
+The process chain suggested interactive execution because the activity originated from `explorer.exe` and moved through `cmd.exe` before launching PowerShell.
+
+This required additional context to determine whether the behavior was part of authorized administrative activity, lab activity, or suspicious user-driven execution.
+
+## Malicious Indicators Checked
+
+I reviewed available evidence for signs of:
+
+- Persistence
+- Privilege escalation
+- Credential access
+- Lateral movement
+- Command-and-control activity
+- Threat Intelligence matches
+- Suspicious parent processes
+- Additional related alerts
+- Malware execution
+
+No immediate evidence confirmed compromise based on the available telemetry.
+
+## Outcome
+
+The investigation concluded that the PowerShell activity required continued investigation rather than immediate confirmation of compromise.
+
+The alert was valid because the behavior matched the detection rule, but the available evidence was not enough to conclusively determine malicious activity.
+
+## Skills Demonstrated
+
+- Elastic Security investigation
+- PowerShell investigation
+- Detection rule analysis
+- Elastic EQL interpretation
+- Command-line analysis
+- Process lineage analysis
+- LOLBAS recognition
+- Endpoint investigation
+- Behavioral detection analysis
+- Evidence correlation
+- Threat Intelligence review
+- SOC triage methodology
+- Evidence-based decision making
 
 ---
 
-## Findings
+# Overall Week 14 Takeaways
 
-Available telemetry showed:
+Across all three labs, I strengthened my ability to investigate alerts using a disciplined SOC workflow.
 
-- PowerShell downloading content
-- Interactive execution
-- No persistence
-- No privilege escalation
-- No credential theft
-- No lateral movement
-- No confirmed command-and-control activity
+The biggest takeaway was that security alerts should be treated as starting points for investigation, not final conclusions.
 
-Rather than immediately classifying the activity as malicious, the investigation concluded that additional evidence would be required before confirming compromise.
+This week reinforced that professional analysts must be able to:
 
----
-
-# Investigation Methodology Applied Across All Labs
-
-Every investigation throughout Week 14 consistently followed the same analytical workflow:
-
-1. Understand the detection
-2. Validate detection logic
-3. Establish investigative questions
-4. Review alert metadata
-5. Analyze process lineage
-6. Examine command-line activity
-7. Correlate endpoint evidence
-8. Evaluate alternative explanations
-9. Assess confidence level
-10. Produce a defensible conclusion
-
-This repeatable methodology reduces confirmation bias while improving investigation quality.
-
----
-
-# Key Lessons Learned
-
-The most valuable lessons from Week 14 extended beyond individual Elastic Security investigations.
-
-I learned that:
-
-- Detection rules identify behaviors—not confirmed attacks.
-- Alert severity should never replace investigation.
-- Parent-child process relationships often provide more value than executable names.
-- Command-line arguments frequently explain why a process executed.
-- Context determines whether behavior is expected or suspicious.
-- Evidence should always outweigh assumptions.
-- Confidence levels improve professional communication.
-- Unknowns should be documented rather than ignored.
-- Well-documented investigations are reproducible and defensible.
-
----
-
-# Evidence
-
-The repository contains screenshots documenting the complete investigation workflow, including:
-
-- Elastic Security Dashboard
-- Detection Rules
-- Detection Logic
-- Alert Details
-- Alert Reason
-- Process Analyzer
-- Parent-Child Relationships
-- Process Trees
-- Timeline Evidence
-- Command-Line Analysis
-- Investigation Findings
-- Endpoint Context
-- Security Assessment
-
-Only screenshots directly supporting the investigation findings have been included.
-
----
-
-# Overall Outcome
-
-Week 14 represented a significant progression from learning security tools to developing professional investigative judgment.
-
-Rather than simply acknowledging alerts, I practiced evaluating detections through structured evidence collection, contextual analysis, process reconstruction, and disciplined reasoning before reaching conclusions.
-
-The combined investigations strengthened my ability to:
-
-- Perform professional SOC investigations
-- Validate behavioral detections
-- Reconstruct endpoint activity
-- Interpret Windows process execution
+- Understand why alerts fired
+- Validate detection logic
+- Reconstruct process activity
 - Analyze command-line behavior
-- Correlate multiple evidence sources
-- Differentiate benign administrative behavior from attacker techniques
-- Produce evidence-based incident assessments
-- Document investigations suitable for Security Operations Center workflows
+- Correlate endpoint evidence
+- Consider multiple explanations
+- Document unknowns
+- Assign confidence levels
+- Make defensible decisions
 
 ---
 
-# Reflection
+# Final Reflection
 
-The greatest takeaway from this week's work was recognizing that effective SOC analysts are not defined by how many tools they know, but by how consistently they apply sound investigative judgment.
+Week 14 helped me shift from simply learning security tools to developing stronger investigative judgment.
 
-Security platforms continuously evolve, but disciplined analytical thinking remains transferable across SIEM, EDR, and XDR technologies.
+Elastic Security provided the technical platform, but the most important skill developed was the ability to think like an analyst: carefully, logically, and evidence-first.
 
-Developing a repeatable investigation methodology has strengthened my confidence in approaching security incidents objectively, validating detections through evidence, and communicating findings professionally.
+These labs strengthened my ability to distinguish between suspicious-looking activity and confirmed malicious behavior by validating context, process lineage, command intent, and supporting telemetry before making final conclusions.
 
 ---
 
 # Portfolio Note
 
-This repository represents **Week 14** of my cybersecurity portfolio, focusing on Security Operations Center (SOC) investigations using Elastic Security.
+This project is part of my cybersecurity portfolio documenting hands-on SOC investigations, endpoint analysis, alert triage, and incident response methodology.
 
-Rather than showcasing isolated tool usage, these projects demonstrate a structured investigation methodology centered on evidence-based decision-making, contextual analysis, process lineage reconstruction, behavioral interpretation, and professional incident documentation.
-
-The skills developed throughout this week are directly transferable across enterprise security platforms—including Elastic Security, Splunk Enterprise Security, Microsoft Defender XDR, Microsoft Sentinel, CrowdStrike Falcon, IBM QRadar, Google Chronicle, and other SIEM, EDR, and XDR solutions—and reflect the analytical thinking expected of modern SOC analysts, incident responders, and security engineers.
+The skills demonstrated in this week are transferable across Elastic Security, Splunk, Microsoft Defender XDR, Microsoft Sentinel, CrowdStrike Falcon, QRadar, Chronicle, and other enterprise SIEM, EDR, and XDR platforms.
