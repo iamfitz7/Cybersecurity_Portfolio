@@ -551,3 +551,146 @@ It requires understanding:
 The final classification was based on correlated evidence rather than the alert title alone:
 
 **False Positive / Benign Activity – High Confidence**
+
+# Week 19 Lab 2 – RDP Successful RemoteInteractive Logon Investigation
+
+## Overview
+
+This lab focused on the investigation and triage of a successful Remote Desktop Protocol (RDP) authentication alert in Elastic Security.
+
+The alert, titled **RDP - Successful Interactive Remote Logon Detected**, identified a successful Windows authentication event associated with **Windows Security Event ID 4624** and **Logon Type 10**, which represents a RemoteInteractive logon session.
+
+The purpose of this investigation was not simply to confirm that an RDP authentication occurred. The primary analytical objective was to determine whether the successful remote authentication represented legitimate remote administrative activity, unauthorized access, compromised credentials, or activity requiring escalation.
+
+The investigation followed an evidence-driven SOC methodology. Instead of treating the alert title, severity, source geography, or privileged account usage as automatic proof of compromise, the alert was treated as an investigative hypothesis.
+
+The investigation included:
+
+- Detection rule analysis
+- Alert validation
+- Windows authentication event analysis
+- Logon Type validation
+- Privileged account analysis
+- Host investigation
+- Source IP analysis
+- Geolocation enrichment
+- Network organization enrichment
+- Elastic Security Timeline analysis
+- Entity investigation
+- Alert correlation review
+- Prevalence review
+- Authentication event correlation
+- Source IP pivoting
+- Host and user pivoting
+- Process activity review
+- Network activity review
+- Hypothesis testing
+- Evidence-based alert disposition
+
+The investigation confirmed that a successful RemoteInteractive authentication occurred against the monitored Windows endpoint. However, the available telemetry did not provide sufficient corroborating evidence of malicious post-authentication behavior.
+
+The final assessment was:
+
+**Disposition: Benign Positive**
+
+**Confidence: Moderate**
+
+The detection itself functioned correctly and accurately identified successful RDP authentication activity. However, based on the evidence available within the investigation scope, the event did not meet the threshold for escalation as a confirmed security incident.
+
+---
+
+## Investigation Scenario
+
+Remote Desktop Protocol is widely used for legitimate remote administration, troubleshooting, and infrastructure management. However, attackers can also abuse RDP after obtaining valid credentials.
+
+A successful RDP authentication can represent several possible scenarios:
+
+1. Legitimate remote administration
+2. Expected help desk or system maintenance activity
+3. Unauthorized access using stolen credentials
+4. Brute-force activity followed by successful authentication
+5. Password spraying followed by account compromise
+6. Lateral movement between internal systems
+7. External remote access to an exposed RDP service
+8. Persistence through continued use of compromised credentials
+
+Because legitimate and malicious RDP activity can generate similar authentication events, a successful RDP alert cannot be accurately classified from the alert title alone.
+
+The analyst must determine:
+
+> What happened, which account was used, which system was accessed, where the connection originated, and whether surrounding activity supports a legitimate or malicious explanation?
+
+This question guided the investigation.
+
+---
+
+## Investigation Objectives
+
+The primary objectives of the investigation were to:
+
+1. Review the alert and identify the primary entities involved.
+2. Understand the detection logic responsible for generating the alert.
+3. Validate the underlying Windows authentication event.
+4. Confirm whether the event represented successful RemoteInteractive authentication.
+5. Identify the source IP address associated with the connection.
+6. Identify the affected endpoint.
+7. Identify the account used for authentication.
+8. Determine whether the account was privileged.
+9. Review available source geolocation and network ownership context.
+10. Investigate the source IP for additional activity.
+11. Investigate the host and account for surrounding activity.
+12. Review relevant authentication events.
+13. Search for suspicious process activity.
+14. Search for suspicious network activity.
+15. Identify additional correlated alerts or suspicious behavior.
+16. Compare competing investigative hypotheses.
+17. Reach a defensible final disposition based on available evidence.
+
+---
+
+## Alert Summary
+
+The investigation began with the following alert:
+
+| Field | Value |
+|---|---|
+| Alert Name | RDP - Successful Interactive Remote Logon Detected |
+| Severity | Medium |
+| Risk Score | 47 |
+| Event Category | Authentication |
+| Event Action | Logged-in |
+| Host | workstation-01 |
+| User | Administrator |
+| Process | C:\Windows\System32\svchost.exe |
+| Source IP | 142.114.44.227 |
+| Source Country | Canada |
+| Source Region | Ontario |
+| Source Organization | Bell Canada |
+| Windows Event ID | 4624 |
+| Logon Type | 10 |
+| Logon Process Name | User32 |
+
+The initial alert evidence established that the event involved:
+
+- A successful authentication
+- A remote interactive logon type
+- A privileged Administrator account
+- A Windows workstation
+- An external source IP address
+
+These characteristics justified further investigation.
+
+However, none of these characteristics independently established malicious intent.
+
+---
+
+## Phase 1 – Detection Rule Analysis
+
+The investigation began by reviewing the detection rule responsible for generating the alert.
+
+The rule description indicated that it was designed to detect Windows Security Event ID 4624 with Logon Type 10.
+
+The detection logic was:
+
+```text
+winlog.channel:"Security" and event.code:"4624" and winlog.event_data.LogonType:"10"
