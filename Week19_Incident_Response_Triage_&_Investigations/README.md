@@ -857,3 +857,668 @@ Reconstruct Timeline
 Make Final Classification
    ↓
 Recommend Response Actions
+
+
+# Week 19 – Triage and Investigations
+
+## Lab 4 – Malware Prevention Alert Investigation
+
+---
+
+## Overview
+
+Security tools can detect and block malicious activity, but an alert still needs to be investigated before an analyst can understand what happened.
+
+In this lab, I investigated a **high-severity Malware Prevention Alert** in Elastic Security. The alert was connected to a suspicious file creation attempt involving an installer process, a temporary setup process, and a file that Elastic Endpoint identified as malicious.
+
+The investigation focused on answering several important questions:
+
+- What caused the alert?
+- Which user and endpoint were involved?
+- What process attempted to create the detected file?
+- What was the parent process?
+- Where did the original installer come from?
+- What did the process tree show?
+- Was the malicious file successfully created?
+- Did the endpoint security control prevent the activity?
+- Should the alert be classified as a True Positive or False Positive?
+
+Instead of making a decision based only on the alert name or severity, I reviewed the alert details, endpoint fields, file information, SHA-256 hash, process relationships, command-line data, process tree, timeline, quarantine evidence, and prevention result.
+
+The investigation found that a temporary setup process attempted to create a file that Elastic Endpoint identified as malicious. The activity was traced back through the installer process chain, and the endpoint security control prevented the malicious file creation attempt.
+
+**Final Classification: True Positive – Prevented Malware Activity**
+
+---
+
+## Objectives
+
+The main objectives of this investigation were to:
+
+- Triage a high-severity endpoint security alert
+- Identify the affected user and endpoint
+- Review the alert reason and detection details
+- Identify the suspicious file involved in the alert
+- Collect the file's SHA-256 hash
+- Review the file path and temporary directory activity
+- Identify the process responsible for the file creation attempt
+- Identify the parent process
+- Review process ancestry
+- Trace the activity back to the original installer
+- Review command-line and process argument information
+- Reconstruct the process execution chain
+- Review quarantine and prevention evidence
+- Determine whether the alert represented real malicious activity
+- Make an evidence-based final classification
+- Identify possible next steps for a larger incident response investigation
+
+---
+
+## Tools and Technologies Used
+
+- Elastic Security
+- Elastic Endpoint
+- Elastic Defend
+- Endpoint Detection and Response telemetry
+- Process Analyzer
+- Process Tree Analysis
+- Elastic Timeline
+- Windows process telemetry
+- File event telemetry
+- SHA-256 hash analysis
+- Command-line analysis
+- Endpoint alert triage
+
+---
+
+## Alert Summary
+
+The investigation started with a high-severity Malware Prevention Alert.
+
+The main alert details were:
+
+| Field | Value |
+|---|---|
+| Alert Name | Malware Prevention Alert |
+| Severity | High |
+| Risk Score | 73 |
+| User | DELL |
+| Host | desktop-jlklrc9 |
+| Main Process | setup.tmp |
+| Parent Process | setup.exe |
+| Detected File | cls-lolzx_x86.exe |
+| Event Action | creation |
+| Event Code | malicious_file |
+| Final Classification | True Positive – Prevented Malware Activity |
+
+The alert showed that `setup.tmp`, with `setup.exe` as its parent process, was connected to an attempted file creation event involving `cls-lolzx_x86.exe`.
+
+At this point, the alert appeared suspicious, but additional investigation was needed before making a final decision.
+
+---
+
+## Investigation Process
+
+### 1. Initial Alert Review
+
+I started by reviewing the Malware Prevention Alert in Elastic Security.
+
+The alert was marked as:
+
+- **Severity:** High
+- **Risk Score:** 73
+- **Status:** Open at the time of investigation
+
+The alert reason connected the following activity:
+
+- Process: `setup.tmp`
+- Parent process: `setup.exe`
+- File: `cls-lolzx_x86.exe`
+- User: `DELL`
+- Host: `desktop-jlklrc9`
+
+This gave me the first basic relationship to investigate:
+
+`setup.exe` → `setup.tmp` → attempted creation of `cls-lolzx_x86.exe`
+
+![Malware Prevention Alert Overview](Screenshots/01_Malware_Prevention_Alert_Overview.png)
+
+---
+
+### 2. Affected Host and User Identification
+
+The next step was identifying the user and endpoint connected to the activity.
+
+The investigation showed:
+
+- **User:** DELL
+- **Host:** desktop-jlklrc9
+
+I also reviewed the process executable path and suspicious file path.
+
+This was important because identifying the affected user and endpoint creates the starting point for scope analysis.
+
+In a real SOC environment, I could use this information to search for:
+
+- Other alerts from the same endpoint
+- Other suspicious activity involving the same user
+- Similar file activity across other endpoints
+- Additional executions of the same process
+- Related authentication activity
+- Related network connections
+
+![Affected Host User and File Paths](Screenshots/02_Affected_Host_User_and_File_Paths.png)
+
+---
+
+### 3. Suspicious File Analysis
+
+The file connected to the malware detection was:
+
+`cls-lolzx_x86.exe`
+
+The file was located under a temporary directory:
+
+`C:\Users\DELL\AppData\Local\Temp\is-1II3F.tmp\cls-lolzx_x86.exe`
+
+The investigation also identified the following SHA-256 hash:
+
+`77b920a22f93f87d2624b58f729712ebacaf8b605437c2678ca4216a28f3b8b2`
+
+The hash is an important investigation artifact because it can be used for:
+
+- Threat intelligence research
+- SIEM searches
+- EDR searches
+- Environment-wide threat hunting
+- Identifying the same file on other endpoints
+- Supporting future detection rules
+
+The alert also contained quarantine-related evidence connected to the detected file.
+
+![Malicious File Hash and Quarantine Evidence](Screenshots/03_Malicious_File_Hash_and_Quarantine_Evidence.png)
+
+---
+
+### 4. Event Classification Review
+
+I reviewed the event fields to understand how the endpoint security product classified the activity.
+
+The event included:
+
+- `event.action: creation`
+- `event.category: malware`
+- `event.category: intrusion_detection`
+- `event.category: file`
+- `event.code: malicious_file`
+
+These fields showed that the detection involved an attempted file creation event that the endpoint security product classified as malicious.
+
+This evidence increased confidence that the alert represented a real security event rather than only a general suspicious process pattern.
+
+![Malicious File Event Classification](Screenshots/05_Malicious_File_Event_Classification.png)
+
+---
+
+### 5. Prevention Validation
+
+One of the most important parts of the investigation was determining whether the file creation attempt succeeded.
+
+The Elastic Timeline event message connected:
+
+- The user
+- The endpoint
+- The temporary setup process
+- The parent installer
+- The detected file
+- The source installer
+- The file hash
+- The prevention result
+
+The evidence showed that the endpoint was prevented from creating the malicious file.
+
+This was an important difference in the impact assessment.
+
+The alert was still a **True Positive** because the malicious activity was real, but the security control successfully prevented the specific file creation attempt.
+
+![Alert Timeline and Prevention Message](Screenshots/09_Alert_Timeline_and_Prevention_Message.png)
+
+---
+
+## Process Lineage Analysis
+
+Process lineage analysis was one of the most important parts of this investigation.
+
+The process tree showed the following high-level execution chain:
+
+`winlogon.exe`
+
+↓
+
+`userinit.exe`
+
+↓
+
+`explorer.exe`
+
+↓
+
+`setup.exe`
+
+↓
+
+`setup.tmp`
+
+The tree also showed `WerFault.exe` activity after the temporary setup process.
+
+The full visible chain was approximately:
+
+`winlogon.exe` → `userinit.exe` → `explorer.exe` → `setup.exe` → `setup.tmp` → `WerFault.exe`
+
+The first part of the chain is connected to a normal interactive Windows user session.
+
+The investigation became more important when the process chain moved into:
+
+`explorer.exe` → `setup.exe` → `setup.tmp`
+
+The malware prevention event was connected to this installer activity.
+
+![Full Process Ancestry Chain](Screenshots/06_Full_Process_Ancestry_Chain.png)
+
+---
+
+## Original Installer Source Analysis
+
+I continued tracing the process activity backward to understand where the installer came from.
+
+The process evidence connected the activity to the following source:
+
+`D:\Games\Grand Theft Auto V [FitGirl Lolly Repack]\setup.exe`
+
+The command-line and process argument information helped connect the temporary `setup.tmp` process to the original installer.
+
+This created the following investigation chain:
+
+`User Session`
+
+↓
+
+`explorer.exe`
+
+↓
+
+`setup.exe`
+
+↓
+
+`setup.tmp`
+
+↓
+
+`cls-lolzx_x86.exe` file creation attempt
+
+↓
+
+`Elastic Endpoint Prevention`
+
+The source path added important context to the investigation. However, I did not make the final decision based only on the directory name.
+
+The final decision was based on the complete evidence chain.
+
+![Original Installer Source Path](Screenshots/12_Original_Installer_Source_Path.png)
+
+---
+
+## Command-Line Analysis
+
+The command-line information helped explain the connection between the temporary setup process and the original installer.
+
+Looking only at a process such as:
+
+`C:\Users\DELL\AppData\Local\Temp\...\setup.tmp`
+
+would not provide the complete story.
+
+By reviewing the process arguments and command-line information, I was able to connect the temporary execution back to the original `setup.exe` process.
+
+This showed why command-line analysis is important during endpoint investigations.
+
+A process name alone may not provide enough information. An analyst should also review:
+
+- Full executable path
+- Command line
+- Process arguments
+- Parent process
+- Grandparent process
+- User
+- Host
+- Execution time
+- File activity
+- Network activity
+- Child processes
+
+![Process Command Line Evidence](Screenshots/13_Process_Command_Line_Evidence.png)
+
+---
+
+## Full Process Tree Review
+
+The process tree gave a clear visual view of the execution activity.
+
+The main process chain was:
+
+`winlogon.exe`
+
+↓
+
+`userinit.exe`
+
+↓
+
+`explorer.exe`
+
+↓
+
+`setup.exe`
+
+↓
+
+`setup.tmp`
+
+The process tree helped connect the alert back to the user's Windows session and original installer activity.
+
+It also showed additional child-process activity involving `WerFault.exe`.
+
+![Complete Process Tree Overview](Screenshots/15_Complete_Process_Tree_Overview.png)
+
+---
+
+## Post-Execution Activity
+
+The process tree showed two `WerFault.exe` processes after the `setup.tmp` activity.
+
+`WerFault.exe` is a legitimate Windows Error Reporting process. Because of this, I did not classify it as malicious based only on its name.
+
+However, the process tree showed that the `WerFault.exe` processes had related:
+
+- File activity
+- Network activity
+- Registry activity
+
+This would be an important area for additional investigation in a production environment.
+
+A deeper investigation could review:
+
+- Network destinations
+- DNS requests
+- Files created or accessed
+- Registry activity
+- Process command lines
+- Digital signatures
+- Executable paths
+- Timing compared to the original alert
+
+![WerFault Child Process Activity](Screenshots/18_WerFault_Child_Process_Activity.png)
+
+---
+
+## Investigation Timeline
+
+Based on the available evidence, the activity can be summarized in the following order:
+
+### Stage 1 – User Session
+
+A normal Windows user session was active through:
+
+`winlogon.exe` → `userinit.exe` → `explorer.exe`
+
+### Stage 2 – Installer Execution
+
+The user session was connected to the execution of `setup.exe`.
+
+### Stage 3 – Temporary Setup Activity
+
+The installer started `setup.tmp` from a temporary AppData directory.
+
+### Stage 4 – Malicious File Creation Attempt
+
+`setup.tmp` attempted to create:
+
+`cls-lolzx_x86.exe`
+
+### Stage 5 – Endpoint Detection
+
+Elastic Endpoint identified the file event as malicious.
+
+### Stage 6 – Prevention
+
+The endpoint security control prevented the malicious file creation attempt.
+
+### Stage 7 – Additional Process Activity
+
+Additional `WerFault.exe` activity appeared after the setup process activity and was documented for further investigation.
+
+---
+
+## Key Indicators and Artifacts
+
+### Alert Information
+
+- Alert: Malware Prevention Alert
+- Severity: High
+- Risk Score: 73
+- Final Classification: True Positive – Prevented Malware Activity
+
+### Endpoint Information
+
+- User: DELL
+- Host: desktop-jlklrc9
+
+### Process Information
+
+- Main Process: `setup.tmp`
+- Parent Process: `setup.exe`
+- Additional Observed Process: `WerFault.exe`
+
+### File Information
+
+- File Name: `cls-lolzx_x86.exe`
+- Event Action: `creation`
+- Event Code: `malicious_file`
+
+### SHA-256
+
+`77b920a22f93f87d2624b58f729712ebacaf8b605437c2678ca4216a28f3b8b2`
+
+### Source Installer
+
+`D:\Games\Grand Theft Auto V [FitGirl Lolly Repack]\setup.exe`
+
+---
+
+## Key Findings
+
+### Finding 1 – High-Severity Malware Alert
+
+A high-severity Malware Prevention Alert was generated with a risk score of 73.
+
+### Finding 2 – Specific User and Endpoint Identified
+
+The activity was connected to user `DELL` on host `desktop-jlklrc9`.
+
+### Finding 3 – Suspicious File Identified
+
+The alert was connected to the attempted creation of `cls-lolzx_x86.exe`.
+
+### Finding 4 – Process Relationship Identified
+
+The investigation showed that `setup.tmp` was connected to the file event and had `setup.exe` as its parent process.
+
+### Finding 5 – File Hash Collected
+
+A SHA-256 hash was available for the detected file and could be used for additional threat hunting.
+
+### Finding 6 – Source Installer Identified
+
+The process activity was traced back to an installer located under an unofficial game repack directory.
+
+### Finding 7 – Prevention Confirmed
+
+Elastic Endpoint prevented the malicious file creation attempt.
+
+### Finding 8 – Process Tree Reconstructed
+
+The process tree showed the activity from the Windows user session through the installer and temporary setup process.
+
+### Finding 9 – Additional Child-Process Activity Observed
+
+`WerFault.exe` activity appeared after the setup process and could be investigated further for complete incident scope.
+
+---
+
+## Final Classification
+
+**True Positive – Prevented Malware Activity**
+
+**Confidence Level: High**
+
+The alert was classified as a True Positive because several pieces of evidence supported the detection:
+
+- High-severity Malware Prevention Alert
+- `malicious_file` event classification
+- Specific attempted file creation
+- Identified file name
+- SHA-256 hash
+- Clear process relationship
+- Source installer path
+- Command-line evidence
+- Process tree evidence
+- Quarantine-related information
+- Endpoint prevention result
+
+The investigation did not rely on one field or one screenshot.
+
+The final decision was based on several pieces of evidence that supported each other.
+
+---
+
+## Impact Assessment
+
+The available evidence showed that the malicious file creation attempt was prevented.
+
+This means the immediate impact appears limited compared to a situation where the file was successfully created and executed.
+
+However, successful prevention does not automatically prove that the endpoint is completely clean.
+
+A full incident response investigation should still review:
+
+- Earlier installer execution
+- Other created files
+- Additional malicious hashes
+- Persistence mechanisms
+- Scheduled tasks
+- Services
+- Registry Run keys
+- Suspicious PowerShell activity
+- Command shell activity
+- Credential access attempts
+- Suspicious network connections
+- Similar alerts on other endpoints
+
+The evidence in this lab supports a prevented malware event, but additional investigation would be needed in a production environment to confirm the full scope.
+
+---
+
+## Recommended Response Actions
+
+If this alert occurred in a production environment, I would recommend:
+
+1. Confirm that the malicious file remains blocked or quarantined.
+2. Search the environment for the SHA-256 hash.
+3. Search for the file name `cls-lolzx_x86.exe`.
+4. Search for other endpoints that executed the same installer.
+5. Review earlier alerts involving the affected endpoint.
+6. Review the complete endpoint timeline before and after the detection.
+7. Investigate the `WerFault.exe` file, network, and registry activity.
+8. Review common persistence locations.
+9. Review recently created files in temporary directories.
+10. Run a complete endpoint security scan.
+11. Review network telemetry for suspicious outbound communication.
+12. Remove untrusted software according to organizational policy.
+13. Escalate the incident if additional malicious behavior is discovered.
+
+---
+
+## Skills Practiced
+
+This investigation gave me hands-on practice with:
+
+- SOC alert triage
+- Elastic Security
+- Elastic Endpoint
+- Malware prevention investigation
+- Endpoint telemetry analysis
+- File event analysis
+- Process lineage analysis
+- Parent-child process analysis
+- Process tree investigation
+- Timeline reconstruction
+- Command-line analysis
+- File path analysis
+- SHA-256 hash collection
+- IOC identification
+- Quarantine validation
+- Prevention validation
+- True Positive classification
+- Impact assessment
+- Incident response thinking
+- Evidence-based investigation
+
+---
+
+## Lessons Learned
+
+This lab helped me understand that a security alert should be treated as the beginning of an investigation.
+
+The alert title showed that malware prevention activity occurred, but I still needed to determine:
+
+- What process caused the alert
+- What file was involved
+- What parent process launched the activity
+- Where the original installer came from
+- What the command line showed
+- What the process tree showed
+- Whether the file creation succeeded
+- What happened after the alert
+
+Another important lesson was understanding the difference between **detection** and **impact**.
+
+The alert was a True Positive because the malicious activity was real.
+
+At the same time, the endpoint security control successfully prevented the specific malicious file creation attempt.
+
+Both facts can be true:
+
+**The detection was real.**
+
+**The prevention control worked.**
+
+This is important in SOC investigations because a True Positive does not always mean that an attacker or malicious program successfully completed its goal.
+
+---
+
+## Conclusion
+
+This investigation started with a high-severity Malware Prevention Alert and developed into a deeper endpoint investigation.
+
+I identified the affected user and host, reviewed the detected file, collected the SHA-256 hash, analyzed the file path, reviewed quarantine evidence, traced the process ancestry, examined command-line information, identified the source installer, reconstructed the process tree, and reviewed post-execution process activity.
+
+The evidence showed that `setup.tmp`, connected to installer activity, attempted to create `cls-lolzx_x86.exe` inside a temporary directory.
+
+Elastic Endpoint identified the file event as malicious and prevented the file creation attempt.
+
+Based on the complete evidence chain, the final classification was:
+
+**True Positive – Prevented Malware Activity**
+
+This lab strengthened my understanding of how a SOC analyst can move from an initial endpoint alert to a supported investigation decision by connecting alert data, file evidence, process relationships, command-line information, timeline activity, and endpoint response results.
