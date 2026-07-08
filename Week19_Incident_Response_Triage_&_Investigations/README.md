@@ -692,5 +692,168 @@ The rule description indicated that it was designed to detect Windows Security E
 
 The detection logic was:
 
-```text
+
 winlog.channel:"Security" and event.code:"4624" and winlog.event_data.LogonType:"10"
+
+
+# Week 19 – Lab 3: Malware Prevention Alert Investigation
+
+## Elastic Security Malware Detection, Process Lineage Analysis, and Prevention Validation
+
+---
+
+## Overview
+
+Malware alerts provide an important starting point for an investigation, but the alert title alone does not explain the full story.
+
+A security analyst still needs to answer important questions:
+
+- What activity caused the alert?
+- Which endpoint was affected?
+- Which user was involved?
+- What process caused the activity?
+- What launched that process?
+- Where did the original activity begin?
+- What file was involved?
+- Were other alerts connected to the same process chain?
+- Did the suspicious activity continue?
+- Did the security control only detect the activity, or did it prevent it?
+- What can be proven from the available evidence?
+- What still remains unknown?
+
+In this investigation, I analyzed a **Malware Prevention Alert** in Elastic Security involving a suspicious file creation attempt on a Windows endpoint.
+
+Instead of making a decision based only on the alert name or severity level, I investigated the activity by reviewing:
+
+- Alert details
+- Detection context
+- Host information
+- User information
+- Process metadata
+- Parent-child process relationships
+- Process ancestry
+- Original execution source
+- Suspicious file information
+- SHA-256 hash information
+- Process Analyzer activity
+- Related alerts
+- Artifact prevalence
+- Prevention evidence
+- Quarantine-related evidence
+- Timeline activity
+
+The investigation showed that an unofficial game repack installer started a temporary setup process that attempted to create a file identified by Elastic Security as malicious.
+
+Based on the available evidence, the final classification was:
+
+> **True Positive – Prevented Malware Activity**
+
+The investigation also showed an important lesson: even when a security product prevents malicious activity, the analyst should still determine what caused the activity, how far the execution chain progressed, and whether additional endpoint investigation is needed.
+
+---
+
+# Investigation Objectives
+
+The main objectives of this investigation were to:
+
+- Understand why the Malware Prevention Alert was generated.
+- Validate the activity behind the detection.
+- Identify the affected host.
+- Identify the user connected to the activity.
+- Determine which process caused the alert.
+- Identify the parent process.
+- Trace the full process ancestry.
+- Find the original source of execution.
+- Investigate the suspicious file creation attempt.
+- Collect the available SHA-256 hash.
+- Review process relationships in Elastic Security Process Analyzer.
+- Review related alerts.
+- Review artifact prevalence.
+- Determine whether the activity was detected or prevented.
+- Reconstruct the event timeline.
+- Separate confirmed facts from assumptions.
+- Determine the most reasonable final classification.
+- Recommend reasonable response actions.
+
+---
+
+# Alert Summary
+
+| Field | Value |
+|---|---|
+| Alert Name | Malware Prevention Alert |
+| Severity | High |
+| Risk Score | 73 |
+| Host | `desktop-jlklrc9` |
+| User | `DELL` |
+| Process | `setup.tmp` |
+| Parent Process | `setup.exe` |
+| Suspicious File | `cls-lolzx_x86.exe` |
+| Operating System | Windows 11 Pro |
+| Final Classification | True Positive – Prevented Malware Activity |
+
+The selected alert occurred on:
+
+`July 6, 2026 at 12:21:49.020`
+
+The alert was connected to suspicious file activity involving the following process:
+
+`setup.tmp`
+
+The suspicious file connected to the alert was:
+
+`cls-lolzx_x86.exe`
+
+At the beginning of the investigation, I did not immediately assume that I understood the full activity.
+
+The alert provided the starting point, but I still needed to determine:
+
+1. What exactly happened?
+2. What process caused the alert?
+3. What launched that process?
+4. Where did the activity originally begin?
+5. What file was involved?
+6. Did the suspicious file successfully execute?
+7. Did Elastic Security prevent the activity?
+8. Were other alerts connected to the same event?
+9. Was there evidence of additional suspicious activity?
+10. What response actions would be reasonable?
+
+---
+
+# Investigation Methodology
+
+I followed this investigation workflow:
+
+```text
+Alert
+   ↓
+Review Alert Details
+   ↓
+Identify Host and User
+   ↓
+Investigate Process
+   ↓
+Investigate Parent Process
+   ↓
+Trace Process Ancestry
+   ↓
+Find Original Execution Source
+   ↓
+Investigate Suspicious File
+   ↓
+Collect File Hash
+   ↓
+Review Process Tree
+   ↓
+Review Related Alerts
+   ↓
+Check Artifact Prevalence
+   ↓
+Validate Prevention Evidence
+   ↓
+Reconstruct Timeline
+   ↓
+Make Final Classification
+   ↓
+Recommend Response Actions
