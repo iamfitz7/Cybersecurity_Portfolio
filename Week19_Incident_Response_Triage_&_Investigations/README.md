@@ -1,18 +1,16 @@
 # 🛡️ Week 19 — Security Alert Triage & Endpoint Investigations
 
-## Evidence-Driven SOC Triage, Authentication Analysis, Process Lineage Investigation, Malware Prevention Validation, and Defensible Alert Classification
+## Evidence-Based SOC Triage, Authentication Review, Process Lineage Analysis, Malware Prevention Validation, and Defensible Alert Classification
 
 ---
 
 ## 📖 Overview
 
-Week 19 focuses on one of the most important responsibilities in Security Operations: **turning security alerts into evidence-based investigation decisions**.
+Week 19 focuses on one of the most important responsibilities in Security Operations: turning security alerts into clear, evidence-based investigation decisions.
 
-Modern security tools can generate alerts for suspicious file activity, authentication behavior, process execution, malware detections, and other potentially dangerous events. However, an alert is not automatically proof that a security incident occurred.
+Modern security tools can generate alerts for suspicious file activity, authentication behavior, process execution, malware detections, dump files, remote logons, and endpoint activity. However, an alert by itself is not proof that a system was compromised.
 
-A security analyst still needs to investigate.
-
-The central focus of this week was learning how to move from:
+This week focused on learning how to move from:
 
 ```text
 Alert
@@ -34,68 +32,45 @@ Classification
 Response Decision
 ```
 
-The investigations in this week required careful analysis of:
+The main goal was not to force every alert into a malicious conclusion.
 
-- Alert metadata
-- Detection rule logic
-- Windows authentication events
-- Event semantics
-- File operations
-- Process executable paths
-- Process ancestry
-- Parent-child relationships
-- Command-line arguments
-- Endpoint Detection and Response telemetry
-- Process trees
-- File hashes
-- Alert correlation
-- Timeline evidence
-- Artifact prevalence
-- Prevention evidence
-- Quarantine-related information
-- Negative evidence
-- Investigation limitations
-- Confidence levels
-- Response recommendations
+The goal was to answer:
 
-The goal was not to classify every alert as malicious.
+> What conclusion is best supported by the available evidence?
 
-The goal was to answer a more important question:
+---
 
-> **What conclusion is best supported by the available evidence?**
-
-This week included investigations that reached different conclusions:
+## 📁 Labs Included
 
 | Lab | Investigation | Final Assessment |
 |---|---|---|
 | Lab 01 | SVCHOST Dump Creation Alert Triage | False Positive / Benign Activity — High Confidence |
 | Lab 02 | RDP Successful RemoteInteractive Logon Investigation | Benign Positive — Moderate Confidence |
 | Lab 03 | Malware Prevention & Process Lineage Investigation | True Positive — Prevented Malware Activity — High Confidence |
-
-Together, these investigations demonstrate an important part of SOC work: similar-looking alerts can require very different analytical approaches and may lead to completely different outcomes.
+| Lab 04 | Repacked Game Installer Malware Prevention Investigation | True Positive — Malware Prevented / Blocked — High Confidence |
 
 ---
 
 # 🎯 Week 19 Objectives
 
-The main objectives of Week 19 were to strengthen my ability to:
+The objectives of Week 19 were to strengthen my ability to:
 
-- Treat security alerts as investigative starting points rather than conclusions
+- Treat alerts as investigation starting points, not final conclusions
 - Validate detection logic before making classification decisions
-- Separate alert wording from underlying endpoint telemetry
-- Interpret Windows authentication events
+- Review endpoint telemetry carefully
+- Interpret file creation, deletion, and prevention events
+- Analyze Windows authentication events
 - Investigate RemoteInteractive RDP logons
-- Analyze file creation and deletion activity
-- Reconstruct endpoint process lineage
-- Review command-line arguments for execution context
-- Trace suspicious activity back to its original execution source
-- Investigate malware prevention events
-- Validate whether malicious activity was detected, blocked, or successfully executed
-- Use file hashes as investigation and threat hunting artifacts
-- Review related alerts and surrounding endpoint activity
-- Interpret negative evidence carefully
-- Compare competing hypotheses
-- Assign defensible alert classifications
+- Reconstruct process lineage
+- Review parent-child process relationships
+- Analyze command-line arguments
+- Validate malware prevention activity
+- Distinguish prevented malware from confirmed compromise
+- Review suspicious installer chains
+- Collect file hashes for additional hunting
+- Use host, user, process, and hash pivots
+- Compare benign and malicious hypotheses
+- Assign accurate alert classifications
 - Document confidence levels and limitations
 - Recommend proportional response actions
 
@@ -103,55 +78,46 @@ The main objectives of Week 19 were to strengthen my ability to:
 
 # 🧠 Investigation Philosophy
 
-The investigations in this week followed several core principles.
-
 ## 1. Alerts Are Hypotheses
 
-An alert tells the analyst:
+An alert means something matched detection logic.
 
-> Something happened that matched detection logic.
+It does not automatically mean:
 
-It does not automatically tell the analyst:
+```text
+Confirmed Compromise
+```
 
-> A confirmed compromise occurred.
-
-The analyst must determine what actually happened.
+A strong analyst validates what happened before deciding what it means.
 
 ---
 
 ## 2. Context Changes Meaning
 
-The same process, file extension, authentication event, or network connection can have very different meanings depending on context.
+The same artifact can mean different things depending on context.
 
 For example:
 
 ```text
-.DMP File
+.DMP file
 ```
 
-could be associated with:
+could relate to:
 
-- Application crash diagnostics
-- Troubleshooting
-- Forensic collection
-- Windows maintenance
-- Credential dumping
-- Malicious process memory collection
+- crash diagnostics
+- troubleshooting
+- memory dumping
+- forensic collection
+- credential dumping
+- malicious process memory collection
 
-Similarly:
-
-```text
-Windows Event ID 4624
-Logon Type 10
-```
-
-confirms successful RemoteInteractive authentication, but does not automatically establish whether the access was authorized or malicious.
+The analyst must determine what the surrounding evidence supports.
 
 ---
 
 ## 3. Process Names Are Not Conclusions
 
-A process should not be classified based only on its name.
+A process should not be judged only by its name.
 
 A stronger investigation reviews:
 
@@ -179,76 +145,21 @@ Timeline Context
 
 ---
 
-## 4. Event Semantics Matter
+## 4. Prevention Does Not Equal Full Compromise
 
-The difference between:
+A malware prevention alert can be a true positive even if the endpoint security tool blocked the activity.
 
-```text
-File Creation
-```
-
-and:
+The analyst must separate:
 
 ```text
-File Deletion
+Was the activity malicious?
 ```
 
-can completely change the interpretation of an alert.
-
-The same applies to:
-
-- attempted execution versus successful execution
-- detection versus prevention
-- authentication failure versus success
-- network connection attempt versus completed communication
-
-Understanding the actual event action is essential.
-
----
-
-## 5. Negative Evidence Must Be Described Carefully
-
-If an analyst searches an alert dataset and finds no additional alerts, the correct conclusion is:
-
-> No additional matching alerts were identified within the searched dataset, timeframe, and investigation scope.
-
-The correct conclusion is not:
-
-> Nothing else happened.
-
-Security investigations should clearly distinguish between:
-
-- evidence of absence
-- absence of evidence
-- telemetry limitations
-- search scope limitations
-
----
-
-## 6. Confidence Should Match the Evidence
-
-A good investigation does not only provide a classification.
-
-It should also communicate confidence.
-
-Examples:
+from:
 
 ```text
-False Positive / Benign Activity
-Confidence: High
+Did the malicious activity succeed?
 ```
-
-```text
-Benign Positive
-Confidence: Moderate
-```
-
-```text
-True Positive – Prevented Malware Activity
-Confidence: High
-```
-
-This makes the final decision easier to understand and defend.
 
 ---
 
@@ -264,20 +175,7 @@ This lab focused on investigating a medium-severity Elastic Security alert title
 SVCHOST Dump creation attempt on endpoints
 ```
 
-At first glance, the alert name suggested potentially suspicious process dumping behavior.
-
-Process dump files can be associated with:
-
-- Crash diagnostics
-- Application troubleshooting
-- Operating system maintenance
-- Digital forensics
-- Debugging
-- Credential access
-- Process memory collection
-- Malicious post-compromise activity
-
-Because a `.DMP` file does not establish malicious intent by itself, the investigation focused on validating the actual endpoint telemetry.
+At first glance, the alert sounded suspicious because dump files can sometimes be associated with credential access, memory collection, debugging, or post-compromise activity.
 
 The alert involved:
 
@@ -291,61 +189,21 @@ File Path:
 C:\Users\DELL\AppData\Local\Temp\svchost.DMP
 ```
 
-The process associated with the event was:
+The process associated with the activity was:
 
 ```text
 C:\Windows\System32\cleanmgr.exe
 ```
 
-The alert occurred on:
+The key question was:
 
-```text
-Host:
-desktop-il6ukq9
-```
-
-under:
-
-```text
-User:
-DELL
-```
-
-The alert had:
-
-```text
-Severity: Medium
-Risk Score: 47
-Observed File Action: Deletion
-```
-
-The central investigative question was:
-
-> **Did the evidence support malicious SVCHOST process dumping, or was the alert associated with legitimate Windows cleanup activity involving an existing dump artifact?**
+> Did this alert show malicious dump creation, or did Windows Disk Cleanup delete an existing dump file?
 
 The final assessment was:
 
-> **False Positive / Benign Activity — High Confidence**
-
----
-
-## 🎯 Investigation Objectives
-
-The investigation focused on determining:
-
-- What caused the alert?
-- What file was involved?
-- What was the actual file operation?
-- Which process performed the activity?
-- Was the process located in an expected Windows directory?
-- What command-line arguments were used?
-- What did the process lineage show?
-- Was there evidence of suspicious dump tooling?
-- Were there additional DMP-related alerts?
-- Was there evidence of credential access activity?
-- Was there evidence of malware execution?
-- Was there evidence of suspicious follow-on activity?
-- Which hypothesis best explained the observed behavior?
+```text
+False Positive / Benign Activity — High Confidence
+```
 
 ---
 
@@ -375,8 +233,6 @@ Alert Review
       ↓
 Detection Rule Review
       ↓
-Alert Reason Analysis
-      ↓
 Event Action Validation
       ↓
 Process Path Validation
@@ -385,132 +241,64 @@ Process Lineage Analysis
       ↓
 Command-Line Analysis
       ↓
-Host-Specific DMP Alert Search
+DMP Alert Scope Review
       ↓
-Malicious vs Benign Hypothesis Comparison
+Hypothesis Comparison
       ↓
 Final Classification
 ```
 
 ---
 
-## 🔍 Investigation Process
+## 🔍 Key Investigation Steps
 
-### 1️⃣ Initial Alert Review
+### 1. Alert Review
 
-The investigation began by reviewing the alert in Elastic Security.
-
-The alert identified:
+The alert identified a dump file named:
 
 ```text
-Process: cleanmgr.exe
-File: svchost.DMP
-User: DELL
-Host: desktop-il6ukq9
+svchost.DMP
 ```
 
-The alert title initially raised concern because process dumping can be associated with credential access and other malicious behavior.
+Because dump files can sometimes contain sensitive memory contents, the alert required review.
 
-However, the associated process was:
-
-```text
-C:\Windows\System32\cleanmgr.exe
-```
-
-This created an alternative hypothesis:
-
-> The alert may have been triggered by legitimate Windows cleanup activity involving an existing dump file.
-
-No final classification was made at this stage.
-
-The investigation continued.
+However, the investigation did not accept the alert title as proof of malicious activity.
 
 ---
 
-### 2️⃣ Detection Rule Review
+### 2. Event Action Validation
 
-The detection rule was reviewed to understand why the alert was generated.
-
-This step was important because detection rules identify patterns of interest, but the detection rule name does not automatically describe the complete meaning of the underlying activity.
-
-The investigation separated three questions:
-
-1. What behavior was the rule designed to detect?
-2. What did the actual endpoint event show?
-3. What security conclusion did the complete evidence support?
-
-This prevented the investigation from automatically treating the phrase:
-
-```text
-Dump creation attempt
-```
-
-as proof that the observed process created a malicious memory dump.
-
----
-
-### 3️⃣ Event Action Validation
-
-One of the most important findings came from reviewing the actual event semantics.
-
-The file involved was:
-
-```text
-C:\Users\DELL\AppData\Local\Temp\svchost.DMP
-```
-
-However, the observed event action was:
+The most important field was the actual event action:
 
 ```text
 Deletion
 ```
 
-This materially changed the investigation.
+This changed the investigation significantly.
 
-The available evidence did not show `cleanmgr.exe` creating the dump file.
+The available evidence showed that `cleanmgr.exe` deleted the `.DMP` file.
 
-Instead, the telemetry showed:
-
-```text
-cleanmgr.exe
-      ↓
-Deletion of svchost.DMP
-```
-
-This became one of the strongest pieces of evidence supporting the benign activity hypothesis.
+It did not show that `cleanmgr.exe` created a malicious memory dump.
 
 ---
 
-### 4️⃣ Process Path Validation
+### 3. Process Path Validation
 
-The executable path was:
+The process path was:
 
 ```text
 C:\Windows\System32\cleanmgr.exe
 ```
 
-This path is consistent with the standard Windows Disk Cleanup utility.
+This path is consistent with the legitimate Windows Disk Cleanup utility.
 
-However, the investigation did not stop there.
-
-A legitimate process name and expected path do not automatically prove that activity is benign.
-
-The investigation continued by reviewing:
-
-- Process lineage
-- Command-line arguments
-- File action
-- User context
-- Host context
-- Related alerts
+However, the investigation did not stop there. A legitimate path is helpful context, but not enough by itself.
 
 ---
 
-### 5️⃣ Process Lineage Analysis
+### 4. Process Lineage Analysis
 
-Elastic Process Analyzer was used to reconstruct the relevant process relationships.
-
-The observed lineage included:
+The process lineage was consistent with Windows maintenance behavior:
 
 ```text
 services.exe
@@ -522,110 +310,39 @@ cleanmgr.exe
 DismHost.exe
 ```
 
-This process context was consistent with Windows service-driven maintenance and cleanup behavior.
-
-The reviewed alert context did not show an obvious suspicious execution chain involving:
-
-- ProcDump
-- PowerShell dumping commands
-- Rundll32 and `comsvcs.dll`
-- Unknown dump utilities
-- Suspicious unsigned binaries
-
-The lineage supported the benign hypothesis.
+No suspicious dump tools were identified in the reviewed process chain.
 
 ---
 
-### 6️⃣ Command-Line Analysis
+### 5. Command-Line Review
 
-The `cleanmgr.exe` command-line arguments were reviewed.
-
-Observed arguments included:
+The command line included:
 
 ```text
-/autocleanstoragesense
+/autocleanstoragesense /d C:
 ```
 
-and:
+This supported automated Windows cleanup activity.
 
-```text
-/d C:
-```
-
-The execution was consistent with:
-
-```text
-C:\WINDOWS\system32\cleanmgr.exe /autocleanstoragesense /d C:
-```
-
-This was one of the strongest pieces of contextual evidence in the investigation.
-
-The key question was not:
-
-> Is `cleanmgr.exe` normally legitimate?
-
-The better question was:
-
-> What was this specific execution of `cleanmgr.exe` instructed to do?
-
-The arguments supported automated storage cleanup activity targeting the C: drive.
-
-When correlated with:
-
-- the deletion event
-- the Temp directory location
-- the process lineage
-- the absence of corroborating malicious evidence
-
-the behavior was most consistent with legitimate cleanup activity.
+The evidence pointed toward Windows Storage Sense or Disk Cleanup removing a temporary dump file.
 
 ---
 
-### 7️⃣ DMP Alert Scope Validation
+## ⚖️ Hypothesis Comparison
 
-A host-specific search was performed:
+### Hypothesis A — Malicious Dump Creation
 
-```text
-host.name : "desktop-il6ukq9" and file.extension : "DMP"
-```
+This would be supported by:
 
-Within the searched Alerts data view and investigation scope, the search returned the current SVCHOST dump alert without revealing a broader pattern of matching DMP-related alerts.
+- Procdump execution
+- suspicious PowerShell dumping commands
+- Rundll32 with dump behavior
+- unknown dump utilities
+- credential access alerts
+- suspicious outbound activity
+- malware detections
 
-This was useful negative evidence.
-
-However, the finding was documented carefully.
-
-The investigation supported:
-
-> No additional matching DMP-related alerts were identified within the searched alert dataset and scope.
-
-It did not prove:
-
-> No other DMP activity ever occurred on the endpoint.
-
-This distinction is important for accurate SOC documentation.
-
----
-
-## ⚖️ Hypothesis Analysis
-
-### Hypothesis A — Malicious Process Dumping
-
-This hypothesis would be strengthened by evidence such as:
-
-- ProcDump execution
-- Suspicious PowerShell activity
-- Rundll32 with `comsvcs.dll`
-- Task Manager dump activity
-- Unknown dump utilities
-- Credential access alerts
-- Suspicious parent processes
-- Malware detections
-- Follow-on execution
-- Persistence
-- Suspicious outbound network communication
-
-The reviewed evidence did not provide sufficient corroborating support for these behaviors.
+The reviewed evidence did not support this strongly.
 
 **Support Level: Weak**
 
@@ -633,141 +350,35 @@ The reviewed evidence did not provide sufficient corroborating support for these
 
 ### Hypothesis B — Legitimate Windows Cleanup Activity
 
-This hypothesis was supported by:
+This was supported by:
 
-- `cleanmgr.exe` performed the observed activity
-- The executable path was under `C:\Windows\System32`
-- The observed action was deletion
-- The file was located under a Temp directory
-- The command line contained `/autocleanstoragesense`
-- The execution targeted the C: drive
-- Process lineage was consistent with Windows maintenance behavior
-- No corroborating malicious dump behavior was identified in the reviewed alert context
+- `cleanmgr.exe`
+- System32 path
+- deletion action
+- Temp directory target
+- Storage Sense command-line arguments
+- maintenance-style process lineage
+- lack of corroborating malicious behavior
 
 **Support Level: Strong**
 
 ---
 
-## 📌 Evidence Chain
-
-```text
-Alert Triggered
-      ↓
-svchost.DMP Identified
-      ↓
-Actual Event Action = Deletion
-      ↓
-Responsible Process = cleanmgr.exe
-      ↓
-Expected System32 Path
-      ↓
-Storage Sense Cleanup Arguments
-      ↓
-Windows Maintenance Process Lineage
-      ↓
-No Corroborating Malicious Dump Evidence
-      ↓
-Benign Activity Best Fits Available Evidence
-```
-
----
-
 ## ✅ Final Assessment
 
-| Assessment Field | Result |
+| Field | Result |
 |---|---|
 | Classification | False Positive / Benign Activity |
 | Confidence | High |
 | Escalation | Not supported by available evidence |
-| Primary Explanation | Automated Windows storage cleanup |
+| Primary Explanation | Windows cleanup activity |
 | Malicious Dumping Evidence | Not identified in reviewed scope |
 
-### Assessment Rationale
-
-The alert involved `svchost.DMP`; however, the underlying telemetry showed a deletion event associated with:
-
-```text
-C:\Windows\System32\cleanmgr.exe
-```
-
-The process executed with arguments including:
-
-```text
-/autocleanstoragesense /d C:
-```
-
-which supported automated Windows storage cleanup behavior.
-
-The process lineage was consistent with Windows maintenance activity, and the reviewed alert context did not provide corroborating evidence of malicious dump tooling, credential access behavior, malware execution, or suspicious follow-on activity.
-
-The strongest evidence therefore supported:
-
-> **False Positive / Benign Activity — High Confidence**
-
 ---
 
-## 🧠 Key Lessons
+## 🧾 Professional Summary
 
-### Alert Titles Must Be Validated
-
-A detection name describes the pattern a rule is looking for.
-
-It does not automatically prove malicious intent.
-
-### Event Semantics Can Change the Investigation
-
-The difference between:
-
-```text
-Creation
-```
-
-and:
-
-```text
-Deletion
-```
-
-was critical to this investigation.
-
-### Command Lines Provide Intent Context
-
-The arguments:
-
-```text
-/autocleanstoragesense /d C:
-```
-
-helped explain what the process was doing.
-
-### Legitimate Processes Still Require Validation
-
-The investigation did not close the alert simply because `cleanmgr.exe` is a Windows utility.
-
-The conclusion came from correlated evidence.
-
-### Good Triage Prevents Unnecessary Escalation
-
-Strong SOC work includes identifying malicious activity, but it also includes confidently identifying benign activity when the evidence supports it.
-
----
-
-## 🛠️ Skills Demonstrated
-
-- Elastic Security alert triage
-- Detection rule analysis
-- EDR telemetry review
-- File event interpretation
-- Process path validation
-- Process lineage reconstruction
-- Command-line analysis
-- KQL filtering
-- Host-level scope review
-- False-positive identification
-- Hypothesis-driven investigation
-- Negative evidence interpretation
-- Confidence assessment
-- Professional incident documentation
+This lab strengthened my ability to validate alert meaning by reviewing event action, process context, command-line arguments, and process lineage. Although the alert title suggested possible dump creation, the evidence showed a deletion event performed by Windows Disk Cleanup behavior. The best-supported conclusion was benign activity with high confidence.
 
 ---
 
@@ -777,7 +388,7 @@ Strong SOC work includes identifying malicious activity, but it also includes co
 
 ## 🛡️ Investigation Overview
 
-This lab focused on investigating and triaging a successful Remote Desktop Protocol authentication alert in Elastic Security.
+This lab focused on investigating a successful Remote Desktop Protocol authentication alert in Elastic Security.
 
 The alert was titled:
 
@@ -785,10 +396,10 @@ The alert was titled:
 RDP - Successful Interactive Remote Logon Detected
 ```
 
-The underlying Windows authentication activity involved:
+The underlying Windows authentication event involved:
 
 ```text
-Windows Security Event ID: 4624
+Event ID: 4624
 Logon Type: 10
 ```
 
@@ -798,57 +409,22 @@ Logon Type 10 represents:
 RemoteInteractive
 ```
 
-This is commonly associated with Remote Desktop Protocol activity.
+This is commonly associated with RDP activity.
 
-The investigation was not limited to confirming that an RDP authentication occurred.
+The investigation focused on determining whether the activity represented:
 
-The more important question was:
-
-> **Did the successful remote authentication represent legitimate remote access, compromised credentials, lateral movement, or activity requiring escalation?**
-
-The investigation followed an evidence-driven methodology.
-
-The following factors were treated as investigative leads rather than automatic proof of compromise:
-
-- Successful authentication
-- External source IP
-- Administrator account usage
-- Source geolocation
-- RemoteInteractive logon type
+- legitimate remote administration
+- expected support activity
+- compromised credentials
+- unauthorized RDP access
+- lateral movement
+- activity requiring escalation
 
 The final assessment was:
 
-> **Benign Positive — Moderate Confidence**
-
-The detection correctly identified successful RDP authentication activity. However, the available investigation telemetry did not provide sufficient corroborating evidence of malicious post-authentication behavior.
-
----
-
-## 🎯 Investigation Objectives
-
-The investigation focused on:
-
-- Reviewing the initial RDP alert
-- Understanding the detection rule logic
-- Validating Windows Event ID 4624
-- Confirming Logon Type 10
-- Identifying the source IP
-- Identifying the destination host
-- Identifying the authenticated account
-- Reviewing privileged account context
-- Reviewing source geolocation
-- Reviewing network organization information
-- Pivoting on the source IP
-- Pivoting on the user
-- Pivoting on the host
-- Reviewing authentication events
-- Reviewing related alerts
-- Reviewing process activity
-- Reviewing network activity
-- Searching for evidence of brute-force behavior
-- Searching for suspicious post-authentication activity
-- Comparing legitimate and malicious access hypotheses
-- Making a defensible disposition
+```text
+Benign Positive — Moderate Confidence
+```
 
 ---
 
@@ -870,63 +446,8 @@ The investigation focused on:
 | Source Organization | Bell Canada |
 | Windows Event ID | 4624 |
 | Logon Type | 10 |
-| Logon Process Name | User32 |
 | Final Disposition | Benign Positive |
 | Confidence | Moderate |
-
----
-
-## 🧠 Why Successful RDP Logons Require Investigation
-
-RDP is widely used for:
-
-- Remote administration
-- Help desk support
-- Server maintenance
-- Infrastructure management
-- Remote troubleshooting
-- Work-from-home access
-
-However, attackers also use RDP for:
-
-- Initial access
-- Valid account abuse
-- Lateral movement
-- Persistence
-- Remote execution
-- Post-compromise access
-
-A successful RDP event can therefore represent several possibilities:
-
-```text
-Legitimate Administration
-```
-
-```text
-Expected Remote Support
-```
-
-```text
-Unauthorized Use of Valid Credentials
-```
-
-```text
-Brute Force Followed by Success
-```
-
-```text
-Password Spraying Followed by Success
-```
-
-```text
-Internal Lateral Movement
-```
-
-```text
-External Access to Exposed RDP
-```
-
-The investigation needed to determine which explanation best matched the available evidence.
 
 ---
 
@@ -945,27 +466,15 @@ User Attribution
       ↓
 Host Identification
       ↓
-Source IP Analysis
+Source IP Review
       ↓
 Geolocation Enrichment
-      ↓
-Network Organization Review
-      ↓
-Timeline Investigation
-      ↓
-Source IP Pivot
-      ↓
-User Pivot
-      ↓
-Host Pivot
       ↓
 Authentication Correlation
       ↓
 Related Alert Review
       ↓
 Process Activity Review
-      ↓
-Network Activity Review
       ↓
 Hypothesis Comparison
       ↓
@@ -974,69 +483,37 @@ Final Disposition
 
 ---
 
-## 🔍 Investigation Process
+## 🔍 Key Investigation Areas
 
-### 1️⃣ Detection Rule Analysis
+### 1. Detection Rule Review
 
-The investigation began by reviewing the rule responsible for generating the alert.
-
-The detection logic focused on:
+The rule logic focused on:
 
 ```text
-winlog.channel:"Security"
-and event.code:"4624"
-and winlog.event_data.LogonType:"10"
+event.code: 4624
+winlog.event_data.LogonType: 10
 ```
 
-This established that the alert was designed to identify:
-
-```text
-Successful Windows Authentication
-      +
-RemoteInteractive Logon
-```
-
-The rule correctly identified activity that deserved investigation.
-
-However, the rule did not determine whether the access was authorized.
-
-That required additional context.
+This confirmed that the alert was intended to detect successful RemoteInteractive logons.
 
 ---
 
-### 2️⃣ Authentication Event Validation
-
-The underlying authentication event was reviewed.
+### 2. Authentication Validation
 
 The investigation confirmed:
 
 ```text
-Event ID: 4624
+Event ID 4624 = Successful logon
+Logon Type 10 = RemoteInteractive logon
 ```
 
-which represents a successful Windows logon.
+This proved that RDP-style authentication occurred.
 
-The event also showed:
-
-```text
-Logon Type: 10
-```
-
-which represents RemoteInteractive access.
-
-This confirmed that the detection logic matched the underlying authentication telemetry.
-
-At this stage, the investigation had confirmed:
-
-> A successful RemoteInteractive authentication occurred.
-
-It had not yet confirmed:
-
-> The authentication was malicious.
+It did not prove that the access was malicious.
 
 ---
 
-### 3️⃣ Account Review
+### 3. Account Review
 
 The authenticated account was:
 
@@ -1044,26 +521,13 @@ The authenticated account was:
 Administrator
 ```
 
-The use of a privileged account increased the importance of the investigation.
+This increased concern because privileged accounts can perform high-impact actions.
 
-Administrator account activity can have significant impact because privileged credentials may allow:
-
-- Software installation
-- Security control modification
-- Service creation
-- User creation
-- Credential access
-- Persistence
-- Lateral movement
-- Sensitive file access
-
-However, privileged account usage alone is not proof of malicious behavior.
-
-The investigation therefore continued into source, host, timeline, and surrounding activity.
+However, administrator usage alone does not prove compromise.
 
 ---
 
-### 4️⃣ Source IP Analysis
+### 4. Source IP Review
 
 The source IP was:
 
@@ -1074,120 +538,37 @@ The source IP was:
 Available enrichment showed:
 
 ```text
-Country: Canada
-Region: Ontario
-Organization: Bell Canada
+Canada
+Ontario
+Bell Canada
 ```
 
-Geolocation and organization information provided useful context.
-
-However, geography alone was not treated as a classification decision.
-
-An IP address from another country or region can be associated with:
-
-- Legitimate travel
-- VPN infrastructure
-- Residential ISP access
-- Remote workers
-- Corporate remote access
-- Compromised infrastructure
-- Unauthorized access
-
-The investigation therefore used enrichment as context rather than proof.
+This was useful context, but geolocation was not treated as proof of malicious activity.
 
 ---
 
-### 5️⃣ Timeline and Entity Investigation
+### 5. Post-Authentication Review
 
-The alert was reviewed in the context of:
-
-- the source IP
-- the Administrator account
-- `workstation-01`
-- surrounding authentication events
-- related alerts
-- process activity
-- network activity
-
-This helped determine whether the RDP event was part of a larger suspicious sequence.
-
-The investigation focused on identifying behavior such as:
+The investigation looked for evidence such as:
 
 - repeated failed logons before success
+- brute force behavior
 - multiple account attempts
-- suspicious process execution after authentication
-- PowerShell activity
+- suspicious PowerShell activity
 - command shell execution
 - service creation
+- credential dumping
+- malware execution
 - persistence
-- suspicious file activity
-- suspicious network communication
-- additional alerts from the same endpoint
+- suspicious outbound connections
 
-The reviewed evidence did not provide sufficient corroborating support for a malicious post-authentication sequence.
-
----
-
-## ⚖️ Hypothesis Analysis
-
-### Hypothesis A — Compromised Credentials / Unauthorized RDP Access
-
-This hypothesis would be strengthened by:
-
-- Numerous failed logons before success
-- Password spraying patterns
-- Multiple accounts attempted from the same source
-- Impossible travel evidence
-- Unusual access time
-- Suspicious process execution after authentication
-- PowerShell or command shell abuse
-- Service creation
-- Credential dumping
-- Persistence activity
-- Malware execution
-- Suspicious outbound communication
-
-Within the reviewed investigation scope, sufficient corroborating evidence was not identified to confidently support this hypothesis.
-
----
-
-### Hypothesis B — Legitimate Remote Administrative Access
-
-This hypothesis was supported by:
-
-- Successful authentication telemetry
-- RemoteInteractive logon behavior
-- No sufficiently corroborating malicious post-authentication behavior in the reviewed scope
-- No investigation evidence strong enough to justify escalation as confirmed unauthorized access
-
-However, the investigation did not have enough business context to classify the activity with high confidence.
-
-Examples of missing contextual validation could include:
-
-- Change ticket information
-- Administrator work schedule
-- Approved remote access records
-- VPN logs
-- Identity provider logs
-- Asset owner confirmation
-
-For this reason, the confidence level remained:
-
-```text
-Moderate
-```
-
-rather than:
-
-```text
-High
-```
+The reviewed evidence did not provide enough support for confirmed malicious post-authentication activity.
 
 ---
 
 ## ✅ Final Assessment
 
-| Assessment Field | Result |
+| Field | Result |
 |---|---|
 | Disposition | Benign Positive |
 | Confidence | Moderate |
@@ -1196,100 +577,11 @@ High
 | Malicious Follow-On Evidence | Not sufficiently identified in reviewed scope |
 | Escalation | Not supported by available evidence |
 
-### Assessment Rationale
-
-The alert accurately detected a successful RemoteInteractive authentication event involving:
-
-```text
-Event ID 4624
-Logon Type 10
-```
-
-The event involved the Administrator account on `workstation-01` from source IP `142.114.44.227`.
-
-The event deserved investigation because it involved:
-
-- RDP activity
-- successful authentication
-- privileged account usage
-- an external source IP
-
-However, the reviewed telemetry did not provide sufficient corroborating evidence of:
-
-- brute-force activity
-- password spraying
-- suspicious process execution
-- malware execution
-- credential access
-- persistence
-- malicious network behavior
-- other clear post-authentication compromise activity
-
-The detection was therefore considered valid, but the activity was not escalated as a confirmed incident based on the available evidence.
-
-Final disposition:
-
-> **Benign Positive — Moderate Confidence**
-
 ---
 
-## 🧠 Key Lessons
+## 🧾 Professional Summary
 
-### A Successful Authentication Is Not the End of the Investigation
-
-The analyst must determine what happened:
-
-```text
-Before Authentication
-During Authentication
-After Authentication
-```
-
-### Privileged Account Usage Raises Risk but Does Not Prove Compromise
-
-Administrator activity deserves careful investigation, but classification must still be evidence-based.
-
-### Geolocation Is Context, Not Proof
-
-Country and ISP information can help guide an investigation, but should not be treated as a final verdict.
-
-### Post-Authentication Behavior Is Critical
-
-A successful login becomes more concerning when followed by:
-
-- PowerShell
-- command shell activity
-- credential dumping
-- service creation
-- persistence
-- suspicious network communication
-
-### Business Context Matters
-
-Technical telemetry can show that access occurred.
-
-Business context may be required to confirm whether the access was expected.
-
----
-
-## 🛠️ Skills Demonstrated
-
-- Windows authentication investigation
-- RDP alert triage
-- Event ID 4624 analysis
-- Logon Type 10 interpretation
-- Privileged account investigation
-- Source IP analysis
-- Geolocation enrichment
-- Network organization enrichment
-- Elastic Timeline analysis
-- Entity pivoting
-- Authentication correlation
-- Related alert review
-- Hypothesis testing
-- Evidence-based disposition
-- Confidence assessment
-- Investigation limitation documentation
+This lab strengthened my ability to investigate RDP authentication events without overreacting to successful logons. The detection correctly identified RemoteInteractive activity, but the reviewed evidence did not show enough malicious follow-on behavior to escalate it as a confirmed incident. The final classification was a benign positive with moderate confidence because additional business context would improve certainty.
 
 ---
 
@@ -1318,67 +610,23 @@ The investigation focused on answering:
 - Which user was involved?
 - What process caused the activity?
 - What launched that process?
-- Where did the execution chain begin?
 - What file was detected?
 - What was the file hash?
-- Did the file creation succeed?
+- Did file creation succeed?
 - Was the malicious activity prevented?
-- What additional activity followed?
-- What could be proven?
-- What still required additional investigation?
-
-The investigation found that an installer process launched a temporary setup process that attempted to create a file identified by Elastic Endpoint as malicious.
-
-Elastic Endpoint prevented the malicious file creation attempt.
+- What additional review was needed?
 
 The final classification was:
 
-> **True Positive — Prevented Malware Activity**
+```text
+True Positive — Prevented Malware Activity
+```
 
-**Confidence: High**
+Confidence:
 
----
-
-## 🎯 Investigation Objectives
-
-The investigation focused on:
-
-- Triaging a high-severity endpoint alert
-- Identifying the affected user and host
-- Reviewing the alert reason
-- Identifying the suspicious file
-- Reviewing the file path
-- Collecting the SHA-256 hash
-- Identifying the responsible process
-- Identifying the parent process
-- Tracing process ancestry
-- Identifying the original installer source
-- Reviewing command-line arguments
-- Reconstructing the execution chain
-- Reviewing related process activity
-- Reviewing prevention evidence
-- Reviewing quarantine-related information
-- Determining whether the file creation succeeded
-- Separating confirmed facts from assumptions
-- Making an evidence-based classification
-- Recommending additional response actions
-
----
-
-## 🛠️ Tools and Technologies Used
-
-| Tool / Technology | Investigation Purpose |
-|---|---|
-| Elastic Security | Alert investigation and endpoint analysis |
-| Elastic Endpoint | Malware detection and prevention evidence |
-| Elastic Defend | Endpoint protection context |
-| Process Analyzer | Process relationship reconstruction |
-| Elastic Timeline | Chronological event review |
-| Windows Process Telemetry | Execution analysis |
-| File Event Telemetry | File creation investigation |
-| SHA-256 Analysis | IOC collection and hunting |
-| Command-Line Analysis | Execution context validation |
-| Process Tree Analysis | Parent-child and ancestry investigation |
+```text
+High
+```
 
 ---
 
@@ -1396,15 +644,8 @@ The investigation focused on:
 | Detected File | `cls-lolzx_x86.exe` |
 | Event Action | Creation |
 | Event Code | `malicious_file` |
-| Operating System | Windows 11 Pro |
 | Final Classification | True Positive — Prevented Malware Activity |
 | Confidence | High |
-
-The selected alert occurred at:
-
-```text
-July 6, 2026 at 12:21:49.020
-```
 
 ---
 
@@ -1427,17 +668,9 @@ Responsible Process Investigation
         ↓
 Parent Process Investigation
         ↓
-Process Ancestry Reconstruction
-        ↓
-Original Installer Source Identification
-        ↓
-Command-Line Analysis
-        ↓
 Process Tree Review
         ↓
 Prevention Validation
-        ↓
-Post-Execution Activity Review
         ↓
 Impact Assessment
         ↓
@@ -1446,73 +679,9 @@ Final Classification
 
 ---
 
-## 🔍 Investigation Process
+## 🔍 Key Investigation Areas
 
-### 1️⃣ Initial Alert Review
-
-The investigation began with a high-severity Malware Prevention Alert.
-
-The alert had:
-
-```text
-Severity: High
-Risk Score: 73
-```
-
-The initial evidence connected:
-
-```text
-Process: setup.tmp
-Parent Process: setup.exe
-Detected File: cls-lolzx_x86.exe
-User: DELL
-Host: desktop-jlklrc9
-```
-
-This created the initial investigation relationship:
-
-```text
-setup.exe
-      ↓
-setup.tmp
-      ↓
-Attempted Creation of cls-lolzx_x86.exe
-```
-
-The alert appeared suspicious, but additional investigation was needed before making a final classification.
-
----
-
-### 2️⃣ Affected Host and User Identification
-
-The activity was associated with:
-
-```text
-User:
-DELL
-```
-
-and:
-
-```text
-Host:
-desktop-jlklrc9
-```
-
-Identifying the affected user and endpoint created the starting point for scope analysis.
-
-In a production environment, these entities could be used to investigate:
-
-- Other alerts from the endpoint
-- Other suspicious activity from the user
-- Authentication activity
-- Related file executions
-- Similar activity across the environment
-- Suspicious network connections
-
----
-
-### 3️⃣ Suspicious File Analysis
+### 1. Suspicious File Review
 
 The detected file was:
 
@@ -1520,107 +689,37 @@ The detected file was:
 cls-lolzx_x86.exe
 ```
 
-The file path was:
+The file was located in a temporary directory:
 
 ```text
-C:\Users\DELL\AppData\Local\Temp\is-1II3F.tmp\cls-lolzx_x86.exe
+C:\Users\DELL\AppData\Local\Temp\
 ```
 
-The location was relevant because temporary directories are commonly used by:
-
-- Legitimate installers
-- Software updaters
-- Application unpacking processes
-- Malware droppers
-- Payload staging
-- Defense evasion activity
-
-The path alone was not used as proof of malicious behavior.
-
-It was correlated with the endpoint malware classification, process chain, hash, and prevention result.
+Temporary locations are commonly used by installers, but also by malware droppers and payload staging behavior.
 
 ---
 
-### 4️⃣ SHA-256 Collection
+### 2. SHA-256 Collection
 
-The investigation identified the SHA-256 hash:
+The SHA-256 hash was collected for future hunting and enrichment:
 
 ```text
 77b920a22f93f87d2624b58f729712ebacaf8b605437c2678ca4216a28f3b8b2
 ```
 
-This hash is a useful investigation artifact because it can support:
+This hash can be used for:
 
-- Threat intelligence enrichment
 - SIEM searches
 - EDR searches
-- Environment-wide threat hunting
+- threat intelligence enrichment
+- environment-wide hunting
 - IOC tracking
-- Detection engineering
-- Identification of similar activity on other endpoints
-
-A production investigation could search:
-
-```text
-file.hash.sha256:
-77b920a22f93f87d2624b58f729712ebacaf8b605437c2678ca4216a28f3b8b2
-```
-
-across available endpoint and SIEM telemetry.
 
 ---
 
-### 5️⃣ Event Classification Review
+### 3. Process Lineage Review
 
-The endpoint event contained fields including:
-
-```text
-event.action: creation
-```
-
-```text
-event.category: malware
-```
-
-```text
-event.category: intrusion_detection
-```
-
-```text
-event.category: file
-```
-
-```text
-event.code: malicious_file
-```
-
-These fields showed that the endpoint security product classified the event as malicious file activity.
-
-This strengthened confidence that the alert represented a real security event rather than only a generic suspicious process pattern.
-
----
-
-### 6️⃣ Process Lineage Analysis
-
-Process lineage analysis was one of the most important parts of the investigation.
-
-The process tree showed:
-
-```text
-winlogon.exe
-      ↓
-userinit.exe
-      ↓
-explorer.exe
-      ↓
-setup.exe
-      ↓
-setup.tmp
-```
-
-Additional `WerFault.exe` activity appeared after the temporary setup process.
-
-The wider visible chain was approximately:
+The process chain showed:
 
 ```text
 winlogon.exe
@@ -1633,548 +732,606 @@ setup.exe
       ↓
 setup.tmp
       ↓
-WerFault.exe
+attempted creation of cls-lolzx_x86.exe
 ```
 
-The first portion:
-
-```text
-winlogon.exe
-      ↓
-userinit.exe
-      ↓
-explorer.exe
-```
-
-was consistent with an interactive Windows user session.
-
-The investigation became more significant when the chain moved into:
-
-```text
-explorer.exe
-      ↓
-setup.exe
-      ↓
-setup.tmp
-```
-
-and then connected to the malicious file creation attempt.
+This showed the activity originated from an interactive user session and moved through an installer chain.
 
 ---
 
-### 7️⃣ Original Installer Source Analysis
+### 4. Prevention Validation
 
-The process activity was traced back to:
+Elastic classified the file activity as malicious and prevented the file creation attempt.
 
-```text
-D:\Games\Grand Theft Auto V [FitGirl Lolly Repack]\setup.exe
-```
-
-The source path added important context.
-
-However, the final classification was not based only on the directory name.
-
-The conclusion was based on the complete evidence chain:
-
-```text
-Interactive User Session
-        ↓
-Explorer Execution
-        ↓
-Installer Execution
-        ↓
-Temporary Setup Process
-        ↓
-Malicious File Creation Attempt
-        ↓
-Elastic Endpoint Detection
-        ↓
-Prevention
-```
+This meant the activity was a true positive, but the immediate malicious action was blocked.
 
 ---
 
-### 8️⃣ Command-Line Analysis
+## ✅ Final Classification
 
-Command-line and process argument information helped connect the temporary process to the original installer.
-
-Looking only at:
-
-```text
-C:\Users\DELL\AppData\Local\Temp\...\setup.tmp
-```
-
-would not provide the complete investigation story.
-
-The investigation correlated:
-
-- executable path
-- command line
-- process arguments
-- parent process
-- grandparent process
-- user
-- host
-- execution time
-- file activity
-- process tree
-
-This helped reconstruct how the activity developed.
+| Field | Result |
+|---|---|
+| Classification | True Positive |
+| Outcome | Prevented Malware Activity |
+| Confidence | High |
+| File Creation Attempt | Confirmed |
+| Endpoint Malware Classification | Confirmed |
+| Prevention | Confirmed |
+| Further Review | Recommended |
 
 ---
 
-### 9️⃣ Prevention Validation
+## 🧾 Professional Summary
 
-One of the most important questions was:
-
-> Did the malicious file creation succeed?
-
-Timeline and prevention evidence showed that Elastic Endpoint prevented the malicious file creation attempt.
-
-This changed the impact assessment.
-
-The correct conclusion was not:
-
-```text
-False Positive
-```
-
-because the malicious activity was real.
-
-The correct conclusion was:
-
-```text
-True Positive
-      +
-Prevented Activity
-```
-
-These two facts can exist together.
+This lab strengthened my ability to investigate malware prevention events by tracing process lineage, validating file activity, collecting hashes, and separating true positive detection from confirmed compromise. The evidence showed malicious file creation activity that was prevented by Elastic Endpoint.
 
 ---
 
-## 🧬 Reconstructed Execution Chain
-
-```text
-Windows Interactive Session
-        ↓
-winlogon.exe
-        ↓
-userinit.exe
-        ↓
-explorer.exe
-        ↓
-setup.exe
-        ↓
-setup.tmp
-        ↓
-Attempted Creation:
-cls-lolzx_x86.exe
-        ↓
-Elastic Endpoint Detection
-        ↓
-Elastic Endpoint Prevention
-        ↓
-Additional WerFault.exe Activity Observed
-```
+# 🧬 Lab 04 — Repacked Game Installer Malware Prevention Investigation
 
 ---
 
-## ⏱️ Investigation Timeline
+## 🛡️ Investigation Overview
 
-### Stage 1 — Interactive User Session
+This lab focused on a high-confidence Elastic Defend malware prevention alert involving a user-launched repacked game installer.
 
-A Windows user session was active through:
-
-```text
-winlogon.exe → userinit.exe → explorer.exe
-```
-
-### Stage 2 — Installer Execution
-
-The user session was connected to:
-
-```text
-setup.exe
-```
-
-### Stage 3 — Temporary Setup Process
-
-The installer launched:
-
-```text
-setup.tmp
-```
-
-from a temporary AppData directory.
-
-### Stage 4 — Malicious File Creation Attempt
-
-The temporary setup process attempted to create:
+Elastic Defend prevented a suspicious file creation attempt involving:
 
 ```text
 cls-lolzx_x86.exe
 ```
 
-### Stage 5 — Endpoint Detection
-
-Elastic Endpoint classified the file event as malicious.
-
-### Stage 6 — Prevention
-
-The endpoint security control prevented the malicious file creation attempt.
-
-### Stage 7 — Additional Process Activity
-
-Additional `WerFault.exe` activity appeared after the setup process and was documented as an area requiring further investigation in a production environment.
-
----
-
-## 🔎 Post-Execution Activity Review
-
-The process tree showed two `WerFault.exe` processes after `setup.tmp`.
-
-`WerFault.exe` is a legitimate Windows Error Reporting process.
-
-For that reason, it was not classified as malicious based only on its process name.
-
-However, the process tree showed related:
-
-- File activity
-- Network activity
-- Registry activity
-
-A deeper production investigation should review:
-
-- Executable paths
-- Digital signatures
-- Command lines
-- DNS requests
-- Network destinations
-- Files created
-- Files accessed
-- Registry modifications
-- Timing relative to the malware alert
-
-This is an important investigation principle:
-
-> A legitimate process name should be validated through behavior and context.
-
----
-
-## 📌 Key Indicators and Artifacts
-
-### Alert Information
+File path:
 
 ```text
-Alert: Malware Prevention Alert
-Severity: High
-Risk Score: 73
+C:\Users\DELL\AppData\Local\Temp\is-1IJ3F.tmp\cls-lolzx_x86.exe
 ```
 
-### Endpoint Information
+The parent execution chain was:
 
 ```text
-User: DELL
-Host: desktop-jlklrc9
+winlogon.exe
+      ↓
+userinit.exe
+      ↓
+explorer.exe
+      ↓
+setup.exe
+      ↓
+setup.tmp
+      ↓
+cls-lolzx_x86.exe
 ```
 
-### Process Information
-
-```text
-Main Process: setup.tmp
-Parent Process: setup.exe
-Additional Observed Process: WerFault.exe
-```
-
-### File Information
-
-```text
-File Name: cls-lolzx_x86.exe
-Event Action: creation
-Event Code: malicious_file
-```
-
-### SHA-256
-
-```text
-77b920a22f93f87d2624b58f729712ebacaf8b605437c2678ca4216a28f3b8b2
-```
-
-### Source Installer
+The source installer was:
 
 ```text
 D:\Games\Grand Theft Auto V [FitGirl Lolly Repack]\setup.exe
+```
+
+This mattered because cracked or repacked game installers are a common malware delivery path. A repacked installer spawning temporary executables that Elastic classifies as malware is highly suspicious.
+
+The final classification was:
+
+```text
+True Positive — Malware Prevented / Blocked
+```
+
+This was not classified as confirmed full compromise because available evidence did not prove successful malware execution, persistence, C2, lateral movement, or data theft.
+
+---
+
+## 🎯 Investigation Objectives
+
+The main goals of this investigation were to:
+
+- Review the high-severity Malware Prevention Alert
+- Identify the affected host and user
+- Validate the suspicious file creation attempt
+- Review file name, file path, and SHA-256 hash evidence
+- Confirm whether Elastic Defend prevented or quarantined the file
+- Analyze the parent-child process chain
+- Identify the original installer source
+- Determine whether the alert represented a true positive or false positive
+- Pivot on the host, user, file hash, and installer process
+- Determine whether additional activity appeared on the endpoint
+- Make a careful final classification without overstating impact
+
+---
+
+## 📊 Alert Summary
+
+| Field | Value |
+|---|---|
+| Alert Type | Malware Prevention Alert |
+| Severity | High |
+| Risk Score | 73 |
+| Host | `desktop-jlklrc9` |
+| User | `DELL` |
+| Main Process | `setup.tmp` |
+| Parent Process | `setup.exe` |
+| Suspicious File | `cls-lolzx_x86.exe` |
+| Suspicious File Path | `C:\Users\DELL\AppData\Local\Temp\is-1IJ3F.tmp\cls-lolzx_x86.exe` |
+| Source Installer | `D:\Games\Grand Theft Auto V [FitGirl Lolly Repack]\setup.exe` |
+| Final Classification | True Positive — Malware Prevented / Blocked |
+| Confirmed Full Compromise | Not proven from available evidence |
+
+---
+
+## 🔄 Investigation Workflow
+
+```text
+Malware Prevention Alert
+        ↓
+Alert Overview Review
+        ↓
+File Evidence Review
+        ↓
+Quarantine / Prevention Validation
+        ↓
+Process Lineage Analysis
+        ↓
+Parent Installer Investigation
+        ↓
+Host Pivot
+        ↓
+User Pivot
+        ↓
+File Hash Pivot
+        ↓
+Installer Chain Pivot
+        ↓
+Impact Assessment
+        ↓
+Final Classification
+```
+
+---
+
+## 🔍 Key Evidence Reviewed
+
+### 1. Malware Prevention Alert Overview
+
+The alert showed:
+
+- Severity: `High`
+- Risk Score: `73`
+- Host: `desktop-jlklrc9`
+- User: `DELL`
+- Process: `setup.tmp`
+- Suspicious file: `cls-lolzx_x86.exe`
+
+Recommended screenshot:
+
+```text
+01_Malware_Prevention_Alert_Overview.png
+```
+
+---
+
+### 2. Malicious File and Quarantine Evidence
+
+The suspicious file was:
+
+```text
+cls-lolzx_x86.exe
+```
+
+Located at:
+
+```text
+C:\Users\DELL\AppData\Local\Temp\is-1IJ3F.tmp\cls-lolzx_x86.exe
+```
+
+Important fields reviewed:
+
+- `file.name`
+- `file.path`
+- `file.hash.sha256`
+- `file.Ext.quarantine_result`
+- `file.Ext.quarantine_message`
+- `file.Ext.quarantine_path`
+- `file.Ext.malware_classification.score`
+- `file.Ext.malware_classification.threshold`
+
+This evidence mattered because it showed the file was classified as malicious and prevented/quarantined successfully.
+
+Recommended screenshot:
+
+```text
+02_Malicious_File_And_Quarantine_Evidence.png
+```
+
+---
+
+### 3. Process Lineage Analysis
+
+The process lineage showed:
+
+```text
+winlogon.exe
+      ↓
+userinit.exe
+      ↓
+explorer.exe
+      ↓
+setup.exe
+      ↓
+setup.tmp
+      ↓
+cls-lolzx_x86.exe
+```
+
+This showed the alert did not appear randomly. The activity came from a user session where a setup installer launched a temporary process that attempted to create a suspicious executable.
+
+Recommended screenshot:
+
+```text
+03_Process_Lineage_Setup_Execution_Chain.png
+```
+
+---
+
+### 4. Parent Installer Evidence
+
+The parent installer was identified as:
+
+```text
+D:\Games\Grand Theft Auto V [FitGirl Lolly Repack]\setup.exe
+```
+
+Fields reviewed included:
+
+- `process.parent.executable`
+- `process.parent.name`
+- `process.parent.hash.sha256`
+- `process.parent.command_line`
+
+This was a major part of the conclusion because cracked or repacked software is a common malware delivery path.
+
+Recommended screenshot:
+
+```text
+04_Parent_Installer_FitGirl_Repack_Evidence.png
+```
+
+---
+
+## 🧪 Investigation Pivots Performed
+
+### Host Pivot
+
+Affected host:
+
+```text
+desktop-jlklrc9
+```
+
+KQL searches:
+
+```kql
+host.name : "desktop-jlklrc9"
+```
+
+```kql
+host.name : "desktop-jlklrc9" and event.category : "process"
+```
+
+```kql
+host.name : "desktop-jlklrc9" and event.category : "network"
+```
+
+Purpose:
+
+- Determine whether the endpoint had additional suspicious activity
+- Review process and network activity
+- Identify possible follow-up behavior
+
+---
+
+### File Hash Pivot
+
+KQL search:
+
+```kql
+host.name : "desktop-jlklrc9" and file.hash.sha256 : "77b920a22f93f87d2624b58f729712ebacaf8b605437c2678ca4216a28f3b8b2"
+```
+
+Purpose:
+
+- Determine whether the same file/hash appeared again
+- Support endpoint scoping
+- Identify repeated malicious file activity
+
+---
+
+### User Pivot
+
+Affected user:
+
+```text
+DELL
+```
+
+KQL search:
+
+```kql
+user.name : "DELL" and host.name : "desktop-jlklrc9"
+```
+
+Purpose:
+
+- Determine whether the same user had other related suspicious activity
+- Review possible repeated risky behavior
+
+---
+
+### Installer Chain Pivot
+
+KQL searches:
+
+```kql
+process.parent.name : "setup.exe" and host.name : "desktop-jlklrc9"
+```
+
+```kql
+process.name : "setup.tmp" and host.name : "desktop-jlklrc9"
+```
+
+Purpose:
+
+- Identify repeated alerts from the same installer chain
+- Determine whether `setup.exe` or `setup.tmp` appeared in other suspicious activity
+
+---
+
+## 📌 Evidence Chain
+
+```text
+User Session
+      ↓
+explorer.exe
+      ↓
+setup.exe
+      ↓
+setup.tmp
+      ↓
+attempted creation of cls-lolzx_x86.exe
+      ↓
+Elastic malware classification
+      ↓
+quarantine / prevention evidence
+      ↓
+True Positive — Malware Prevented
 ```
 
 ---
 
 ## 📊 Key Findings
 
-### Finding 1 — High-Severity Malware Alert
-
-A high-severity Malware Prevention Alert was generated with a risk score of 73.
-
-### Finding 2 — Affected User and Host Identified
-
-The activity was connected to:
-
-```text
-User: DELL
-Host: desktop-jlklrc9
-```
-
-### Finding 3 — Suspicious File Identified
-
-The detected file was:
+- Elastic Defend generated a high-severity Malware Prevention Alert.
+- Risk score was `73`.
+- The affected host was `desktop-jlklrc9`.
+- The affected user was `DELL`.
+- The suspicious process was `setup.tmp`.
+- The parent process was `setup.exe`.
+- The suspicious file was `cls-lolzx_x86.exe`.
+- The suspicious file was created under a temporary directory.
+- The source installer was:
 
 ```text
-cls-lolzx_x86.exe
+D:\Games\Grand Theft Auto V [FitGirl Lolly Repack]\setup.exe
 ```
 
-### Finding 4 — Process Relationship Established
-
-The investigation showed:
-
-```text
-setup.exe
-      ↓
-setup.tmp
-      ↓
-malicious file creation attempt
-```
-
-### Finding 5 — SHA-256 Collected
-
-The file hash was collected for potential environment-wide hunting and threat intelligence enrichment.
-
-### Finding 6 — Source Installer Identified
-
-The process activity was traced back to the original installer source.
-
-### Finding 7 — Prevention Confirmed
-
-Elastic Endpoint prevented the malicious file creation attempt.
-
-### Finding 8 — Process Tree Reconstructed
-
-The investigation reconstructed the activity from the interactive user session through the installer and temporary setup process.
-
-### Finding 9 — Additional Child-Process Activity Observed
-
-`WerFault.exe` activity appeared after the setup process and was documented for further review.
-
----
-
-## ⚖️ Detection vs Impact
-
-One of the most important lessons from this investigation was understanding the difference between:
-
-```text
-Was the detection real?
-```
-
-and:
-
-```text
-What impact occurred?
-```
-
-The detection was a True Positive because the malicious file creation activity was real.
-
-However, the endpoint security control prevented the specific malicious file creation attempt.
-
-Therefore:
-
-```text
-Detection: True Positive
-```
-
-and:
-
-```text
-Immediate Outcome: Prevented
-```
-
-can both be correct.
+- The process lineage showed a user-launched installer chain.
+- Elastic classified the file as malicious.
+- Elastic prevented/quarantined the malicious file creation attempt.
+- No confirmed evidence showed successful malware execution, persistence, C2, lateral movement, or data theft.
 
 ---
 
 ## ✅ Final Classification
 
-| Assessment Field | Result |
+| Field | Value |
 |---|---|
-| Classification | True Positive — Prevented Malware Activity |
+| Classification | True Positive |
+| Outcome | Malware Prevented / Blocked |
 | Confidence | High |
-| File Creation Attempt | Confirmed |
-| Endpoint Malware Classification | Confirmed |
-| Prevention | Confirmed |
-| Further Scope Review | Recommended |
-
-### Classification Rationale
-
-The classification was supported by multiple evidence sources:
-
-- High-severity Malware Prevention Alert
-- `malicious_file` event classification
-- Specific attempted file creation
-- Identified suspicious file name
-- SHA-256 hash
-- Parent-child process relationships
-- Source installer path
-- Command-line context
-- Process tree evidence
-- Quarantine-related information
-- Endpoint prevention result
-
-The investigation did not rely on one alert field or one piece of evidence.
-
-The final decision was based on an evidence chain.
+| Full Compromise Confirmed | No |
+| Endpoint Review Recommended | Yes |
+| User Education Recommended | Yes |
+| Suspicious Installer Removal Recommended | Yes |
 
 ---
 
-## 🚨 Impact Assessment
+## 🧠 Analyst Reasoning
 
-The available evidence showed that the malicious file creation attempt was prevented.
+This alert should not be closed as benign.
 
-This reduced the immediate impact compared with a scenario where the file was successfully created and executed.
+The evidence showed that a repacked game installer launched temporary executable activity and attempted to create a file that Elastic classified as malicious.
 
-However:
+At the same time, the investigation should not overstate the activity as a confirmed full compromise because the available evidence showed prevention/quarantine, not successful malware execution.
 
-> **Successful prevention does not automatically prove that the endpoint is completely clean.**
+The most accurate conclusion is:
 
-A complete incident response investigation should still review:
+> Elastic Defend generated a high-severity malware prevention alert after a user-launched repacked game installer attempted to create an executable from a temporary directory. The file was classified as malicious by Elastic’s malware model and was successfully prevented/quarantined. No confirmed post-execution impact has been proven yet, but the source installer and execution chain are suspicious enough to classify this as a true positive prevention event.
 
-- Earlier installer activity
-- Other files created by the installer
-- Additional hashes
-- Persistence mechanisms
-- Scheduled tasks
-- New services
-- Registry Run keys
-- PowerShell activity
-- Command shell activity
-- Credential access attempts
-- Suspicious network communication
-- Similar alerts on other endpoints
+---
 
-The available evidence supported a prevented malware event.
+## 🚨 Why This Activity Was Suspicious
 
-Additional investigation would still be appropriate in a production environment.
+This activity was suspicious because several indicators aligned:
+
+```text
+Repacked Game Installer
+      ↓
+Temporary Setup Process
+      ↓
+Suspicious Executable Creation
+      ↓
+Elastic Malware Classification
+      ↓
+Quarantine / Prevention
+```
+
+The strongest suspicious factors were:
+
+- unofficial/repacked software source
+- execution from a game repack installer path
+- temporary executable creation
+- malware classification by Elastic
+- prevention/quarantine evidence
+- clear process chain from installer to suspicious file
+
+---
+
+## ⚠️ What Was Not Proven
+
+This investigation did **not** prove:
+
+- successful malware execution
+- confirmed endpoint compromise
+- persistence
+- credential theft
+- command-and-control activity
+- lateral movement
+- data exfiltration
+
+This distinction matters because professional SOC documentation should avoid overstating impact.
+
+The evidence supported:
+
+```text
+True Positive — Malware Prevented / Blocked
+```
+
+not:
+
+```text
+Confirmed Full Compromise
+```
 
 ---
 
 ## 🛡️ Recommended Response Actions
 
-If this event occurred in a production environment, reasonable response actions would include:
+Recommended actions include:
 
-1. Confirm that the malicious file remains blocked or quarantined.
-2. Search the environment for the SHA-256 hash.
-3. Search for `cls-lolzx_x86.exe` across available telemetry.
-4. Identify other endpoints that executed the same installer.
-5. Review earlier alerts involving the affected endpoint.
-6. Review the complete endpoint timeline before and after the alert.
-7. Investigate `WerFault.exe` file, network, and registry activity.
-8. Review common persistence locations.
-9. Review recently created files in temporary directories.
-10. Run a complete endpoint security scan.
-11. Review DNS, proxy, firewall, and EDR network telemetry.
-12. Remove untrusted software according to organizational policy.
-13. Escalate if additional malicious activity is identified.
+1. Keep the alert classified as a true positive prevention event.
+2. Confirm the malicious file was quarantined or blocked successfully.
+3. Remove the suspicious repacked game installer from the endpoint.
+4. Search the endpoint for the same SHA-256 hash.
+5. Search for repeated `setup.exe` or `setup.tmp` activity.
+6. Review the endpoint timeline before and after the alert.
+7. Review related process, file, registry, and network activity.
+8. Monitor for follow-up alerts from `desktop-jlklrc9`.
+9. Educate the user about the risk of cracked or repacked software.
+10. Run a full endpoint security scan.
+11. Hunt for similar installer paths or hashes across other endpoints.
+12. Escalate if additional post-execution activity is discovered.
 
 ---
 
-## 🧠 Key Lessons
+## 📸 Screenshot Evidence
 
-### Alert Triage Must Continue Beyond the Alert Name
-
-The alert showed that malware prevention occurred.
-
-The investigation still needed to determine:
-
-- what process caused the activity
-- what file was involved
-- what launched the process
-- where the activity began
-- whether prevention succeeded
-- what happened afterward
-
-### Process Lineage Can Explain the Entire Story
-
-The process tree connected:
-
-```text
-User Session
-      ↓
-Installer
-      ↓
-Temporary Process
-      ↓
-Malicious File Creation Attempt
-      ↓
-Prevention
-```
-
-### File Hashes Are Valuable Investigation Artifacts
-
-The SHA-256 hash can support:
-
-- threat hunting
-- IOC searches
-- threat intelligence
-- environment-wide scoping
-
-### Prevention Does Not Eliminate the Need for Investigation
-
-A blocked payload may be only one part of a larger execution chain.
-
-The analyst still needs to investigate the source and surrounding activity.
+| Screenshot | Description |
+|---|---|
+| `01_Malware_Prevention_Alert_Overview.png` | Shows the high-severity Malware Prevention Alert, risk score, host, user, process, and suspicious file |
+| `02_Malicious_File_And_Quarantine_Evidence.png` | Shows file name, file path, SHA-256 hash, malware classification, and quarantine/prevention fields |
+| `03_Process_Lineage_Setup_Execution_Chain.png` | Shows process chain from user session to installer and temporary setup process |
+| `04_Parent_Installer_FitGirl_Repack_Evidence.png` | Shows the suspicious parent installer path and parent process evidence |
 
 ---
 
 ## 🛠️ Skills Demonstrated
 
-- SOC alert triage
-- Elastic Security investigation
-- Elastic Endpoint analysis
-- Malware prevention investigation
-- EDR telemetry analysis
-- File event investigation
-- Process lineage reconstruction
+- Malware prevention alert triage
+- Elastic Defend investigation
+- Endpoint process lineage analysis
 - Parent-child process analysis
-- Process ancestry analysis
-- Process tree investigation
-- Timeline reconstruction
-- Command-line analysis
-- File path analysis
-- SHA-256 collection
-- IOC identification
-- Quarantine validation
-- Prevention validation
+- Temporary file execution review
+- Malware classification validation
+- Quarantine/prevention evidence review
+- KQL pivoting
+- Host-based investigation
+- User-based investigation
+- File hash pivoting
+- Installer chain analysis
 - True Positive classification
 - Impact assessment
-- Response recommendation development
-- Evidence-based incident investigation
+- Professional SOC documentation
+- Evidence-based response recommendation
+
+---
+
+## 📚 Lessons Learned
+
+### 1. Malware Prevention Still Requires Investigation
+
+Even if a file is blocked, the analyst still needs to determine:
+
+- what caused the attempt
+- which user was involved
+- where the file came from
+- whether the endpoint shows other suspicious activity
+- whether the same hash appears elsewhere
+
+### 2. Prevention Does Not Equal Full Compromise
+
+A true positive malware prevention event means malicious activity was real, but it does not automatically mean the attacker succeeded.
+
+### 3. Source Context Matters
+
+The source installer path was important because cracked or repacked software is commonly associated with malware delivery.
+
+### 4. Process Lineage Tells the Story
+
+The process chain explained how the suspicious file creation attempt occurred.
+
+### 5. Accurate Classification Matters
+
+The best classification was not benign and not confirmed compromise.
+
+The best classification was:
+
+```text
+True Positive — Malware Prevented / Blocked
+```
+
+---
+
+## 🧾 Professional Summary
+
+This lab investigated a high-severity Elastic Defend malware prevention alert involving a suspicious file creation attempt from a repacked game installer. The investigation traced the activity from the Windows user session through `explorer.exe`, `setup.exe`, and `setup.tmp`, ending with an attempted creation of `cls-lolzx_x86.exe` in a temporary directory.
+
+Elastic classified the file as malicious and prevented/quarantined the activity. The source installer path, temporary executable creation, malware classification, and process lineage all supported a true positive classification.
+
+The final conclusion was that this was a **True Positive — Malware Prevented / Blocked** event. No confirmed full compromise was proven from the available evidence, but the endpoint should be reviewed, the suspicious installer should be removed, and the user should be educated about the risks of cracked or repacked software.
+
+This project strengthened my ability to investigate malware prevention alerts, validate endpoint evidence, analyze process lineage, separate prevention from compromise, and make careful SOC classification decisions.
 
 ---
 
 # 📊 Cross-Lab Investigation Comparison
 
-| Investigation Area | Lab 01 | Lab 02 | Lab 03 |
-|---|---:|---:|---:|
-| Alert Triage | ✅ | ✅ | ✅ |
-| Detection Rule Review | ✅ | ✅ | ✅ |
-| File Event Analysis | ✅ | — | ✅ |
-| Authentication Analysis | — | ✅ | — |
-| Process Lineage Analysis | ✅ | Context Review | ✅ |
-| Command-Line Analysis | ✅ | Context Review | ✅ |
-| Source IP Analysis | — | ✅ | — |
-| Geolocation Enrichment | — | ✅ | — |
-| Hash Collection | — | — | ✅ |
-| Prevention Validation | — | — | ✅ |
-| Hypothesis Comparison | ✅ | ✅ | ✅ |
-| Confidence Assessment | ✅ | ✅ | ✅ |
-| Response Recommendations | Scope-Based | Monitor / Validate | Hunt / Contain if Expanded |
+| Investigation Area | Lab 01 | Lab 02 | Lab 03 | Lab 04 |
+|---|---:|---:|---:|---:|
+| Alert Triage | ✅ | ✅ | ✅ | ✅ |
+| Detection Rule / Alert Review | ✅ | ✅ | ✅ | ✅ |
+| File Event Analysis | ✅ | — | ✅ | ✅ |
+| Authentication Analysis | — | ✅ | — | — |
+| Process Lineage Analysis | ✅ | Context Review | ✅ | ✅ |
+| Command-Line Analysis | ✅ | Context Review | ✅ | ✅ |
+| Source IP Analysis | — | ✅ | — | — |
+| Geolocation Enrichment | — | ✅ | — | — |
+| Hash Collection | — | — | ✅ | ✅ |
+| Prevention Validation | — | — | ✅ | ✅ |
+| Quarantine Review | — | — | ✅ | ✅ |
+| Host Pivoting | ✅ | ✅ | ✅ | ✅ |
+| User Pivoting | Context Review | ✅ | ✅ | ✅ |
+| Hypothesis Comparison | ✅ | ✅ | ✅ | ✅ |
+| Confidence Assessment | ✅ | ✅ | ✅ | ✅ |
+| Response Recommendations | Scope-Based | Monitor / Validate | Hunt / Review | Remove Installer / Hunt / Educate |
 
 ---
 
@@ -2182,15 +1339,14 @@ The analyst still needs to investigate the source and surrounding activity.
 
 ## 1. The Alert Is the Beginning
 
-Across all three investigations, the alert provided a starting point.
+Every investigation started with an alert, but the alert was not treated as the conclusion.
 
-The investigation still needed to determine:
+The important questions were:
 
 ```text
 What happened?
 Who was involved?
 What system was affected?
-What process or authentication event was involved?
 What does the surrounding evidence show?
 What conclusion can actually be supported?
 ```
@@ -2209,106 +1365,83 @@ False Positive / Benign Activity
 Benign Positive
 ```
 
-and:
-
 ```text
-True Positive – Prevented Malware Activity
+True Positive — Prevented Malware Activity
 ```
 
-This demonstrates why analysts should not force every investigation toward the same conclusion.
-
----
-
-## 3. Process Context Is More Important Than Process Names
-
-A process name should be investigated through:
-
 ```text
-Executable Path
-      +
-Command Line
-      +
-Parent Process
-      +
-Grandparent Process
-      +
-User Context
-      +
-File Activity
-      +
-Network Activity
-      +
-Timeline
+True Positive — Malware Prevented / Blocked
 ```
 
----
-
-## 4. Authentication Success Does Not Automatically Mean Compromise
-
-A successful RDP logon confirms that authentication occurred.
-
-The analyst must still investigate:
-
-- source
-- account
-- host
-- surrounding failures
-- post-authentication behavior
-- business context
+This shows why SOC analysts must avoid forcing every alert into the same category.
 
 ---
 
-## 5. Prevention and Detection Are Different Questions
+## 3. Event Semantics Matter
 
-A True Positive can still represent prevented activity.
-
-The analyst should separately determine:
+The difference between:
 
 ```text
-Was the activity malicious?
+creation
 ```
 
 and:
 
 ```text
-Did the malicious action succeed?
+deletion
 ```
+
+or between:
+
+```text
+malware executed successfully
+```
+
+and:
+
+```text
+malware was prevented
+```
+
+can completely change the final assessment.
 
 ---
 
-## 6. Negative Evidence Must Be Scoped
+## 4. Process Lineage Tells the Investigation Story
 
-A search that returns no results should be documented precisely.
+Process lineage helped explain how activity happened.
 
-Good investigation language:
+Examples:
 
-> No additional matching activity was identified within the searched dataset and investigation scope.
+```text
+services.exe → svchost.exe → cleanmgr.exe
+```
 
-Overstated language:
+```text
+winlogon.exe → userinit.exe → explorer.exe → setup.exe → setup.tmp
+```
 
-> Nothing else happened.
+These chains helped separate normal behavior from suspicious behavior.
 
 ---
 
-## 7. Confidence Is Part of the Conclusion
+## 5. True Positive Does Not Always Mean Full Compromise
 
-A classification without confidence can hide uncertainty.
+In the malware prevention labs, malicious activity was real, but prevention reduced the confirmed impact.
 
-Week 19 used:
+That distinction matters.
 
-```text
-High Confidence
-```
-
-when multiple evidence sources strongly supported the conclusion.
-
-It used:
+The correct language was:
 
 ```text
-Moderate Confidence
+True Positive — Malware Prevented / Blocked
 ```
 
-when the technical evidence supported a likely conclusion but additional business or identity context would improve certainty.
+not:
+
+```text
+Confirmed Full Endpoint Compromise
+```
 
 ---
 
@@ -2328,19 +1461,19 @@ when the technical evidence supported a likely conclusion but additional busines
 
 - EDR telemetry analysis
 - Process lineage reconstruction
-- Process tree analysis
 - Parent-child process review
 - Command-line analysis
 - File event analysis
 - Prevention validation
 - Quarantine evidence review
+- Installer chain analysis
 
 ## Windows Security Analysis
 
 - Event ID 4624 analysis
 - Logon Type 10 interpretation
 - RemoteInteractive authentication analysis
-- Privileged account investigation
+- Privileged account review
 - Windows process context review
 
 ## Threat Hunting Foundations
@@ -2405,11 +1538,18 @@ Week19_Triage_And_Investigations/
 │   │   └── Week19_Lab2_RDP_Logon_Case_Study.md
 │   └── Screenshots/
 │
-└── Lab03_Malware_Prevention_Investigation/
+├── Lab03_Malware_Prevention_Investigation/
+│   ├── Technical_Analysis/
+│   │   └── Week19_Lab3_Malware_Prevention_Writeup.md
+│   ├── Case_Study/
+│   │   └── Week19_Lab3_Malware_Prevention_Case_Study.md
+│   └── Screenshots/
+│
+└── Lab04_Repacked_Game_Installer_Malware_Prevention/
     ├── Technical_Analysis/
-    │   └── Week19_Lab3_Malware_Prevention_Writeup.md
+    │   └── Week19_Lab4_Repacked_Game_Installer_Malware_Prevention_Writeup.md
     ├── Case_Study/
-    │   └── Week19_Lab3_Malware_Prevention_Case_Study.md
+    │   └── Week19_Lab4_Repacked_Game_Installer_Case_Study.md
     └── Screenshots/
 ```
 
@@ -2419,21 +1559,24 @@ Week19_Triage_And_Investigations/
 
 | Lab | Initial Concern | Strongest Evidence | Final Decision |
 |---|---|---|---|
-| SVCHOST Dump Alert | Possible malicious process dumping | Deletion event + `cleanmgr.exe` + Storage Sense arguments + maintenance lineage | False Positive / Benign Activity |
-| RDP RemoteInteractive Logon | Possible unauthorized remote access | Confirmed 4624 Type 10, but insufficient malicious follow-on evidence | Benign Positive |
-| Malware Prevention Alert | Malicious file creation attempt | `malicious_file` classification + process chain + hash + prevention evidence | True Positive — Prevented |
+| Lab 01 | Possible malicious SVCHOST dump activity | Deletion event + `cleanmgr.exe` + Storage Sense arguments + maintenance lineage | False Positive / Benign Activity |
+| Lab 02 | Possible unauthorized RDP access | Confirmed 4624 Type 10, but insufficient malicious follow-on evidence | Benign Positive |
+| Lab 03 | Malicious file creation attempt | `malicious_file` classification + process chain + hash + prevention evidence | True Positive — Prevented Malware Activity |
+| Lab 04 | Repacked installer attempting malicious file creation | Repacked game installer path + temp executable + Elastic malware classification + quarantine/prevention evidence | True Positive — Malware Prevented / Blocked |
 
 ---
 
 # 🧾 Professional Week 19 Summary
 
-Week 19 focused on developing stronger alert triage and endpoint investigation skills through three investigations with different outcomes.
+Week 19 focused on developing stronger alert triage and endpoint investigation skills through four investigations with different outcomes.
 
 The first investigation involved an SVCHOST dump-related alert that initially appeared suspicious. By reviewing the actual file action, responsible process, executable path, process lineage, and command-line arguments, I determined that the observed activity was most consistent with legitimate Windows cleanup behavior.
 
 The second investigation involved successful RemoteInteractive authentication. I validated Windows Event ID 4624 and Logon Type 10, reviewed the Administrator account, source IP, geolocation context, host activity, and surrounding evidence. The detection was valid, but the reviewed telemetry did not provide enough corroborating evidence of malicious post-authentication activity to justify escalation as a confirmed incident.
 
-The third investigation involved a high-severity malware prevention event. I traced the activity from the Windows user session through the installer process chain, identified the temporary process responsible for the malicious file creation attempt, collected the SHA-256 hash, reviewed the original installer source, reconstructed the process tree, and validated that Elastic Endpoint prevented the malicious file creation attempt.
+The third investigation involved a high-severity malware prevention event. I traced the activity from the Windows user session through the installer process chain, identified the temporary process responsible for the malicious file creation attempt, collected the SHA-256 hash, reviewed the source process, reconstructed the process tree, and validated that Elastic Endpoint prevented the malicious file creation attempt.
+
+The fourth investigation focused on a repacked game installer that attempted to create a suspicious executable from a temporary directory. The source installer path, process lineage, malicious file classification, and quarantine/prevention evidence supported a true positive prevention decision without overstating the case as confirmed full compromise.
 
 Together, these projects strengthened my ability to move from:
 
@@ -2461,7 +1604,8 @@ Defensible Decision
 
 The most important lesson from Week 19 was:
 
-> **A strong analyst does not investigate to prove the alert correct. A strong analyst investigates to determine which conclusion is best supported by the evidence.**
+> A strong analyst does not investigate to prove the alert correct.  
+> A strong analyst investigates to determine which conclusion is best supported by the evidence.
 
 ---
 
@@ -2487,8 +1631,6 @@ In production environments, additional evidence could include:
 - Privileged access management logs
 
 The conclusions in these projects were limited to the available evidence and investigation scope.
-
-This is intentional.
 
 Professional security investigations should clearly separate:
 
@@ -2556,27 +1698,32 @@ SVCHOST Dump
 Successful RDP Logon
 ```
 
+```text
+Malware Prevention Alert
+```
+
 and:
 
 ```text
-Malware Prevention Alert
+Repacked Installer Malware Block
 ```
 
 are starting points.
 
 The analyst still needs to understand:
 
-- the event semantics
-- the process context
-- the authentication context
-- the timeline
-- the execution chain
-- the scope
-- the supporting evidence
-- the missing evidence
-- the limitations of the telemetry
+- event semantics
+- process context
+- authentication context
+- timeline
+- execution chain
+- scope
+- supporting evidence
+- missing evidence
+- telemetry limitations
+- business impact
 
-The three investigations showed three different outcomes:
+The four investigations showed four important outcomes:
 
 ```text
 Benign Activity
@@ -2588,6 +1735,10 @@ Valid Detection Without Sufficient Malicious Corroboration
 
 ```text
 Confirmed Malicious Activity That Was Prevented
+```
+
+```text
+True Positive Malware Prevention Without Confirmed Full Compromise
 ```
 
 That difference is one of the most valuable lessons from this week.
