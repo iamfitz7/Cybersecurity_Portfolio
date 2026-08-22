@@ -1,4 +1,4 @@
-# 🐧 Week 17 — Lab 1: Enterprise Linux Server Administration, Hardening & Secure Remote Access
+# 🐧 Week 20 — Lab 1: Enterprise Linux Server Administration, Hardening & Secure Remote Access
 
 ![Linux](https://img.shields.io/badge/Linux-Ubuntu-E95420?logo=ubuntu&logoColor=white)
 ![Bash](https://img.shields.io/badge/Scripting-Bash-4EAA25?logo=gnubash&logoColor=white)
