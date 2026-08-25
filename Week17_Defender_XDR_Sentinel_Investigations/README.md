@@ -1,6 +1,6 @@
 # Week 17 — Microsoft Defender XDR & Sentinel Security Operations
 
-> **Focus:** Microsoft Defender XDR • Microsoft Defender for Endpoint • Microsoft Sentinel • Microsoft Entra ID • Azure Log Analytics • Kusto Query Language (KQL) • Endpoint Detection and Response (EDR) • Security Information and Event Management (SIEM) • Extended Detection and Response (XDR) • Threat Hunting • Incident Investigation • Incident Response
+> **Focus:** Microsoft Defender XDR • Microsoft Defender for Endpoint • Microsoft Sentinel • Microsoft Entra ID • Azure Log Analytics • Kusto Query Language (KQL) • Endpoint Detection and Response (EDR) • Security Information and Event Management (SIEM) • Extended Detection and Response (XDR) • Threat Hunting • Detection Engineering Fundamentals • Incident Investigation • Incident Response
 
 ---
 
@@ -8,68 +8,68 @@
 
 Week 17 focuses on building, validating, and operating a Microsoft-based Security Operations environment using **Microsoft Defender XDR, Microsoft Defender for Endpoint, Microsoft Sentinel, Microsoft Entra ID, Azure Log Analytics, and Kusto Query Language (KQL)**.
 
-Rather than beginning with an already configured security platform, the week starts by building the cloud and endpoint infrastructure required to support security monitoring. The environment is then used to generate controlled security activity, validate endpoint telemetry, investigate Microsoft Defender detections, hunt security data with KQL, and practice the investigation workflow used within Microsoft Defender XDR.
+Rather than beginning with an already configured security platform, this week starts by building the cloud and endpoint infrastructure required to support security monitoring. The environment is then used to generate controlled security activity, validate endpoint and cloud telemetry, investigate Microsoft Defender detections, hunt security data with KQL, examine Sentinel analytics rules, map detections to MITRE ATT&CK, and practice investigation workflows used within modern Security Operations Centers.
 
-Week 17 consists of two complementary labs:
+Week 17 consists of three complementary labs:
 
 ### Lab 01 — Microsoft Security Environment Setup & EDR Investigation
 
-Lab 01 focuses on building the underlying Microsoft security environment. This includes configuring Azure resources, creating a Log Analytics workspace, enabling Microsoft Sentinel, configuring Microsoft Defender for Endpoint, onboarding a Windows 11 Enterprise endpoint, validating Defender services and telemetry, generating controlled security activity, investigating the resulting EDR detection, hunting the supporting endpoint telemetry with KQL, classifying the activity, and securely cleaning up temporary test infrastructure.
+Lab 01 focuses on building the underlying Microsoft security environment. This includes configuring Azure resources, creating a Log Analytics workspace, enabling Microsoft Sentinel, configuring Microsoft Defender for Endpoint, onboarding a Windows 11 Enterprise endpoint, validating Defender services and telemetry, generating controlled security activity, investigating the resulting EDR detection, hunting supporting endpoint telemetry with KQL, classifying the activity, and securely cleaning up temporary test infrastructure.
 
 ### Lab 02 — Microsoft Defender XDR Fundamentals
 
-Lab 02 expands from the investigation of a single controlled detection into the broader Microsoft Defender XDR Security Operations workflow. The lab focuses on the Defender XDR dashboard, device inventory, incident queue, incident correlation, alert investigation, evidence and entity analysis, device investigation, Device Timeline analysis, process lineage, user investigation, User Timeline analysis, incident lifecycle management, and endpoint response capabilities.
+Lab 02 expands from investigating a single controlled endpoint detection into the broader Microsoft Defender XDR Security Operations workflow. The lab focuses on the Defender XDR dashboard, device inventory, incident queue, incident correlation, alert investigation, evidence and entity analysis, device investigation, Device Timeline analysis, process lineage, user investigation, User Timeline analysis, incident lifecycle management, and endpoint response capabilities.
 
-Together, the labs progress from **building the security platform** to **operating the platform as a security analyst**.
+### Lab 03 — Microsoft Sentinel & KQL Fundamentals
+
+Lab 03 expands the environment from endpoint-focused XDR investigation into **cloud SIEM monitoring, telemetry ingestion, KQL analysis, behavioral aggregation, and detection engineering fundamentals**.
+
+The lab follows Azure administrative activity from its original source through the complete Sentinel telemetry pipeline:
 
 ```text
-Build Microsoft Security Environment
-                │
-                ▼
-Configure Sentinel & Log Analytics
-                │
-                ▼
-Configure Defender for Endpoint
-                │
-                ▼
-Onboard Windows Endpoint
-                │
-                ▼
-Validate Endpoint Telemetry
-                │
-                ▼
-Generate Controlled Security Activity
-                │
-                ▼
-Investigate Defender Detection
-                │
-                ▼
-Hunt Supporting Telemetry with KQL
-                │
-                ▼
-Understand XDR Incident Correlation
-                │
-                ▼
-Investigate Alerts & Evidence
-                │
-                ▼
-Pivot Across Devices & Users
-                │
-                ▼
-Reconstruct Activity with Timelines
-                │
-                ▼
-Analyze Process Lineage
-                │
-                ▼
-Determine Scope & Verdict
-                │
-                ▼
-Evaluate Response Options
-                │
-                ▼
-Classify, Document & Resolve
+Azure Administrative Activity
+            │
+            ▼
+     Azure Activity Log
+            │
+            ▼
+   Azure Activity Connector
+            │
+            ▼
+   Log Analytics Workspace
+            │
+            ▼
+      AzureActivity Table
+            │
+            ▼
+        KQL Analysis
+            │
+            ├── Filtering
+            ├── Projection
+            ├── Aggregation
+            ├── Time Analysis
+            └── Behavioral Analysis
+            │
+            ▼
+ Sentinel Analytics Rules
+            │
+            ▼
+     MITRE ATT&CK Mapping
+            │
+            ▼
+      Alert / Incident
+            │
+            ▼
+      Analyst Investigation
 ```
+
+The purpose of Lab 03 is not simply to demonstrate navigation through Microsoft Sentinel.
+
+The goal is to understand and validate the relationship between:
+
+> **Data Source → Data Connector → Log Analytics → Security Table → KQL → Detection Logic → Alert → Incident → Analyst Investigation**
+
+Together, the three labs progress from **building the security platform**, to **operating the XDR investigation environment**, to **querying and analyzing cloud SIEM telemetry and understanding how that telemetry becomes automated detection logic**.
 
 ---
 
@@ -86,7 +86,7 @@ The primary objectives of Week 17 were to:
 - Verify Microsoft Defender for Endpoint sensor functionality
 - Verify endpoint security telemetry collection
 - Troubleshoot endpoint onboarding and service dependencies
-- Generate controlled security test activity
+- Generate controlled endpoint security test activity
 - Validate the endpoint detection pipeline
 - Investigate Microsoft Defender alerts
 - Investigate Microsoft Defender XDR incidents
@@ -104,6 +104,29 @@ The primary objectives of Week 17 were to:
 - Review chronological identity activity using User Timeline
 - Use Microsoft Defender Advanced Hunting
 - Use KQL to query endpoint telemetry
+- Configure and validate Microsoft Sentinel data ingestion
+- Understand the role of Microsoft Sentinel data connectors
+- Understand the relationship between Microsoft Sentinel and Log Analytics
+- Validate Azure Activity telemetry
+- Investigate the `AzureActivity` table
+- Understand tables, rows, columns, and schemas within security telemetry
+- Use KQL to filter security events by time
+- Use KQL to filter specific Azure resources
+- Use KQL to select investigation-relevant fields
+- Use KQL to sort events chronologically
+- Use KQL to count and aggregate events
+- Use `summarize` to identify behavioral patterns
+- Use `bin()` to group activity into time intervals
+- Analyze frequently occurring Azure operations
+- Search for failed administrative operations
+- Understand manual hunting versus automated detection
+- Examine Microsoft Sentinel analytics-rule templates
+- Understand scheduled analytics-rule logic
+- Review rule severity and data-source requirements
+- Review MITRE ATT&CK mappings within Sentinel detections
+- Understand how analytics rules can produce alerts
+- Understand how alerts can become incidents
+- Understand Sentinel workbooks and watchlists
 - Correlate evidence across multiple security views
 - Determine incident context and scope
 - Practice SOC alert triage
@@ -140,9 +163,17 @@ LAW-Microsoft-Security-Lab
         │
         ▼
 Microsoft Sentinel
+        │
+        ├── Data Connectors
+        ├── Analytics
+        ├── Incidents
+        ├── Hunting
+        ├── Workbooks
+        ├── Watchlists
+        └── Security Content
 ```
 
-This portion of the environment provides the identity, cloud-resource, centralized logging, and SIEM foundation supporting the security lab.
+This portion of the environment provides the identity, cloud-resource, centralized logging, SIEM, detection, and investigation foundation supporting the security lab.
 
 ---
 
@@ -172,199 +203,80 @@ Microsoft Defender XDR
         └── Response Actions
 ```
 
-The endpoint layer provides the detailed host telemetry required to investigate processes, users, files, command lines, detections, and other security-relevant activity.
+The endpoint layer provides detailed host telemetry required to investigate processes, users, files, command lines, detections, and other security-relevant activity.
 
 ---
 
-## Investigation Layer
+## SIEM Telemetry Layer
 
 ```text
-Security Activity
-       │
-       ▼
-Endpoint Telemetry
-       │
-       ▼
-Detection Logic
-       │
-       ▼
-Security Alert
-       │
-       ▼
-Incident Correlation
-       │
-       ▼
-Incident Queue
-       │
-       ▼
-Analyst Triage
-       │
-       ├───────────────┬────────────────┐
-       ▼               ▼                ▼
-     Alerts         Evidence          Assets
-                       │
-              ┌────────┴────────┐
-              ▼                 ▼
-            Device             User
-              │                 │
-              ▼                 ▼
-      Device Timeline      User Timeline
-              │
-              ▼
-       Process Lineage
-              │
-              ▼
-      Advanced Hunting
-              │
-              ▼
-       KQL Telemetry
-              │
-              ▼
-      Evidence Correlation
-              │
-              ▼
-       Scope & Verdict
-              │
-              ▼
-       Response Decision
-              │
-              ▼
- Classification / Resolution
+Azure Subscription
+        │
+        ▼
+Administrative Operations
+        │
+        ▼
+Azure Activity Log
+        │
+        ▼
+Azure Activity Data Connector
+        │
+        ▼
+LAW-Microsoft-Security-Lab
+        │
+        ▼
+AzureActivity
+        │
+        ▼
+KQL
+        │
+        ├── where
+        ├── project
+        ├── count
+        ├── summarize
+        ├── top
+        ├── order by
+        ├── bin()
+        └── render
+        │
+        ▼
+Security Analysis
+        │
+        ▼
+Analytics Rule
+        │
+        ▼
+Alert
+        │
+        ▼
+Incident
 ```
+
+This architecture demonstrates that a SIEM depends on more than a dashboard.
+
+Security data must first be **generated, transported, stored, structured, queried, and evaluated** before it can support meaningful detection and investigation.
 
 ---
 
 # Technologies & Platforms
 
 | Technology | Purpose |
-|---|---|
+| --- | --- |
 | **Microsoft Defender XDR** | Unified detection, incident correlation, investigation, entity analysis, and response |
 | **Microsoft Defender for Endpoint** | Endpoint Detection and Response, endpoint telemetry, device investigation, and endpoint response |
-| **Microsoft Sentinel** | Cloud-native Security Information and Event Management and security operations platform |
+| **Microsoft Sentinel** | Cloud-native SIEM, security analytics, detection, hunting, investigation, and security operations |
 | **Microsoft Entra ID** | Identity, tenant, user, and administrative access management |
-| **Azure Log Analytics** | Centralized security log storage and query workspace |
-| **Microsoft Azure** | Cloud infrastructure supporting Microsoft Sentinel and Log Analytics |
+| **Azure Log Analytics** | Centralized security telemetry storage and query workspace |
+| **Azure Activity Log** | Records subscription-level Azure control-plane activity |
+| **Azure Activity Connector** | Sends Azure administrative activity into the Sentinel-connected Log Analytics workspace |
+| **Microsoft Azure** | Cloud infrastructure supporting Sentinel, Log Analytics, and Azure administrative telemetry |
 | **Windows 11 Enterprise** | Monitored enterprise endpoint used for endpoint security investigation |
-| **Kusto Query Language (KQL)** | Security telemetry querying, threat hunting, filtering, and investigation |
-| **Microsoft Defender Advanced Hunting** | Query interface for investigating Defender security telemetry |
+| **Kusto Query Language (KQL)** | Security telemetry querying, filtering, aggregation, hunting, and investigation |
+| **Microsoft Defender Advanced Hunting** | Query interface for investigating Defender and available Sentinel security telemetry |
+| **Sentinel Analytics Rules** | Automated detection logic used to continuously evaluate security telemetry |
+| **MITRE ATT&CK** | Framework used to map detection logic to adversary tactics and techniques |
 | **PowerShell** | Endpoint administration, validation, troubleshooting, and controlled test activity |
 | **Oracle VirtualBox** | Virtualization platform supporting the Windows lab endpoint |
-
----
-
-# Core Skills Demonstrated
-
-## Microsoft Defender XDR
-
-- Defender XDR portal navigation
-- Security Operations dashboard review
-- Incident queue analysis
-- Incident prioritization
-- Alert triage
-- Alert investigation
-- Alert and incident differentiation
-- Incident correlation analysis
-- Attack-story investigation
-- Evidence review
-- Entity analysis
-- Device investigation
-- User investigation
-- Device Timeline analysis
-- User Timeline analysis
-- Process lineage analysis
-- Process-tree analysis
-- Advanced Hunting
-- Incident lifecycle management
-- Incident classification
-- Response-action evaluation
-- Investigation documentation
-
-## Endpoint Detection & Response
-
-- Windows endpoint onboarding
-- Microsoft Defender for Endpoint configuration
-- Defender sensor validation
-- Endpoint telemetry verification
-- EDR alert validation
-- Process execution analysis
-- Parent-child process analysis
-- Command-line investigation
-- Process lineage analysis
-- Endpoint timeline reconstruction
-- Detection-source analysis
-- Endpoint scoping
-- Response decision-making
-- Device isolation awareness
-- Antivirus scan awareness
-- Investigation-package awareness
-- Live Response awareness
-
-## Microsoft Sentinel / SIEM
-
-- Microsoft Sentinel workspace deployment
-- Azure Log Analytics configuration
-- Defender XDR integration
-- Security telemetry validation
-- Incident review
-- Alert correlation
-- KQL-based investigation
-- SIEM and XDR workflow analysis
-
-## Threat Hunting
-
-- Microsoft Defender Advanced Hunting
-- KQL query construction
-- `DeviceProcessEvents` analysis
-- Time-based filtering
-- Device-specific filtering
-- Process-name filtering
-- Command-line filtering
-- Field projection
-- Chronological event analysis
-- Endpoint telemetry correlation
-- Hypothesis-driven investigation
-- Evidence validation
-
-## Incident Response
-
-- Detection
-- Triage
-- Validation
-- Context development
-- Investigation
-- Evidence collection
-- Scoping
-- Classification
-- Containment evaluation
-- Remediation evaluation
-- Secure cleanup
-- Incident resolution
-- Documentation
-
-## Cloud & Identity Administration
-
-- Microsoft Entra ID tenant configuration
-- Organizational security account configuration
-- Microsoft Azure resource management
-- Resource-group deployment
-- Log Analytics workspace deployment
-- Microsoft Sentinel onboarding
-- Defender licensing validation
-- Security-service provisioning
-- User and identity investigation
-
-## Troubleshooting
-
-- Azure tenant troubleshooting
-- Microsoft Entra ID troubleshooting
-- Microsoft Defender licensing validation
-- Endpoint onboarding troubleshooting
-- Defender SENSE service troubleshooting
-- Windows edition compatibility validation
-- Endpoint service verification
-- Defender capability validation
-- Telemetry-flow validation
-- Cloud security integration troubleshooting
 
 ---
 
@@ -403,56 +315,7 @@ The implementation included:
 
 ---
 
-# Lab 01 Environment
-
-## Azure Resources
-
-```text
-Azure Subscription
-└── RG-Microsoft-Security-Lab
-    └── LAW-Microsoft-Security-Lab
-        └── Microsoft Sentinel
-```
-
-A dedicated resource group and Log Analytics workspace were used to keep the security lab logically separated from unrelated Azure resources.
-
-The environment created a foundation for collecting, analyzing, and correlating security telemetry throughout later exercises.
-
----
-
-# Endpoint Configuration
-
-A **Windows 11 Enterprise virtual machine** was configured as the monitored enterprise endpoint.
-
-The endpoint was prepared with:
-
-- Internet connectivity to Microsoft cloud services
-- Microsoft Defender Antivirus
-- Microsoft Defender for Endpoint
-- Defender EDR sensor functionality
-- Endpoint telemetry reporting
-- Microsoft Defender XDR connectivity
-
-After successful onboarding, the endpoint became visible through Microsoft Defender Device Inventory and could be investigated using Defender's endpoint-security capabilities.
-
-The endpoint represented the host being monitored by the Security Operations environment.
-
-```text
-Windows 11 Enterprise
-        │
-        ▼
-Defender for Endpoint Sensor
-        │
-        ▼
-Endpoint Telemetry
-        │
-        ▼
-Microsoft Defender XDR
-```
-
----
-
-# Endpoint Onboarding & Troubleshooting
+## Endpoint Onboarding & Troubleshooting
 
 One of the most valuable portions of Lab 01 involved troubleshooting endpoint onboarding rather than simply following a successful deployment path.
 
@@ -476,54 +339,15 @@ Microsoft Defender for Endpoint capability inspection:
 DISM.EXE /Online /Get-CapabilityInfo /CapabilityName:Microsoft.Windows.Sense.Client~~~~
 ```
 
-The troubleshooting process required validating several layers of the endpoint configuration rather than assuming the onboarding package itself was the source of the problem.
+The troubleshooting process required validating several layers of endpoint configuration rather than assuming the onboarding package itself was the source of the problem.
 
-The investigation reinforced an important security-engineering principle:
-
-> Security platforms depend on underlying services, operating-system capabilities, licensing, connectivity, permissions, and telemetry pipelines. Effective troubleshooting requires validating those dependencies rather than repeatedly rerunning a failed deployment command.
-
-After resolving the endpoint requirements, Defender services were successfully validated and the endpoint was able to report security telemetry.
+> **Security platforms depend on underlying services, operating-system capabilities, licensing, connectivity, permissions, and telemetry pipelines. Effective troubleshooting requires validating those dependencies rather than repeatedly rerunning a failed deployment command.**
 
 ---
 
-# Telemetry Validation
-
-Successful endpoint onboarding alone was not treated as sufficient evidence that the security environment was functioning correctly.
-
-The next requirement was validating the telemetry pipeline.
-
-```text
-Windows Endpoint
-       │
-       ▼
-Defender Sensor
-       │
-       ▼
-Microsoft Cloud
-       │
-       ▼
-Defender for Endpoint
-       │
-       ▼
-Microsoft Defender XDR
-       │
-       ▼
-Analyst Visibility
-```
-
-The endpoint becoming visible within Defender Device Inventory confirmed that the device had successfully established communication with the Microsoft security platform.
-
-This was important because security tooling provides little operational value if the underlying telemetry is missing, delayed, or incorrectly configured.
-
----
-
-# Controlled Detection Test
+## Controlled Detection Test
 
 After the endpoint was successfully onboarded, controlled Microsoft Defender security test activity was generated to validate the detection pipeline.
-
-The purpose was not to simulate an uncontrolled compromise.
-
-The objective was to confirm that security-relevant endpoint activity could successfully travel through the complete detection pipeline:
 
 ```text
 Controlled Endpoint Activity
@@ -559,9 +383,7 @@ The detection demonstrated that:
 
 ---
 
-# Alert Investigation
-
-The resulting alert was investigated through Microsoft Defender XDR.
+## Alert Investigation
 
 The investigation examined:
 
@@ -578,33 +400,11 @@ The investigation examined:
 
 Rather than treating the alert itself as proof of compromise, the investigation pivoted into the underlying endpoint telemetry.
 
-This distinction is critical.
-
-```text
-Alert
-  │
-  ▼
-Investigation
-  │
-  ▼
-Evidence
-  │
-  ▼
-Context
-  │
-  ▼
-Analyst Verdict
-```
-
-An alert represents a reason to investigate.
-
-It does not automatically represent the final conclusion.
+> **An alert represents a reason to investigate. It does not automatically represent the final conclusion.**
 
 ---
 
-# Process Tree Analysis
-
-Process relationships were examined to understand how the detected activity executed on the endpoint.
+## Process Tree Analysis
 
 The observed process chain included:
 
@@ -621,8 +421,6 @@ cmd.exe
 powershell.exe
 ```
 
-Analyzing the process tree provided context that could not be obtained from the alert title alone.
-
 The process lineage helped establish:
 
 - Which process initiated the activity
@@ -633,88 +431,11 @@ The process lineage helped establish:
 - Whether unexpected parent processes were present
 - Whether unexpected child processes were present
 
-This demonstrated why process names should not be interpreted without surrounding execution context.
-
-For example:
-
-```text
-powershell.exe
-```
-
-by itself does not establish malicious activity.
-
-PowerShell is a legitimate administrative tool.
-
-The analyst must determine:
-
-```text
-Who launched it?
-        │
-        ▼
-What launched it?
-        │
-        ▼
-What command executed?
-        │
-        ▼
-What happened afterward?
-```
-
 ---
 
-# Device Timeline Investigation
-
-The Microsoft Defender Device Timeline was used to reconstruct activity around the detection.
-
-Timeline analysis focused on:
-
-- Process execution
-- PowerShell activity
-- File activity
-- Detection events
-- Alert associations
-- User context
-- Event timestamps
-
-The Device Timeline allowed the investigation to move from:
-
-```text
-"What alert fired?"
-```
-
-to:
-
-```text
-"What actually happened on the endpoint?"
-```
-
-The timeline can help answer questions such as:
-
-```text
-What happened before the suspicious process executed?
-
-What happened immediately afterward?
-
-Which user was active?
-
-Were additional processes created?
-
-Were files created or modified?
-
-Did network activity occur?
-
-Were additional detections generated?
-```
-
-That distinction between reviewing an alert and reconstructing endpoint behavior is fundamental to EDR investigation.
-
----
-
-# Advanced Hunting with KQL
+## Advanced Hunting with KQL
 
 Microsoft Defender Advanced Hunting was used to independently search the endpoint telemetry supporting the detection.
-
-Example investigation query:
 
 ```kusto
 DeviceProcessEvents
@@ -733,79 +454,13 @@ DeviceProcessEvents
 | order by Timestamp desc
 ```
 
-## Query Purpose
-
-The query:
-
-- Searches endpoint process telemetry using `DeviceProcessEvents`
-- Restricts results to the relevant investigation time window
-- Filters activity to the affected endpoint
-- Searches for processes associated with the controlled detection test
-- Returns process command-line information
-- Returns initiating-process information
-- Provides account context
-- Orders events chronologically for investigation
-
 The hunt returned relevant endpoint events associated with the controlled test activity.
 
 This independently validated that the alert was supported by underlying endpoint telemetry.
 
 ---
 
-# Evidence Correlation
-
-The investigation correlated multiple evidence sources rather than relying on a single security alert.
-
-```text
-Defender Alert
-      │
-      ├──────────────┐
-      ▼              ▼
-Process Tree     Device Timeline
-      │              │
-      └──────┬───────┘
-             ▼
-      Advanced Hunting
-             │
-             ▼
-       KQL Telemetry
-             │
-             ▼
-      Incident Context
-             │
-             ▼
-       Analyst Verdict
-```
-
-This workflow reinforces an important SOC principle:
-
-> **An alert is the beginning of an investigation—not the conclusion.**
-
----
-
-# Lab 01 Investigation Findings
-
-The investigation established that:
-
-- The Windows 11 Enterprise endpoint successfully reported security telemetry.
-- Microsoft Defender for Endpoint successfully monitored the endpoint.
-- Microsoft Defender for Endpoint detected the controlled activity.
-- Microsoft Defender XDR generated an EDR alert.
-- The alert was associated with the expected endpoint.
-- The alert contained relevant user context.
-- Process telemetry preserved the underlying activity.
-- The process tree showed the execution chain leading to PowerShell.
-- Device Timeline data provided chronological context around the activity.
-- Microsoft Defender Advanced Hunting returned relevant process events.
-- KQL provided independent validation of the endpoint evidence.
-- The observed behavior was consistent with the authorized Microsoft Defender security test.
-- No evidence identified an unauthorized compromise within the scope of the exercise.
-
----
-
-# Lab 01 Incident Classification
-
-Because the activity was intentionally generated as part of an authorized security-validation exercise, the investigation was documented accordingly.
+## Lab 01 Incident Classification
 
 ```text
 Detection Result: Valid Detection
@@ -814,83 +469,11 @@ Compromise: No
 Analyst Disposition: Expected / Security Testing
 ```
 
-This distinction is important.
-
 A security detection can be technically valid even when the underlying behavior was intentionally generated.
-
-A detection should therefore not automatically be classified as a false positive simply because the activity was authorized.
 
 The detection correctly identified the behavior.
 
 The analyst's responsibility was to determine the context and intent behind that behavior.
-
-Correctly documenting the event preserves the effectiveness of the detection while preventing authorized testing from being incorrectly recorded as a genuine compromise.
-
----
-
-# Secure Cleanup
-
-Temporary components used to support the controlled test were removed after evidence collection.
-
-Cleanup included:
-
-- Stopping the temporary IIS web service
-- Removing temporary test files
-- Removing the temporary test directory
-- Disabling the temporary IIS role
-- Verifying that TCP port 80 was no longer listening
-
-Example verification:
-
-```powershell
-Test-NetConnection 127.0.0.1 -Port 80
-```
-
-Expected post-cleanup result:
-
-```text
-TcpTestSucceeded : False
-```
-
-Cleanup is part of the investigation and testing lifecycle because temporary infrastructure should not remain unnecessarily exposed after an exercise has been completed.
-
----
-
-# Lab 01 Investigation Methodology
-
-The methodology practiced throughout Lab 01 can be summarized as:
-
-```text
-1. Build
-      ↓
-2. Configure
-      ↓
-3. Onboard
-      ↓
-4. Validate
-      ↓
-5. Generate Controlled Activity
-      ↓
-6. Detect
-      ↓
-7. Investigate
-      ↓
-8. Analyze Process Lineage
-      ↓
-9. Review Timeline
-      ↓
-10. Hunt with KQL
-      ↓
-11. Correlate Evidence
-      ↓
-12. Determine Scope
-      ↓
-13. Classify Activity
-      ↓
-14. Clean Up
-      ↓
-15. Document
-```
 
 ---
 
@@ -908,93 +491,49 @@ Lab 02 focused on:
 
 > **Can I navigate and investigate within that environment like a security analyst?**
 
-The lab followed a structured investigation path:
-
 ```text
 Microsoft Defender XDR Dashboard
               │
               ▼
-        Device Inventory
+         Device Inventory
               │
               ▼
-         Incident Queue
+          Incident Queue
               │
               ▼
-           Incident
+            Incident
               │
               ▼
-        Attack Story
+         Attack Story
               │
               ▼
-            Alert
+             Alert
               │
               ▼
-      Evidence / Entities
-          ↙         ↘
-       Device       User
-          │           │
-          ▼           ▼
- Device Timeline  User Timeline
+       Evidence / Entities
+           ↙         ↘
+        Device       User
+           │           │
+           ▼           ▼
+  Device Timeline  User Timeline
           │
           ▼
-   Process Lineage
+    Process Lineage
           │
           ▼
-    Analyst Verdict
+     Analyst Verdict
           │
           ▼
-   Response Options
+    Response Options
 ```
 
 ---
 
-# Understanding Microsoft Defender XDR
+## Alert vs. Incident
 
-Microsoft Defender XDR is an Extended Detection and Response platform designed to provide unified investigation across supported Microsoft security workloads and security-relevant entities.
+### Alert
 
-The central concept is not simply antivirus protection.
-
-The important capability is **cross-domain correlation**.
-
-Microsoft Defender XDR organizes investigation information into related security objects:
-
-```text
-Microsoft Defender XDR
-        │
-        ├── Incidents
-        │      │
-        │      ├── Alerts
-        │      ├── Evidence
-        │      ├── Devices
-        │      ├── Users
-        │      └── Investigation Context
-        │
-        ├── Device Inventory
-        │      │
-        │      └── Device Timeline
-        │
-        ├── User Entities
-        │      │
-        │      └── User Timeline
-        │
-        ├── Advanced Hunting
-        │
-        └── Response Actions
-```
-
-This allows an analyst to pivot between different parts of an investigation without treating each security signal as an isolated event.
-
----
-
-# Alert vs. Incident
-
-One of the most important concepts reinforced during Lab 02 was the distinction between an **alert** and an **incident**.
-
-## Alert
-
-An alert represents a specific security detection.
-
-Conceptually:
+An **alert** represents a specific security detection.
 
 ```text
 Observed Telemetry
@@ -1006,9 +545,7 @@ Detection Logic
 Security Alert
 ```
 
-An alert indicates that observed behavior matched security detection logic strongly enough to require analyst attention.
-
-An alert can contain information such as:
+An alert can contain:
 
 - Detection title
 - Severity
@@ -1022,21 +559,11 @@ An alert can contain information such as:
 - Supporting evidence
 - MITRE ATT&CK context
 
-However:
-
 > **An alert does not automatically establish malicious intent or compromise.**
 
-The alert tells the analyst what was detected.
+### Incident
 
-The analyst must determine what the activity means.
-
----
-
-## Incident
-
-An incident represents the broader correlated security case.
-
-An incident can contain multiple related alerts and associated security entities.
+An **incident** represents the broader correlated security case.
 
 ```text
 Alert A ─────┐
@@ -1046,7 +573,7 @@ Alert B ─────┼────► Incident
 Alert C ─────┘
 ```
 
-The incident may connect:
+An incident can connect:
 
 - Alerts
 - Devices
@@ -1058,2015 +585,1208 @@ The incident may connect:
 - Investigation information
 - Response activity
 
-The incident therefore provides the larger attack story surrounding one or more detections.
+The analyst's perspective therefore changes from:
 
-This changes the analyst's perspective from:
-
-```text
-"What does this individual alert say?"
-```
+> **"What does this individual alert say?"**
 
 to:
 
-```text
-"What security activity is occurring across the environment,
-and how are these signals related?"
-```
+> **"What security activity is occurring across the environment, and how are these signals related?"**
 
 ---
 
-# Microsoft Defender XDR Dashboard
+## Device Investigation
 
-The Microsoft Defender XDR dashboard was reviewed as the high-level operational entry point into the security environment.
+Device entity pages were reviewed to understand the affected endpoint in greater context.
 
-The dashboard provides visibility into areas such as:
+Relevant areas included:
 
-- Security incidents
-- Alerts
-- Protected assets
-- Device inventory
-- Hunting capabilities
-- Security posture
-- Investigation functions
-- Response functions
-
-The dashboard serves as an operational overview.
-
-It is not where the complete investigation occurs.
-
-The analyst must pivot from high-level security information into the underlying incidents, alerts, entities, and telemetry.
-
-```text
-Dashboard
-    │
-    ▼
-Security Signal
-    │
-    ▼
-Investigation
-    │
-    ▼
-Underlying Evidence
-```
-
----
-
-# Device Inventory
-
-Microsoft Defender Device Inventory was reviewed to understand how onboarded endpoints appear within the Defender environment.
-
-Device Inventory provides a centralized view of monitored endpoint assets.
-
-An analyst can use this area to identify and pivot into devices requiring investigation.
-
-A device entity can provide information such as:
-
-- Device name
+- Device identity
 - Operating system
 - Risk level
 - Exposure level
-- Onboarding state
-- Sensor health
 - Logged-on users
-- Associated alerts
-- Associated incidents
+- Alerts
+- Incidents
 - Software
-- Vulnerabilities
 - Security recommendations
-- Device Timeline
+- Timeline
 - Response actions
 
-Device Inventory therefore connects asset visibility with investigation.
-
-```text
-Device Inventory
-       │
-       ▼
-Select Endpoint
-       │
-       ▼
-Device Entity Page
-       │
-       ├── Overview
-       ├── Timeline
-       ├── Alerts
-       ├── Incidents
-       ├── Software
-       └── Response Actions
-```
-
 ---
 
-# Incident Queue Analysis
+## Device Timeline
 
-The centralized **Incident Queue** was used to examine security cases requiring analyst attention.
-
-Key incident attributes reviewed included:
-
-- Incident name
-- Severity
-- Status
-- Classification
-- Assigned analyst
-- Alert count
-- Affected assets
-- Service sources
-- Creation time
-- Last activity
-
-The incident queue represents one of the primary locations where SOC analysts begin prioritizing security investigations.
-
-However, severity alone should not determine investigative priority.
-
-An analyst may also consider:
+The Device Timeline was used to reconstruct endpoint activity chronologically.
 
 ```text
-Severity
-   +
-Asset Criticality
-   +
-Number of Alerts
-   +
-Affected Users
-   +
-Attack Stage
-   +
-Recency
-   +
-Ongoing Activity
-   +
-Detection Confidence
-   +
-Existing Investigation State
-   =
-Investigation Priority
-```
-
-This reinforced the difference between simply sorting alerts and performing actual SOC triage.
-
----
-
-# Incident Investigation
-
-An incident was opened to examine the broader correlated security story.
-
-Investigation areas included:
-
-- Incident summary
-- Attack story
-- Alerts
-- Assets
-- Evidence and response
-- Investigation information
-- Timeline
-- Classification
-- Status
-
-The key concept was **correlation**.
-
-Instead of treating security detections as independent:
-
-```text
-Alert 1
-
-Alert 2
-
-Alert 3
-```
-
-Defender XDR can organize related security information into:
-
-```text
-          Incident
-             │
-      ┌──────┼──────┐
-      ▼      ▼      ▼
-   Alert 1 Alert 2 Alert 3
-      │      │      │
-      └──────┼──────┘
-             ▼
-      Related Evidence
-             │
-      ┌──────┴──────┐
-      ▼             ▼
-    Device          User
-```
-
-This provides substantially more investigative context than examining each detection in isolation.
-
----
-
-# Attack Story Analysis
-
-The incident Attack Story was reviewed to understand how Microsoft Defender XDR visually connects security activity and affected entities.
-
-The attack story helps an analyst understand relationships between:
-
-- Alerts
-- Devices
-- Users
-- Processes
-- Files
-- Other security entities
-
-The objective was not simply to view a diagram.
-
-The objective was to understand the relationships represented by that diagram.
-
-```text
-Security Activity
-       │
-       ▼
-Alert
-       │
-       ▼
-Affected Entity
-       │
-       ▼
-Related Evidence
-       │
-       ▼
-Additional Activity
-```
-
-Attack-story analysis supports the broader XDR goal of connecting security signals into an understandable investigation narrative.
-
----
-
-# Alert Analysis
-
-The investigation then moved from the incident level into an individual alert.
-
-Alert review focused on:
-
-- Detection title
-- Severity
-- Status
-- Detection source
-- Category
-- Detection timestamp
-- Affected endpoint
-- Affected user
-- Processes
-- Files
-- IP addresses
-- Supporting evidence
-- Related entities
-- MITRE ATT&CK context when applicable
-
-A repeatable analyst questioning model was used:
-
-```text
-1. What was detected?
-
-2. When did it happen?
-
-3. Which device was involved?
-
-4. Which user was involved?
-
-5. What process or file triggered the detection?
-
-6. What launched the process?
-
-7. What command line executed?
-
-8. Did related network activity occur?
-
-9. What other entities are connected?
-
-10. Was the behavior prevented or only detected?
-
-11. What evidence supports the alert?
-
-12. What happened immediately before the alert?
-
-13. What happened immediately afterward?
-
-14. Is the behavior isolated?
-
-15. What should I investigate next?
-```
-
-This shifts analysis away from simply trusting an alert title and toward evidence-driven investigation.
-
----
-
-# Detection Does Not Equal Compromise
-
-A major concept reinforced throughout Week 17 was:
-
-> **A detection is not automatically a confirmed compromise.**
-
-The detection establishes that observed behavior matched security logic.
-
-The analyst must determine the meaning of that behavior.
-
-Possible investigative outcomes may include:
-
-```text
-True Positive — Malicious
-
-True Positive — Authorized / Expected Activity
-
-False Positive
-
-Benign / Informational
-
-Insufficient Evidence
-```
-
-The exact terminology may vary between platforms and organizations.
-
-The underlying principle remains the same:
-
-```text
+Before Detection
+      │
+      ▼
+Process Execution
+      │
+      ▼
+Related Activity
+      │
+      ▼
 Detection
-    │
-    ▼
-Investigation
-    │
-    ▼
-Evidence
-    │
-    ▼
-Context
-    │
-    ▼
-Verdict
+      │
+      ▼
+Post-Detection Activity
 ```
 
-The verdict should be based on the evidence rather than the alert title alone.
+This helps determine what happened before, during, and after suspicious activity.
 
 ---
 
-# Evidence & Entity Investigation
+## Process Lineage
 
-The investigation expanded from the alert into associated evidence and security-relevant entities.
+Process-tree investigation provides context around process execution.
 
-Entities may include:
-
-- Devices
-- Users
-- Processes
-- Files
-- IP addresses
-- URLs
-- Domains
-- Applications
-- Mailboxes
-- Cloud resources
-
-The investigation process can therefore move through multiple related objects:
-
-```text
-Alert
-  │
-  ▼
-Device
-  │
-  ▼
-Process
-  │
-  ▼
-File
-  │
-  ▼
-User
-  │
-  ▼
-IP / Network Context
-```
-
-This process of **pivoting between related entities** is one of the core investigative capabilities of XDR.
-
-The analyst is not limited to the object that originally generated the alert.
-
-Each entity can provide another investigative direction.
-
----
-
-# Device Investigation
-
-The affected endpoint was investigated through its Microsoft Defender device entity page.
-
-The device view provides endpoint context that can include:
-
-- Device hostname
-- Operating system
-- Risk level
-- Exposure information
-- Sensor state
-- Onboarding state
-- Logged-on users
-- Associated incidents
-- Associated alerts
-- Security recommendations
-- Software inventory
-- Vulnerability information
-- Device Timeline
-- Available response actions
-
-This changes the investigative question from:
-
-```text
-"What happened in this alert?"
-```
-
-to:
-
-```text
-"What else happened on this endpoint?"
-```
-
-That broader question is essential for determining scope.
-
-For example, an individual PowerShell detection may represent one process execution.
-
-The device investigation may reveal whether that same endpoint also experienced:
-
-- Additional suspicious processes
-- File creation
-- Network communication
-- Registry changes
-- Additional alerts
-- Other user activity
-- Related security events
-
----
-
-# Device Timeline Analysis
-
-The **Device Timeline** was used to examine endpoint activity chronologically.
-
-The Device Timeline represents a security-focused history of activity observed on the endpoint.
-
-Potential endpoint telemetry can include:
-
-- Process creation
-- Process termination
-- File creation
-- File modification
-- Network connections
-- Registry changes
-- User logons
-- Service activity
-- PowerShell execution
-- Defender detections
-- Scheduled tasks
-- Remote activity
-- Other endpoint events
-
-Timeline analysis helps answer:
-
-```text
-What happened before the detection?
-
-What happened during the detection?
-
-What happened immediately afterward?
-
-Which user was active?
-
-Which process executed?
-
-What launched that process?
-
-What command line was used?
-
-Were files created?
-
-Were files modified?
-
-Did network communication occur?
-
-Did additional processes execute?
-
-Were additional alerts generated?
-```
-
-The Device Timeline therefore helps reconstruct endpoint behavior instead of relying exclusively on summarized alert information.
-
----
-
-# Hypothesis-Driven Timeline Filtering
-
-Rather than manually reviewing every available endpoint event, timeline filtering was approached according to an investigation hypothesis.
-
-Example:
-
-```text
-Hypothesis:
-A suspicious process executed.
-
-Best Starting Evidence:
-Process events.
-```
-
-Another example:
-
-```text
-Hypothesis:
-A compromised process communicated externally.
-
-Best Starting Evidence:
-Process events + network activity.
-```
-
-Another example:
-
-```text
-Hypothesis:
-Suspicious activity modified persistence-related configuration.
-
-Best Starting Evidence:
-Process events + registry activity.
-```
-
-This reinforces an important investigative principle:
-
-> **Filter telemetry according to the question you are trying to answer.**
-
-Security investigation should be driven by hypotheses and evidence rather than random navigation through available data.
-
----
-
-# Process Event Investigation
-
-Individual process-related timeline events were reviewed for fields such as:
-
-- Process name
-- Process command line
-- Executable path
-- Parent process
-- User
-- Process ID
-- File hash
-- Timestamp
-
-Three pieces of information are especially valuable during initial process analysis.
-
-## Process
-
-```text
-What executed?
-```
-
-Example:
+Instead of evaluating:
 
 ```text
 powershell.exe
 ```
 
-## Command Line
-
-```text
-How exactly was the process executed?
-```
-
-The command line can reveal:
-
-- Parameters
-- Scripts
-- URLs
-- File paths
-- Encoded content
-- Execution-policy changes
-- Other behavioral context
-
-## Parent Process
-
-```text
-What launched the process?
-```
-
-This introduces the concept of **process lineage**.
-
----
-
-# Process Lineage Analysis
-
-A process such as:
-
-```text
-powershell.exe
-```
-
-cannot be accurately interpreted from the executable name alone.
-
-PowerShell is a legitimate Windows administration tool.
-
-The surrounding process relationships provide context.
-
-For example:
-
-```text
-explorer.exe
-    │
-    ▼
-cmd.exe
-    │
-    ▼
-powershell.exe
-```
-
-may have very different implications from:
-
-```text
-winword.exe
-    │
-    ▼
-powershell.exe
-```
-
-The second execution chain may deserve additional investigation because an Office application unexpectedly launching PowerShell can represent suspicious behavior depending on the surrounding context.
-
-Process lineage helps answer:
-
-```text
-What launched this process?
-
-What launched the parent?
-
-Which user context was involved?
-
-What command executed?
-
-What did the process launch afterward?
-```
-
----
-
-# Process Tree Analysis
-
-Where process lineage information was available, the investigation examined parent-child relationships conceptually represented as:
+in isolation, the analyst investigates:
 
 ```text
 Parent Process
       │
       ▼
-Current Process
+Process
+      │
+      ▼
+Command Line
       │
       ▼
 Child Process
+      │
+      ▼
+Related File / Network Activity
 ```
 
-Process trees can help determine:
-
-- How execution began
-- Which process initiated suspicious activity
-- Whether a user-launched application was involved
-- Whether scripting interpreters were chained together
-- Whether unexpected child processes appeared
-- Whether execution matched normal user behavior
-- Whether execution matched the controlled test
-- Whether the process chain supports or contradicts the alert
-
-Process trees are especially valuable when investigating tools such as:
-
-- `powershell.exe`
-- `cmd.exe`
-- `wscript.exe`
-- `cscript.exe`
-- `mshta.exe`
-- Browsers
-- Office applications
-- Windows system utilities
-
-Many legitimate Windows binaries can also be abused.
-
-The surrounding process relationships help determine the significance of their execution.
+This helps distinguish normal administrative activity from suspicious execution patterns.
 
 ---
 
-# Device Alert History
+## Response Capabilities
 
-Associated incidents and alerts for the endpoint were reviewed to provide historical context.
+Endpoint response capabilities reviewed included:
 
-This helps answer:
+- Isolate device
+- Run antivirus scan
+- Collect investigation package
+- Initiate Live Response
+- Restrict application execution
+- Investigate device
+- Review remediation actions
+
+These capabilities were evaluated in context rather than automatically executed.
+
+> **The existence of a response capability does not mean it should immediately be used. Response actions should be based on evidence, business impact, incident severity, scope, and confidence.**
+
+---
+
+# Lab 03 — Microsoft Sentinel & KQL Fundamentals
+
+## Objective
+
+Develop practical experience with the Microsoft Sentinel SIEM data pipeline and build a foundational understanding of how security telemetry moves from its original source into a searchable security dataset and eventually into automated detection logic.
+
+Where Lab 01 asked:
+
+> **Can I build and validate the Microsoft security environment?**
+
+And Lab 02 asked:
+
+> **Can I investigate security activity through Microsoft Defender XDR?**
+
+Lab 03 asks:
+
+> **Can I understand where SIEM data comes from, validate that it is being collected, query it with KQL, identify patterns, and understand how those queries can become automated detections?**
+
+The core technical workflow was:
 
 ```text
-Is this an isolated event?
-```
-
-or:
-
-```text
-Has this device generated other related security activity?
-```
-
-Historical device context can substantially change the interpretation of an individual alert.
-
-For example:
-
-```text
-Single Alert
-     │
-     ▼
-Possibly Isolated Activity
-```
-
-may be interpreted differently from:
-
-```text
-Alert
-  +
-Related Alert
-  +
-Additional Suspicious Process
-  +
-Related Network Activity
-     │
-     ▼
-Potentially Broader Incident
+Generate Azure Activity
+        │
+        ▼
+Verify Source Event
+        │
+        ▼
+Ingest Through Data Connector
+        │
+        ▼
+Store in Log Analytics
+        │
+        ▼
+Inspect AzureActivity Schema
+        │
+        ▼
+Query with KQL
+        │
+        ▼
+Filter Relevant Activity
+        │
+        ▼
+Aggregate Events
+        │
+        ▼
+Identify Behavioral Patterns
+        │
+        ▼
+Review Analytics Rule
+        │
+        ▼
+Review MITRE ATT&CK Mapping
+        │
+        ▼
+Understand Alert / Incident Creation
 ```
 
 ---
 
-# Identity Investigation
+## Lab 03 Environment
 
-The investigation also expanded from endpoint evidence into **user context**.
-
-A user represents another security-relevant entity that can be investigated.
+Lab 03 reused the Microsoft cloud security environment established earlier in Week 17.
 
 ```text
-Incident
+Microsoft Azure Subscription
+        │
+        ├── RG-Microsoft-Security-Lab
+        │
+        └── LAW-Microsoft-Security-Lab
+                    │
+                    ▼
+             Microsoft Sentinel
+                    │
+                    ├── Azure Activity Solution
+                    ├── Azure Activity Connector
+                    ├── AzureActivity Table
+                    ├── Analytics
+                    ├── Incidents
+                    ├── Workbooks
+                    └── Watchlists
+```
+
+A temporary resource group was also used to generate safe Azure control-plane telemetry:
+
+```text
+rg-sentinel-kql-lab3-test
+```
+
+The temporary resource group was used as a controlled source of administrative activity rather than deploying unnecessary compute resources.
+
+---
+
+# Understanding the Sentinel Data Pipeline
+
+One of the most important lessons from Lab 03 was understanding that Microsoft Sentinel does not automatically have visibility into every event simply because Sentinel has been enabled.
+
+A complete telemetry path must exist.
+
+```text
+Security-Relevant Activity
+          │
+          ▼
+      Data Source
+          │
+          ▼
+     Data Connector
+          │
+          ▼
+ Log Analytics Workspace
+          │
+          ▼
+    Structured Table
+          │
+          ▼
+         KQL
+          │
+          ▼
+Security Investigation
+```
+
+For this lab:
+
+```text
+Azure Administrative Activity
+          │
+          ▼
+    Azure Activity Log
+          │
+          ▼
+ Azure Activity Connector
+          │
+          ▼
+LAW-Microsoft-Security-Lab
+          │
+          ▼
+    AzureActivity
+          │
+          ▼
+     KQL Analysis
+```
+
+This relationship is fundamental to SIEM engineering.
+
+If the source does not generate telemetry, the SIEM has nothing to ingest.
+
+If the connector is not configured correctly, the telemetry does not reach the workspace.
+
+If the data is not stored in an expected table, the analyst cannot query it as expected.
+
+If the analyst does not understand the schema, useful investigation becomes more difficult.
+
+---
+
+# Log Analytics Workspace vs. Microsoft Sentinel
+
+An important distinction reinforced during this lab was the difference between **Azure Log Analytics** and **Microsoft Sentinel**.
+
+## Log Analytics Workspace
+
+The Log Analytics workspace provides the underlying environment where telemetry is stored in structured tables and queried.
+
+```text
+Log Analytics
+      │
+      ├── Tables
+      ├── Rows
+      ├── Columns
+      ├── Retention
+      └── Queries
+```
+
+## Microsoft Sentinel
+
+Microsoft Sentinel adds security-focused SIEM capabilities over the collected data.
+
+```text
+Microsoft Sentinel
+      │
+      ├── Data Connectors
+      ├── Analytics Rules
+      ├── Incidents
+      ├── Hunting
+      ├── Workbooks
+      ├── Watchlists
+      └── Automation Capabilities
+```
+
+The relationship can therefore be represented as:
+
+```text
+Telemetry
+   │
+   ▼
+Log Analytics
+   │
+   ▼
+Structured Security Data
+   │
+   ▼
+Microsoft Sentinel
+   │
+   ├── Detect
+   ├── Investigate
+   ├── Hunt
+   └── Respond
+```
+
+---
+
+# Azure Activity Data Connector
+
+The Azure Activity connector was configured so subscription-level administrative events could be sent to the existing Log Analytics workspace.
+
+```text
+Azure Subscription
+        │
+        ▼
+Azure Control-Plane Activity
+        │
+        ▼
+Azure Activity Log
+        │
+        ▼
+Azure Activity Connector
+        │
+        ▼
+LAW-Microsoft-Security-Lab
+        │
+        ▼
+AzureActivity
+```
+
+Connector validation was an important step.
+
+Simply configuring a connector was not treated as proof that telemetry was available.
+
+> **Configuration is not the same as validation.**
+
+---
+
+# Controlled Azure Telemetry Generation
+
+A lightweight resource group was created to generate safe Azure administrative telemetry.
+
+```text
+rg-sentinel-kql-lab3-test
+```
+
+The goal was not to create suspicious or destructive cloud activity.
+
+The goal was to create known activity that could be traced through the monitoring pipeline.
+
+```text
+Known Administrative Action
+          │
+          ▼
+Azure Records Event
+          │
+          ▼
+Connector Ingests Event
+          │
+          ▼
+Log Analytics Stores Event
+          │
+          ▼
+Analyst Queries Event
+```
+
+Using known activity made it possible to validate the SIEM pipeline without relying on unknown background events.
+
+---
+
+# Understanding the `AzureActivity` Schema
+
+The `AzureActivity` table was inspected before more advanced queries were performed.
+
+A security table can be understood as:
+
+```text
+Table
+ │
+ ├── Row
+ │    └── Individual Event
+ │
+ └── Columns
+      └── Attributes Describing Event
+```
+
+Relevant fields observed or investigated included:
+
+- `TimeGenerated`
+- `OperationNameValue`
+- `ActivityStatusValue`
+- `ResourceGroup`
+- `Caller`
+- `CallerIpAddress`
+- `SubscriptionId`
+- `ResourceId`
+- `CategoryValue`
+
+Understanding the schema matters because KQL queries depend on knowing what information is available.
+
+An analyst should not blindly copy a query without understanding the fields being referenced.
+
+---
+
+# KQL Fundamentals
+
+## First `AzureActivity` KQL Query
+
+```kusto
+AzureActivity
+```
+
+A limited version can be written as:
+
+```kusto
+AzureActivity
+| take 10
+```
+
+The pipe operator can be understood as:
+
+> **Take the results produced so far and pass them into the next operation.**
+
+---
+
+## Selecting Investigation-Relevant Fields with `project`
+
+```kusto
+AzureActivity
+| project
+    TimeGenerated,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup,
+    Caller,
+    CallerIpAddress
+| take 20
+```
+
+The query reduces unnecessary information and keeps fields relevant to the investigation.
+
+---
+
+## Time-Based Filtering with `where`
+
+```kusto
+AzureActivity
+| where TimeGenerated >= ago(24h)
+| project
+    TimeGenerated,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup,
+    Caller
+```
+
+Useful relative time examples include:
+
+```kusto
+ago(1h)
+```
+
+```kusto
+ago(7d)
+```
+
+```kusto
+ago(30d)
+```
+
+Time filtering is essential because investigations normally require a defined timeframe.
+
+---
+
+## Targeted Resource Group Investigation
+
+```kusto
+AzureActivity
+| where TimeGenerated >= ago(24h)
+| where ResourceGroup =~ "rg-sentinel-kql-lab3-test"
+| project
+    TimeGenerated,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup,
+    Caller
+| order by TimeGenerated desc
+```
+
+The `=~` operator performs case-insensitive equality comparison.
+
+This query demonstrates a realistic investigation pattern:
+
+```text
+Select Data
     │
     ▼
+Define Time Range
+    │
+    ▼
+Filter Relevant Resource
+    │
+    ▼
+Select Important Fields
+    │
+    ▼
+Sort Chronologically
+```
+
+---
+
+## Successful Administrative Operations
+
+```kusto
+AzureActivity
+| where TimeGenerated >= ago(24h)
+| where ActivityStatusValue =~ "Success"
+| project
+    TimeGenerated,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup,
+    Caller,
+    CallerIpAddress
+| order by TimeGenerated desc
+```
+
+---
+
+## Text Searching with `contains`
+
+```kusto
+AzureActivity
+| where OperationNameValue contains "resource"
+| project
+    TimeGenerated,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup
+| order by TimeGenerated desc
+```
+
+This type of filtering is useful when an analyst knows part of an expected value but does not want to require exact equality.
+
+---
+
+## Counting Events
+
+```kusto
+AzureActivity
+| where TimeGenerated >= ago(24h)
+| count
+```
+
+Instead of returning every event, the query returns the total number of matching events.
+
+```text
+Individual Logs
+      │
+      ▼
+Aggregation
+      │
+      ▼
+Security Information
+```
+
+---
+
+## Behavioral Aggregation with `summarize`
+
+```kusto
+AzureActivity
+| where TimeGenerated >= ago(24h)
+| summarize EventCount = count() by ActivityStatusValue
+| order by EventCount desc
+```
+
+Instead of asking:
+
+> **What does every individual event say?**
+
+The query asks:
+
+> **How many events occurred for each activity status?**
+
+This converts individual events into a higher-level behavioral summary.
+
+---
+
+## Top Azure Operations
+
+```kusto
+AzureActivity
+| where TimeGenerated >= ago(24h)
+| summarize EventCount = count() by OperationNameValue
+| top 10 by EventCount desc
+```
+
+This answers:
+
+> **Which Azure operations appeared most frequently during the selected period?**
+
+This is a basic form of behavioral analysis.
+
+The same concept becomes useful in more advanced security investigations involving:
+
+- Authentication activity
+- Process execution
+- Network connections
+- DNS requests
+- Cloud administrative operations
+- File access
+- Data transfer
+- Endpoint detections
+
+---
+
+## Time-Based Aggregation with `bin()`
+
+```kusto
+AzureActivity
+| where TimeGenerated >= ago(24h)
+| summarize EventCount = count() by bin(TimeGenerated, 1h)
+| order by TimeGenerated asc
+```
+
+The expression:
+
+```kusto
+bin(TimeGenerated, 1h)
+```
+
+places timestamps into one-hour groups.
+
+Time-based aggregation becomes especially valuable when investigating:
+
+- Authentication spikes
+- Password spraying
+- Port scanning
+- Repeated malware execution
+- Command-and-control beaconing
+- Data-transfer spikes
+- Cloud administration bursts
+- Repeated failed operations
+
+---
+
+## KQL Time Visualization
+
+```kusto
+AzureActivity
+| where TimeGenerated >= ago(24h)
+| summarize EventCount = count() by bin(TimeGenerated, 1h)
+| order by TimeGenerated asc
+| render timechart
+```
+
+Visualization can help analysts identify patterns that are difficult to recognize while reading individual rows.
+
+```text
+Raw Logs
+    │
+    ▼
+Aggregation
+    │
+    ▼
+Time Buckets
+    │
+    ▼
+Visualization
+    │
+    ▼
+Pattern Recognition
+```
+
+---
+
+## Failed Azure Operations
+
+```kusto
+AzureActivity
+| where TimeGenerated >= ago(7d)
+| where ActivityStatusValue =~ "Failed"
+| project
+    TimeGenerated,
+    OperationNameValue,
+    ResourceGroup,
+    Caller,
+    CallerIpAddress
+| order by TimeGenerated desc
+```
+
+A query returning zero events is still meaningful.
+
+The goal of security analysis is not to force interesting results.
+
+The query answers a defined investigative question:
+
+> **Were failed Azure administrative operations recorded during this period?**
+
+---
+
+# Manual Hunting vs. Automated Detection
+
+## Manual Hunting
+
+```text
+Analyst
+   │
+   ▼
+Writes / Runs KQL
+   │
+   ▼
+Reviews Results
+   │
+   ▼
+Interprets Activity
+   │
+   ▼
+Determines Significance
+```
+
+The analyst decides when to run the query.
+
+## Automated Detection
+
+```text
+Microsoft Sentinel
+       │
+       ▼
+Runs Detection Logic
+       │
+       ▼
+Evaluates Telemetry
+       │
+       ▼
+Condition Matches
+       │
+       ▼
+Alert Generated
+       │
+       ▼
+Possible Incident
+       │
+       ▼
+Analyst Investigation
+```
+
+The underlying logic may still depend heavily on KQL, but Sentinel executes the detection automatically according to the configured rule.
+
+This creates a direct relationship between threat hunting and detection engineering.
+
+```text
+Question
+   │
+   ▼
+KQL Query
+   │
+   ▼
+Useful Detection Logic
+   │
+   ▼
+Scheduled Analytics Rule
+   │
+   ▼
 Alert
-    │
-    ├────────────► Device
-    │
-    └────────────► User
-```
-
-Where device investigation asks:
-
-```text
-"What happened on this endpoint?"
-```
-
-identity investigation asks:
-
-```text
-"What happened with this account?"
-```
-
-This distinction becomes increasingly important when investigating:
-
-- Compromised credentials
-- Suspicious authentication
-- Account takeover
-- Lateral movement
-- Privilege misuse
-- Cloud activity
-- Unusual logons
-- Identity-based attacks
-
----
-
-# User Entity Overview
-
-The user entity view was reviewed to understand how identity context is incorporated into a Microsoft Defender XDR investigation.
-
-Depending on the available security data and integrations, a user entity can provide context related to:
-
-- User identity
-- Associated devices
-- Security alerts
-- Authentication activity
-- Related incidents
-- Identity risk
-- Cloud activity
-- Other security events
-
-This allows the analyst to pivot from endpoint activity into the identity associated with that activity.
-
-```text
-Suspicious Endpoint Activity
-            │
-            ▼
-        User Account
-            │
-            ▼
-   Identity Investigation
-            │
-            ▼
-Additional User Activity
 ```
 
 ---
 
-# User Timeline
+# Microsoft Sentinel Analytics Rules
 
-The User Timeline provides chronological identity-related context when relevant telemetry is available.
+The Sentinel **Analytics** section was reviewed to understand how detection logic is operationalized.
 
-Identity investigation may involve reviewing:
+An analytics rule can define areas such as:
 
-- Security alerts affecting the user
-- Authentication activity
-- Device logons
-- Identity events
-- Directory activity
-- Cloud application activity
-- Other security events associated with the account
+- Rule name
+- Rule description
+- Severity
+- Required data sources
+- Rule type
+- KQL detection query
+- Query frequency
+- Lookback period
+- Alert threshold
+- Entity mappings
+- Incident settings
+- MITRE ATT&CK tactics
+- MITRE ATT&CK techniques
+- Automated-response configuration
 
-The analytical questions become:
-
-```text
-Where was this account used?
-
-When was it used?
-
-Which devices were involved?
-
-What security events occurred around the same time?
-
-Were there unusual authentication patterns?
-
-Does the identity activity support the endpoint evidence?
-
-Does the identity activity contradict the endpoint evidence?
-
-Is the account involved in activity on additional devices?
-```
-
-This demonstrates why XDR investigations benefit from correlation across multiple security domains rather than endpoint evidence alone.
-
----
-
-# Device and User Correlation
-
-One of the strongest concepts introduced through Lab 02 was the ability to investigate the same security event from multiple entity perspectives.
-
-```text
-              Incident
-                 │
-                 ▼
-               Alert
-                 │
-         ┌───────┴───────┐
-         ▼               ▼
-       Device           User
-         │               │
-         ▼               ▼
-Device Timeline      User Timeline
-         │               │
-         └───────┬───────┘
-                 ▼
-         Correlated Context
-                 │
-                 ▼
-          Analyst Verdict
-```
-
-The device perspective answers:
-
-> **What happened on the endpoint?**
-
-The identity perspective answers:
-
-> **What happened with the account?**
-
-Combining both perspectives provides stronger investigative context.
-
----
-
-# Incident Lifecycle Management
-
-Lab 02 also examined the operational lifecycle of a Microsoft Defender incident.
+A scheduled analytics rule can conceptually operate as:
 
 ```text
 Telemetry
     │
     ▼
-Detection
+Scheduled Query
     │
     ▼
+Detection Condition
+    │
+    ├── Not Met ──► Continue Monitoring
+    │
+    └── Met
+         │
+         ▼
+       Alert
+         │
+         ▼
+       Incident
+```
+
+---
+
+# Suspicious Resource Deployment Analytics Rule
+
+An Azure Activity-related analytics-rule template named:
+
+```text
+Suspicious Resource deployment
+```
+
+was reviewed during the lab.
+
+The rule details showed:
+
+```text
+Rule Name: Suspicious Resource deployment
+Severity: Low
+Rule Type: Scheduled
+Data Source: Azure Activity
+MITRE ATT&CK Tactic: Impact
+MITRE ATT&CK Technique: T1496 — Resource Hijacking
+```
+
+The rule provided an example of how cloud activity can be evaluated using detection logic instead of requiring an analyst to manually inspect every administrative event.
+
+The important lesson was not simply that the template existed.
+
+The investigation required understanding:
+
+```text
+What data source does the rule require?
+        │
+        ▼
+What activity does the query examine?
+        │
+        ▼
+What behavior is considered suspicious?
+        │
+        ▼
+What severity is assigned?
+        │
+        ▼
+What ATT&CK behavior is associated?
+        │
+        ▼
+What happens if the detection condition matches?
+```
+
+---
+
+# MITRE ATT&CK Mapping
+
+The reviewed detection was mapped to:
+
+```text
+Tactic:
+Impact
+
+Technique:
+T1496 — Resource Hijacking
+```
+
+The relationship can be represented as:
+
+```text
+Raw Telemetry
+      │
+      ▼
+Detection Query
+      │
+      ▼
+Suspicious Behavior
+      │
+      ▼
+MITRE ATT&CK
+      │
+      ▼
+Tactic / Technique Context
+```
+
+MITRE ATT&CK mapping does **not** automatically prove that an attacker performed the mapped behavior.
+
+Instead, it provides standardized language for describing the adversary behavior that the detection is intended to identify.
+
+> **ATT&CK Mapping ≠ Proof of Compromise**
+
+An analyst still needs evidence and context.
+
+---
+
+# Sentinel Alerts and Incidents
+
+Lab 03 reinforced the distinction between detections, alerts, and incidents.
+
+```text
+Telemetry
+   │
+   ▼
+Analytics Rule
+   │
+   ▼
+Detection Condition
+   │
+   ▼
 Alert
-    │
-    ▼
-Incident Correlation
-    │
-    ▼
-Triage
-    │
-    ▼
+   │
+   ▼
+Incident
+   │
+   ▼
 Investigation
-    │
-    ▼
-Classification
-    │
-    ▼
-Response
-    │
-    ▼
-Resolution
 ```
 
-Incident status is therefore not simply a technical field.
+## Alert
 
-It represents **case management**.
+An alert means:
 
-## New
+> **A detection condition matched.**
 
-The incident has entered the queue and requires review.
+## Incident
 
-## In Progress
+An incident represents the larger investigation case.
 
-The incident is actively being investigated or handled.
+An incident may contain:
 
-## Resolved
+```text
+Incident
+├── Alert 1
+├── Alert 2
+├── User / Account Entities
+├── Devices
+├── IP Addresses
+├── Resources
+├── Evidence
+├── Timeline
+├── Comments
+├── Owner
+└── Status
+```
 
-The investigation and required response work have been completed.
-
-This introduces an important SOC concept:
-
-> **Security Operations requires managing investigations as cases—not simply acknowledging alerts.**
+This gives the analyst a case-management structure around related security information.
 
 ---
 
-# Analyst Classification
+# Sentinel Workbooks
 
-After evidence has been reviewed, the analyst must determine what conclusion is supported by the investigation.
-
-A conceptual decision model is:
+Workbooks were reviewed conceptually as a way of turning telemetry and KQL results into visual security information.
 
 ```text
-Detection
-    │
-    ▼
-Evidence
-    │
-    ▼
-Context
-    │
-    ▼
-Scope
-    │
-    ▼
-Analyst Assessment
-    │
-    ├── Malicious
-    ├── Authorized / Expected
-    ├── False Positive
-    ├── Benign
-    └── Insufficient Evidence
+Raw Telemetry
+      │
+      ▼
+     KQL
+      │
+      ▼
+Aggregation
+      │
+      ▼
+Workbook
+      │
+      ├── Charts
+      ├── Tables
+      ├── Counts
+      ├── Trends
+      └── Dashboards
 ```
 
-The important principle is that the classification should reflect the evidence.
-
-The alert title should not determine the verdict before the investigation has been completed.
+Workbooks can reduce the need to manually inspect every event when the goal is to understand larger trends or operational patterns.
 
 ---
 
-# Response Actions
+# Sentinel Watchlists
 
-The Defender device investigation workflow was also used to review endpoint response capabilities.
+Watchlists were reviewed as a method of adding organization-specific reference information to security analytics.
 
-Depending on licensing, permissions, configuration, and incident requirements, endpoint response capabilities can include actions such as:
-
-- Device isolation
-- Antivirus scanning
-- Investigation-package collection
-- Automated investigation
-- Application restriction
-- Live Response
-
-These capabilities were evaluated as **response options**.
-
-They should not automatically be executed simply because an alert exists.
-
-The analyst should first determine:
+Example:
 
 ```text
-What happened?
-      │
-      ▼
-What is affected?
-      │
-      ▼
-How confident is the evidence?
-      │
-      ▼
-Is the activity malicious?
-      │
-      ▼
-Is containment necessary?
-      │
-      ▼
-What is the safest appropriate response?
+CriticalAssets
+--------------
+DC01
+SQL01
+FILE01
 ```
 
-Containment without sufficient context can disrupt legitimate business operations.
+Another example:
 
-Delayed containment during a genuine compromise can allow additional attacker activity.
+```text
+ApprovedAdminIPs
+----------------
+10.0.0.10
+10.0.0.20
+```
 
-Effective incident response therefore requires both technical capability and analyst judgment.
+This allows generic telemetry to be evaluated against environmental context.
+
+For example:
+
+```text
+Successful Administrative Login
+              +
+Source IP Not in ApprovedAdminIPs
+              =
+Higher Investigation Interest
+```
+
+Watchlists can therefore help transform generic security events into more meaningful organization-specific detections and investigations.
 
 ---
 
-# Microsoft Defender XDR Analyst Workflow
+# Lab 03 Investigation Methodology
 
-The complete Lab 02 investigation methodology can be summarized as:
+The methodology practiced throughout Lab 03 can be summarized as:
 
 ```text
-1. Review Defender XDR Dashboard
-            │
-            ▼
-2. Review Device Inventory
-            │
-            ▼
-3. Review Incident Queue
-            │
-            ▼
-4. Prioritize Incident
-            │
-            ▼
-5. Open Incident
-            │
-            ▼
-6. Review Incident Summary
-            │
-            ▼
-7. Review Attack Story
-            │
-            ▼
-8. Examine Correlated Alerts
-            │
-            ▼
-9. Investigate Individual Alert
-            │
-            ▼
-10. Review Evidence & Entities
-            │
-            ▼
-11. Pivot to Device
-            │
-            ▼
-12. Review Device Overview
-            │
-            ▼
-13. Review Device Timeline
-            │
-            ▼
-14. Analyze Process Events
-            │
-            ▼
-15. Analyze Process Lineage
-            │
-            ▼
-16. Review Device Alert History
-            │
-            ▼
-17. Pivot to User Context
-            │
-            ▼
-18. Review User Entity
-            │
-            ▼
-19. Review User Timeline
-            │
-            ▼
-20. Correlate Device & Identity Evidence
-            │
-            ▼
-21. Determine Scope
-            │
-            ▼
-22. Develop Analyst Verdict
-            │
-            ▼
-23. Evaluate Response Options
-            │
-            ▼
-24. Classify / Resolve
-            │
-            ▼
-25. Document Findings
+1. Identify Data Source
+        ↓
+2. Configure Data Connector
+        ↓
+3. Generate Controlled Activity
+        ↓
+4. Verify Source Event
+        ↓
+5. Validate Data Ingestion
+        ↓
+6. Identify Destination Table
+        ↓
+7. Inspect Schema
+        ↓
+8. Run Basic KQL
+        ↓
+9. Filter Relevant Activity
+        ↓
+10. Select Important Fields
+        ↓
+11. Sort Chronologically
+        ↓
+12. Aggregate Events
+        ↓
+13. Identify Patterns
+        ↓
+14. Analyze Activity Over Time
+        ↓
+15. Review Detection Logic
+        ↓
+16. Review MITRE ATT&CK Mapping
+        ↓
+17. Understand Alert Generation
+        ↓
+18. Understand Incident Creation
+        ↓
+19. Document Findings
 ```
 
 ---
 
-# Analyst Investigation Framework
+# Lab 03 Findings
 
-Across both Week 17 labs, the investigation process can be summarized through six analytical questions.
+The lab established that:
 
-## 1. Detection — What happened?
-
-Identify the security behavior that generated analyst attention.
-
-Questions include:
-
-- What detection fired?
-- What behavior triggered it?
-- When did it occur?
-- What security product generated the detection?
-
----
-
-## 2. Entity — Who or what was involved?
-
-Identify affected security entities.
-
-These may include:
-
-- Devices
-- Users
-- Processes
-- Files
-- IP addresses
-- URLs
-- Domains
-- Applications
-- Cloud resources
+- The existing Log Analytics workspace could support Sentinel security telemetry.
+- Microsoft Sentinel was available as the SIEM layer over the workspace.
+- Azure Activity was configured as a Sentinel data source.
+- Azure administrative operations generated observable source telemetry.
+- The Azure Activity connector provided a path for that telemetry into the Log Analytics environment.
+- Azure Activity events became queryable through the `AzureActivity` table.
+- The `AzureActivity` schema exposed fields useful for security analysis.
+- KQL could retrieve raw Azure administrative activity.
+- `where` could restrict events according to time and other conditions.
+- `project` could reduce unnecessary fields and improve investigation readability.
+- `order by` could reconstruct activity chronologically.
+- `contains` could perform text-based filtering.
+- `count` could aggregate matching events.
+- `summarize` could convert individual logs into behavioral information.
+- `top` could identify frequently occurring operations.
+- `bin()` could group activity into time intervals.
+- Time-based visualization could help identify activity patterns.
+- Failed administrative activity could be specifically hunted with KQL.
+- Manual hunting and automated analytics rules serve different operational purposes.
+- Sentinel analytics rules can repeatedly evaluate telemetry using detection logic.
+- Analytics rules depend on appropriate data sources.
+- Detection rules can be associated with MITRE ATT&CK tactics and techniques.
+- The reviewed **Suspicious Resource deployment** rule was mapped to **Impact / T1496 — Resource Hijacking**.
 
 ---
 
-## 3. Context — What happened around it?
+# Core Security Operations Lessons
 
-Review the surrounding evidence.
+The most important outcome of the week was understanding that effective Security Operations is not based on memorizing a product interface.
 
-This can include:
+It depends on understanding the systems underneath the interface:
 
-- Process lineage
-- Command lines
-- Device Timeline
-- User Timeline
-- Authentication activity
-- File activity
-- Network activity
-- Registry activity
-- Related alerts
-
----
-
-## 4. Scope — What else was affected?
-
-Determine whether the activity is isolated or part of broader behavior.
-
-Questions include:
-
-- Are additional devices affected?
-- Are additional users involved?
-- Are there related alerts?
-- Did the process create additional files?
-- Did network communication occur?
-- Did similar activity occur elsewhere?
-
----
-
-## 5. Verdict — What does the evidence support?
-
-Determine the most defensible classification.
-
-Possible outcomes include:
-
-- Malicious
-- Authorized / expected
-- False positive
-- Benign
-- Insufficient evidence
-
----
-
-## 6. Response — What should happen next?
-
-Determine the appropriate action based on the evidence.
-
-Possible actions include:
-
-- Continue investigating
-- Collect additional evidence
-- Escalate
-- Monitor
-- Isolate the endpoint
-- Run an antivirus scan
-- Collect an investigation package
-- Use Live Response
-- Remediate
-- Close the incident
-
-The complete model is:
+- Where telemetry originates
+- How telemetry is collected
+- Where telemetry is stored
+- How security data is structured
+- How detections are created
+- Why an alert was generated
+- What evidence supports the alert
+- Which users, devices, resources, and processes are involved
+- How activity developed over time
+- How multiple signals relate to one another
+- How KQL can validate and extend an investigation
+- How hunting logic can become automated detection logic
+- How MITRE ATT&CK provides behavioral context
+- How analysts determine scope and intent
+- When response actions are justified
+- How findings should be documented
 
 ```text
+BUILD THE ENVIRONMENT
+        │
+        ▼
+VALIDATE THE TELEMETRY
+        │
+        ▼
+INVESTIGATE THE ENDPOINT
+        │
+        ▼
+UNDERSTAND XDR CORRELATION
+        │
+        ▼
+INVESTIGATE DEVICES & USERS
+        │
+        ▼
+QUERY CLOUD SIEM TELEMETRY
+        │
+        ▼
+IDENTIFY BEHAVIORAL PATTERNS
+        │
+        ▼
+UNDERSTAND DETECTION LOGIC
+        │
+        ▼
+MAP BEHAVIOR TO MITRE ATT&CK
+        │
+        ▼
+MAKE A DEFENSIBLE SECURITY DECISION
+```
+
+---
+
+# Final Technical Outcome
+
+This Week 17 project demonstrates practical exposure to the complete security-monitoring lifecycle:
+
+> **Telemetry Generation → Collection → Ingestion → Storage → Querying → Detection → Correlation → Investigation → Validation → Classification → Response → Documentation**
+
+The three labs demonstrate a progression from building the underlying Microsoft security environment, to investigating endpoint activity through Microsoft Defender XDR, to analyzing cloud telemetry and detection logic through Microsoft Sentinel and KQL.
+
+The key lesson is that the tools themselves are only one part of Security Operations.
+
+A strong analyst must understand:
+
+```text
+DATA
+  │
+  ▼
+TELEMETRY
+  │
+  ▼
 DETECTION
-    │
-    ▼
-ENTITY
-    │
-    ▼
+  │
+  ▼
+EVIDENCE
+  │
+  ▼
 CONTEXT
-    │
-    ▼
-SCOPE
-    │
-    ▼
-VERDICT
-    │
-    ▼
+  │
+  ▼
+CORRELATION
+  │
+  ▼
+INVESTIGATION
+  │
+  ▼
+VALIDATION
+  │
+  ▼
+DECISION
+  │
+  ▼
 RESPONSE
 ```
 
----
-
-# Lab 01 vs. Lab 02
-
-| Lab 01 — Environment & EDR Investigation | Lab 02 — Defender XDR Fundamentals |
-|---|---|
-| Built the Microsoft security environment | Operated the Defender XDR investigation environment |
-| Configured Microsoft Azure resources | Navigated the Defender XDR dashboard |
-| Created a dedicated resource group | Reviewed Device Inventory |
-| Created a Log Analytics workspace | Reviewed the centralized Incident Queue |
-| Enabled Microsoft Sentinel | Studied incident prioritization |
-| Configured Defender for Endpoint | Investigated incident correlation |
-| Onboarded a Windows endpoint | Distinguished incidents from alerts |
-| Troubleshot Defender services | Reviewed the incident Attack Story |
-| Validated endpoint telemetry | Investigated individual alerts |
-| Generated controlled security activity | Investigated evidence and entities |
-| Investigated an EDR detection | Pivoted into affected devices |
-| Analyzed process lineage | Reconstructed activity with Device Timeline |
-| Used Device Timeline | Expanded process-lineage analysis |
-| Hunted telemetry with KQL | Reviewed device alert history |
-| Used Advanced Hunting | Investigated user and identity context |
-| Correlated endpoint evidence | Reviewed User Timeline |
-| Classified authorized testing | Studied incident lifecycle management |
-| Performed secure cleanup | Evaluated endpoint response capabilities |
-
-Together:
-
-```text
-Lab 01
-"Can I build and validate the security environment?"
-                    │
-                    ▼
-Lab 02
-"Can I investigate and operate within that environment?"
-```
-
----
-
-# SIEM vs. EDR vs. XDR
-
-Week 17 reinforced the relationship between three major Security Operations technologies.
-
----
-
-## EDR — Microsoft Defender for Endpoint
-
-Endpoint Detection and Response provides deep endpoint visibility and response capabilities.
-
-```text
-Endpoint
-   │
-   ├── Processes
-   ├── Files
-   ├── Registry
-   ├── Network Activity
-   ├── Logons
-   ├── Command Lines
-   └── Security Detections
-```
-
-EDR helps answer:
-
-> **What happened on this endpoint?**
-
-Microsoft Defender for Endpoint provides the endpoint-level telemetry required to reconstruct suspicious host behavior.
-
----
-
-## XDR — Microsoft Defender XDR
-
-Extended Detection and Response correlates security information across supported security domains and entities.
-
-```text
-Alerts
-   +
-Devices
-   +
-Users
-   +
-Evidence
-   +
-Security Workloads
-        │
-        ▼
-Correlated Incident
-```
-
-XDR helps answer:
-
-> **How are these security signals related?**
-
-Microsoft Defender XDR allows an analyst to investigate the relationships between security signals rather than analyzing each detection independently.
-
----
-
-## SIEM — Microsoft Sentinel
-
-Security Information and Event Management provides centralized security monitoring, analytics, correlation, hunting, and Security Operations capabilities across broader data sources.
-
-```text
-Endpoints
-    +
-Identities
-    +
-Cloud
-    +
-Applications
-    +
-Network
-    +
-Security Products
-        │
-        ▼
-Centralized Security Data
-        │
-        ▼
-Microsoft Sentinel
-        │
-        ├── Analytics
-        ├── Incidents
-        ├── Hunting
-        ├── KQL
-        └── SOC Workflows
-```
-
-SIEM helps answer:
-
-> **What is happening across the broader environment?**
-
----
-
-# Combined Microsoft Security Operations Model
-
-```text
-                    MICROSOFT SECURITY OPERATIONS
-
-Microsoft Entra ID
-       │
-       ▼
-Identity & Administrative Context
-       │
-       ▼
-Microsoft Azure
-       │
-       ▼
-Azure Log Analytics
-       │
-       ▼
-Microsoft Sentinel
-       │
-       │ SIEM Visibility & Analytics
-       │
-       ├─────────────────────────────────┐
-       │                                 │
-       ▼                                 ▼
-Cross-Source Analytics            Microsoft Defender XDR
-                                         │
-                                         │ XDR Correlation
-                                         ▼
-                                      Incident
-                                         │
-                         ┌───────────────┼───────────────┐
-                         ▼               ▼               ▼
-                       Alerts          Devices          Users
-                                         │               │
-                                         ▼               ▼
-                                  Device Timeline   User Timeline
-                                         │
-                                         ▼
-                                  Process Lineage
-                                         │
-                                         ▼
-                                 Defender for Endpoint
-                                         │
-                                         ▼
-                                  Windows Endpoint
-```
-
-This architecture demonstrates how **identity, SIEM, XDR, and EDR capabilities complement one another during Security Operations investigations**.
-
----
-
-# Evidence Collected
-
-Portfolio evidence across Week 17 documents the progression from environment deployment into endpoint detection and XDR investigation.
-
-## Lab 01 Evidence
-
-Portfolio evidence for Lab 01 includes screenshots documenting:
-
-- Microsoft Entra ID environment configuration
-- Microsoft Azure security environment
-- Azure resource group
-- Azure Log Analytics workspace deployment
-- Microsoft Sentinel enablement
-- Microsoft Defender XDR configuration
-- Microsoft Defender for Endpoint onboarding
-- Windows 11 Enterprise endpoint configuration
-- Defender service validation
-- Device Inventory
-- Controlled detection activity
-- EDR alert investigation
-- Process-tree evidence
-- Device Timeline telemetry
-- Microsoft Defender Advanced Hunting
-- KQL query and results
-- Incident classification
-- Post-investigation cleanup
-
----
-
-## Lab 02 Evidence
-
-Portfolio evidence for Lab 02 includes:
-
-| Evidence | Screenshot Filename |
-|---|---|
-| Microsoft Defender XDR dashboard | `week17_Lab2_Defender_XDR_Dashboard.png` |
-| Endpoint Device Inventory | `week17_Lab2_Device_Inventory.png` |
-| Microsoft Defender for Endpoint device overview | `week17_Lab2_MDE_Device_Overview.png` |
-| Defender XDR Incident Queue | `week17_Lab2_Incident_Queue.png` |
-| Incident Attack Story | `week17_Lab2_Incident_Attack_Story.png` |
-| Alert details | `week17_Lab2_Alert_Details.png` |
-| Incident assets | `week17_Lab2_Incident_Assets.png` |
-| Evidence and response | `week17_Lab2_Evidence_and_Response.png` |
-| Device Timeline | `week17_Lab2_Device_Timeline.png` |
-| Device process tree | `week17_Lab2_Device_Process_Tree.png` |
-| Incident lifecycle management | `week17_Lab2_Incident_Lifecycle_Management.png` |
-| Device response actions | `week17_Lab2_Device_Response_Actions.png` |
-| User entity overview | `week17_Lab2_User_Entity_Overview.png` |
-| User Timeline | `week17_Lab2_User_Timeline.png` |
-
-The Lab 02 evidence was selected to tell an investigation story rather than simply document every page visited.
-
-```text
-Microsoft Defender XDR Dashboard
-              │
-              ▼
-        Device Inventory
-              │
-              ▼
-         Incident Queue
-              │
-              ▼
-           Incident
-              │
-              ▼
-        Attack Story
-              │
-              ▼
-            Alert
-              │
-              ▼
-      Evidence / Entities
-          ↙         ↘
-       Device       User
-          │           │
-          ▼           ▼
- Device Timeline  User Timeline
-          │
-          ▼
-     Process Tree
-          │
-          ▼
-   Analyst Assessment
-          │
-          ▼
-    Response Options
-```
-
-Sensitive identifiers, credentials, subscription information, tenant information, authentication information, personal account information, and other unnecessary private data are excluded or redacted from public portfolio evidence.
-
----
-
-# MITRE ATT&CK-Relevant Investigation Concepts
-
-Although the activity investigated during Week 17 involved authorized security testing rather than an uncontrolled real-world intrusion, the labs exercised analysis techniques relevant to behaviors encountered during genuine incidents.
-
-Relevant concepts included:
-
-- **Command and Scripting Interpreter**
-- **PowerShell**
-- **Process Execution**
-- **User Execution**
-- **Process Lineage**
-- **Parent-Child Process Relationships**
-- **Endpoint Telemetry Analysis**
-- **Identity Investigation**
-- **Security Event Correlation**
-- **Incident Scoping**
-
-MITRE ATT&CK mappings should always be based on the behavior actually observed in the evidence rather than assigned solely because an alert fired.
-
-The correct analytical sequence is:
-
-```text
-Observed Behavior
-       │
-       ▼
-Evidence Validation
-       │
-       ▼
-Behavior Interpretation
-       │
-       ▼
-Relevant ATT&CK Mapping
-```
-
-not:
-
-```text
-Alert Fired
-    │
-    ▼
-Automatically Assign Technique
-```
-
----
-
-# Key Takeaways
-
-### 1. Building the environment is part of security engineering
-
-A functioning EDR, XDR, and SIEM environment depends on identity, licensing, endpoints, cloud resources, sensors, connectors, permissions, networking, and telemetry pipelines working together.
-
-Understanding how these components connect is part of operating the security platform effectively.
-
-### 2. Successful deployment does not automatically mean successful telemetry collection
-
-An endpoint can appear configured while required services or telemetry pipelines are not functioning correctly.
-
-Security tooling must be validated through observable telemetry and controlled testing.
-
-### 3. An alert and an incident are not the same thing
-
-An alert represents a specific detection.
-
-An incident represents the broader security case that can correlate related alerts, evidence, devices, users, processes, and other investigation context.
-
-### 4. Detection does not automatically mean compromise
-
-An alert indicates that behavior matched security detection logic.
-
-The analyst must determine what the activity actually represents.
-
-### 5. Alerts require validation
-
-An alert should be treated as the beginning of an investigation.
-
-The underlying endpoint, identity, process, file, network, and timeline evidence should determine the conclusion.
-
-### 6. Correlation creates context
-
-A single process, authentication event, file, or network connection may be difficult to interpret in isolation.
-
-Relationships between those events can reveal the broader security story.
-
-### 7. Process lineage provides critical context
-
-Understanding what launched a process and what that process launched afterward can substantially change the interpretation of endpoint activity.
-
-### 8. A process name alone is rarely enough
-
-Legitimate tools such as PowerShell can be used for normal administration or malicious activity.
-
-Command-line arguments, parent processes, users, timestamps, child processes, files, and network behavior provide the context required for analysis.
-
-### 9. Device Timeline reconstructs endpoint behavior
-
-Device Timeline helps analysts determine what happened before, during, and after suspicious endpoint activity.
-
-This provides significantly more investigative context than an alert title alone.
-
-### 10. User Timeline adds identity context
-
-Endpoint activity and identity activity should not always be investigated separately.
-
-User Timeline provides another perspective for determining whether an account was involved in additional or suspicious activity.
-
-### 11. XDR investigation is entity-driven
-
-Analysts can pivot between alerts, devices, users, processes, files, IP addresses, and other evidence to understand relationships and determine scope.
-
-### 12. KQL enables independent validation
-
-Microsoft Defender Advanced Hunting allows analysts to search the underlying telemetry rather than relying exclusively on summarized detection information.
-
-### 13. Threat hunting should be hypothesis-driven
-
-Analysts should search and filter telemetry according to a specific investigative question.
-
-The goal is not to review every available event.
-
-The goal is to identify the evidence required to test an investigative hypothesis.
-
-### 14. SIEM, XDR, and EDR are complementary
-
-Microsoft Defender for Endpoint provides deep endpoint visibility.
-
-Microsoft Defender XDR correlates security information into unified investigations.
-
-Microsoft Sentinel provides broader SIEM visibility, analytics, hunting, and cross-source security monitoring.
-
-### 15. Incident management is operational work
-
-Security Operations involves prioritizing, assigning, investigating, classifying, responding to, documenting, and resolving security cases.
-
-The work does not end when an alert is acknowledged.
-
-### 16. Response actions require analyst judgment
-
-The availability of containment capabilities does not mean they should automatically be used.
-
-Response should be proportional to the available evidence, confidence, business context, and potential impact.
-
-### 17. Troubleshooting is a security skill
-
-Diagnosing endpoint onboarding, licensing, services, operating-system compatibility, permissions, connectivity, and telemetry issues is directly relevant to security engineering and Security Operations work.
-
-### 18. Authorized testing must be classified correctly
-
-A detection can be technically valid while the underlying behavior is expected.
-
-Authorized security testing should not automatically be labeled a false positive or a genuine compromise.
-
-### 19. Cleanup is part of the investigation lifecycle
-
-Temporary infrastructure, services, files, and testing artifacts should be removed when they are no longer required.
-
-### 20. Strong investigations are evidence-driven
-
-The objective is not to find evidence that supports the alert title.
-
-The objective is to determine which conclusion is best supported by the available evidence.
-
----
-
-# Professional Skills Demonstrated
-
-## Security Operations
-
-- SOC alert triage
-- Incident queue analysis
-- Incident prioritization
-- Incident investigation
-- Alert investigation
-- Attack-story analysis
-- Evidence correlation
-- Entity investigation
-- Incident classification
-- Case lifecycle management
-- Investigation documentation
-- Analyst decision-making
-
-## Microsoft Defender XDR
-
-- Defender XDR portal navigation
-- Incident correlation
-- Incident queue analysis
-- Attack-story analysis
-- Alert evidence review
-- Evidence and entity investigation
-- Device investigation
-- User investigation
-- Device Timeline analysis
-- User Timeline analysis
-- Process-tree analysis
-- Incident lifecycle management
-- Response-action evaluation
-
-## Endpoint Security
-
-- Microsoft Defender for Endpoint
-- Windows endpoint onboarding
-- Defender sensor validation
-- EDR telemetry analysis
-- Device investigation
-- Process analysis
-- Parent-child process analysis
-- Process lineage
-- Command-line analysis
-- Endpoint timeline reconstruction
-- Endpoint response awareness
-
-## Threat Hunting
-
-- Microsoft Defender Advanced Hunting
-- Kusto Query Language
-- `DeviceProcessEvents`
-- Process telemetry investigation
-- Command-line investigation
-- Time-based filtering
-- Device-based filtering
-- Process-based filtering
-- Field projection
-- Chronological analysis
-- Hypothesis-driven investigation
-- Evidence validation
-
-## Cloud Security
-
-- Microsoft Azure
-- Microsoft Entra ID
-- Microsoft Sentinel
-- Azure Log Analytics
-- Cloud security architecture
-- Security-service integration
-- Cloud resource configuration
-
-## Incident Response
-
-- Detection validation
-- Investigation
-- Context development
-- Evidence collection
-- Scoping
-- Classification
-- Containment evaluation
-- Remediation evaluation
-- Secure cleanup
-- Incident resolution
-- Documentation
-
-## Security Engineering
-
-- Security-platform deployment
-- Endpoint integration
-- Service validation
-- Licensing and dependency troubleshooting
-- Telemetry-pipeline validation
-- SIEM, XDR, and EDR integration
-- Security architecture validation
-
----
-
-# Combined SOC Investigation Methodology
-
-The combined Week 17 investigation methodology can be summarized as:
-
-```text
-1. Build Security Environment
-      │
-      ▼
-2. Configure Security Services
-      │
-      ▼
-3. Onboard Endpoint
-      │
-      ▼
-4. Validate Sensor & Telemetry
-      │
-      ▼
-5. Generate Controlled Activity
-      │
-      ▼
-6. Detect
-      │
-      ▼
-7. Validate Detection
-      │
-      ▼
-8. Identify Entities
-      │
-      ▼
-9. Establish Context
-      │
-      ▼
-10. Investigate Endpoint
-      │
-      ▼
-11. Analyze Process Lineage
-      │
-      ▼
-12. Review Device Timeline
-      │
-      ▼
-13. Investigate Identity Context
-      │
-      ▼
-14. Review User Timeline
-      │
-      ▼
-15. Hunt Telemetry with KQL
-      │
-      ▼
-16. Correlate Evidence
-      │
-      ▼
-17. Determine Scope
-      │
-      ▼
-18. Develop Analyst Verdict
-      │
-      ▼
-19. Classify Activity
-      │
-      ▼
-20. Evaluate Response
-      │
-      ▼
-21. Contain / Remediate if Required
-      │
-      ▼
-22. Perform Secure Cleanup
-      │
-      ▼
-23. Document & Resolve
-```
-
----
-
-# Week 17 Outcome
-
-Week 17 progressed beyond simply learning how to navigate individual Microsoft security products.
-
-The labs established an end-to-end Microsoft Security Operations workflow.
-
-```text
-Building the Cloud Security Environment
-                  │
-                  ▼
-Configuring Microsoft Entra ID
-                  │
-                  ▼
-Deploying Azure Resources
-                  │
-                  ▼
-Deploying Log Analytics
-                  │
-                  ▼
-Enabling Microsoft Sentinel
-                  │
-                  ▼
-Configuring Defender for Endpoint
-                  │
-                  ▼
-Onboarding an Enterprise Endpoint
-                  │
-                  ▼
-Validating Defender Services
-                  │
-                  ▼
-Validating Endpoint Telemetry
-                  │
-                  ▼
-Generating Controlled Security Activity
-                  │
-                  ▼
-Investigating an EDR Detection
-                  │
-                  ▼
-Analyzing Process Execution
-                  │
-                  ▼
-Reconstructing Endpoint Activity
-                  │
-                  ▼
-Hunting Raw Telemetry with KQL
-                  │
-                  ▼
-Understanding Defender XDR Correlation
-                  │
-                  ▼
-Navigating the Incident Queue
-                  │
-                  ▼
-Investigating Incident Attack Story
-                  │
-                  ▼
-Investigating Alerts & Evidence
-                  │
-                  ▼
-Pivoting Across Security Entities
-                  │
-                  ▼
-Investigating Device Context
-                  │
-                  ▼
-Reviewing Device Timeline
-                  │
-                  ▼
-Analyzing Process Lineage
-                  │
-                  ▼
-Investigating Identity Context
-                  │
-                  ▼
-Reviewing User Timeline
-                  │
-                  ▼
-Correlating Endpoint & Identity Evidence
-                  │
-                  ▼
-Determining Incident Scope
-                  │
-                  ▼
-Developing an Analyst Verdict
-                  │
-                  ▼
-Reviewing Response Capabilities
-                  │
-                  ▼
-Classifying & Resolving Activity
-                  │
-                  ▼
-Performing Secure Cleanup
-                  │
-                  ▼
-Documenting the Investigation
-```
-
-By completing these labs, I developed hands-on experience across the major layers of a Microsoft-focused Security Operations environment:
-
-```text
-Identity
-   +
-Cloud Infrastructure
-   +
-Centralized Logging
-   +
-SIEM
-   +
-XDR
-   +
-EDR
-   +
-Endpoint Telemetry
-   +
-Threat Hunting
-   +
-Entity Investigation
-   +
-Incident Investigation
-   +
-Incident Response
-```
-
-The resulting environment provides a foundation for more advanced exercises involving:
-
-- Microsoft Sentinel analytics
-- KQL threat hunting
-- Microsoft Defender XDR investigations
-- Endpoint attack simulation
-- Identity investigations
-- Detection engineering
-- Incident response
-- Endpoint containment
-- Cross-source security correlation
-- Threat hunting
-- Security automation
-- SOC investigation workflows
-
----
-
-# Final Takeaway
-
-The most important lesson from Week 17 was not simply how to navigate Microsoft Defender, deploy Microsoft Sentinel, or execute a KQL query.
-
-It was understanding how the individual layers of a modern Security Operations environment connect.
-
-```text
-Telemetry creates visibility.
-          │
-          ▼
-Detection creates attention.
-          │
-          ▼
-Correlation creates context.
-          │
-          ▼
-Investigation creates understanding.
-          │
-          ▼
-Evidence supports the verdict.
-          │
-          ▼
-Response reduces risk.
-```
-
-A security alert is not the final answer.
-
-It is a signal that requires context.
-
-The analyst must determine:
-
-```text
-What happened?
-
-Who or what was involved?
-
-What happened before and after it?
-
-How far did the activity extend?
-
-What does the evidence actually support?
-
-What action should be taken?
-```
-
-That process transforms raw security telemetry into an evidence-based security decision.
-
-**The alert is where the investigation begins—not where it ends.**
+That end-to-end understanding is the primary technical outcome of the **Microsoft Defender XDR and Microsoft Sentinel Security Operations** labs.
