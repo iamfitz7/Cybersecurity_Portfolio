@@ -1,1959 +1,866 @@
-# Week 17 — Microsoft Defender XDR, Microsoft Sentinel, Endpoint, Identity & Detection Engineering
+# Week 17 — Microsoft Defender XDR, Microsoft Sentinel, Endpoint, Identity, Cloud Security & Detection Engineering
 
-> **Focus:** Microsoft Defender XDR • Microsoft Defender for Endpoint • Microsoft Sentinel • Microsoft Entra ID • Azure Log Analytics • Kusto Query Language (KQL) • EDR • XDR • SIEM • Endpoint Security • Identity Security • Threat Hunting • Detection Engineering • Incident Investigation • Incident Response • PowerShell Investigation • Process Analysis • File Analysis • Network Analysis • Security Engineering • MITRE ATT&CK
+> **Focus:** Microsoft Defender XDR • Microsoft Defender for Endpoint • Microsoft Sentinel • Microsoft Entra ID • Azure Log Analytics • Azure RBAC • Network Security Groups • Kusto Query Language (KQL) • EDR • XDR • SIEM • Endpoint Security • Identity Security • Cloud Security • Threat Hunting • Detection Engineering • Security Automation • Incident Investigation • Incident Response • PowerShell Investigation • Process Analysis • File Analysis • Network Analysis • Security Engineering • Least Privilege • MITRE ATT&CK
 
 ---
 
 # Executive Summary
 
-Week 17 focused on building, operating, testing, troubleshooting, and investigating a Microsoft-based cybersecurity monitoring environment from the ground up.
+Week 17 focused on building, operating, testing, and investigating a Microsoft security environment across endpoint, identity, cloud, SIEM, detection, and automation technologies.
 
-Rather than beginning with an already configured SIEM or EDR environment, I worked through the security lifecycle from infrastructure and telemetry collection through detection, investigation, correlation, classification, and response decision-making.
+The goal was not simply to learn where features are located inside Microsoft security products.
 
-The week consisted of five connected hands-on labs:
+The goal was to understand how security data moves through an environment and how that data can be used to make evidence-based security decisions.
 
-| Lab | Project | Primary Focus |
+Throughout the week, I worked with:
+
+- Microsoft Azure
+- Microsoft Entra ID
+- Microsoft Defender XDR
+- Microsoft Defender for Endpoint
+- Microsoft Sentinel
+- Azure Log Analytics
+- Azure Activity Logs
+- Microsoft Entra sign-in logs
+- Azure Role-Based Access Control (RBAC)
+- Azure Network Security Groups
+- Kusto Query Language (KQL)
+- Advanced Hunting
+- Endpoint telemetry
+- Identity telemetry
+- Cloud administrative telemetry
+- Process telemetry
+- File telemetry
+- Network telemetry
+- Registry telemetry
+- Analytics rules
+- Alert generation
+- Incident investigation
+- Detection engineering
+- MITRE ATT&CK mapping
+- Least-privilege remediation
+- Security automation
+
+The week consisted of six connected hands-on labs.
+
+| Lab | Focus | Major Areas |
 | --- | --- | --- |
-| **Lab 01** | Microsoft Security Environment Setup & EDR Investigation | Azure, Defender for Endpoint, endpoint onboarding, telemetry validation, process investigation |
-| **Lab 02** | Microsoft Defender XDR Fundamentals | Alerts, incidents, devices, users, evidence, timelines, process lineage, response actions |
-| **Lab 03** | Microsoft Sentinel & KQL Fundamentals | SIEM architecture, Azure Activity, Log Analytics, KQL, analytics rules, MITRE ATT&CK |
-| **Lab 04** | Microsoft Entra Failed Login Investigation | Identity telemetry, `SigninLogs`, authentication analysis, detection engineering, incident investigation |
+| **Lab 01** | Microsoft Defender XDR & Defender for Endpoint Foundation | Endpoint onboarding, Defender validation, alerts, incidents, devices, users, response capabilities |
+| **Lab 02** | Microsoft Sentinel & Azure Log Analytics | SIEM deployment, data ingestion, Azure Activity, KQL, analytics rules, MITRE ATT&CK |
+| **Lab 03** | Microsoft Entra Identity Investigation | Sign-in telemetry, failed authentication, source IP analysis, authentication timelines |
+| **Lab 04** | Custom Detection Engineering | KQL detection development, scheduled analytics rules, troubleshooting, alert and incident validation |
 | **Lab 05** | Suspicious PowerShell Endpoint Investigation & Response | Advanced Hunting, encoded PowerShell, process ancestry, file/network telemetry, incident validation, containment assessment |
+| **Lab 06** | Azure RBAC Security Monitoring, Detection & Automated Triage | Azure RBAC, Azure Activity, privileged-access monitoring, KQL hunting, least privilege, Sentinel analytics, automation |
 
-Together, the labs covered the following security workflow:
-
-```text
-BUILD SECURITY INFRASTRUCTURE
-        ↓
-CONNECT SECURITY DATA
-        ↓
-ONBOARD ENDPOINT
-        ↓
-VALIDATE SECURITY SERVICES
-        ↓
-GENERATE CONTROLLED ACTIVITY
-        ↓
-VALIDATE TELEMETRY
-        ↓
-QUERY RAW EVENTS
-        ↓
-HUNT FOR SUSPICIOUS BEHAVIOR
-        ↓
-BUILD DETECTION LOGIC
-        ↓
-GENERATE ALERT
-        ↓
-CREATE INCIDENT
-        ↓
-INVESTIGATE ENTITIES
-        ↓
-RECONSTRUCT TIMELINE
-        ↓
-CORRELATE PROCESS / FILE / NETWORK / IDENTITY EVIDENCE
-        ↓
-ASSESS RISK
-        ↓
-EVALUATE CONTAINMENT
-        ↓
-MAKE EVIDENCE-BASED DECISION
-        ↓
-DOCUMENT & RESOLVE
-```
-
-The most important lesson from Week 17 was that security tools do not make the final investigation decision.
-
-They provide telemetry, detections, alerts, incidents, and response capabilities.
-
-The security professional still has to determine:
-
-> **What actually happened, what does the evidence mean, and what action is justified?**
-
----
-
-# Why This Project Matters
-
-This project demonstrates practical skills relevant across several cybersecurity career paths.
-
-These include:
-
-- Cybersecurity Analyst
-- SOC Analyst
-- Security Operations Analyst
-- Incident Response Analyst
-- Junior Incident Responder
-- Cyber Defense Analyst
-- Blue Team Analyst
-- Endpoint Security Analyst
-- Endpoint Detection and Response Analyst
-- Threat Detection Analyst
-- Threat Hunter
-- Detection Analyst
-- Detection Engineer
-- SIEM Engineer
-- Security Engineer
-- Security Operations Engineer
-- Cloud Security Analyst
-- Identity Security Analyst
-- Microsoft Security Analyst
-- Junior Security Engineer
-
-The project was intentionally built around concepts that transfer between security products.
-
-These concepts included:
-
-- Processes
-- Parent processes
-- Child processes
-- Command lines
-- Process IDs
-- Files
-- File paths
-- File hashes
-- Users
-- Authentication
-- Identity
-- IP addresses
-- Domains
-- Ports
-- Network connections
-- Registry activity
-- Logs
-- Telemetry
-- Detection logic
-- Alerts
-- Incidents
-- Timelines
-- Evidence
-- Risk
-- Containment
-- Response
-
-Understanding these concepts makes it easier to work across different SIEM, EDR, XDR, cloud, and endpoint security platforms.
+Together, these labs created a progression from building the security environment to investigating endpoint and identity behavior, engineering detections, monitoring privileged Azure activity, applying least privilege, and introducing security automation.
 
 ---
 
 # Week 17 Security Progression
 
-The five labs were intentionally connected.
+The labs were designed around increasingly deeper security questions.
 
 ## Lab 01
 
-> **Can I build and validate the Microsoft security environment?**
+> **Can I build and validate a working Microsoft endpoint security environment?**
 
 ## Lab 02
 
-> **Can I investigate security activity using Microsoft Defender XDR?**
+> **Can I collect cloud security telemetry, query it, and understand how Sentinel converts telemetry into detections?**
 
 ## Lab 03
 
-> **Can I understand where SIEM telemetry comes from and analyze it using KQL?**
+> **Can I investigate Microsoft Entra authentication activity and determine what actually happened to an identity?**
 
 ## Lab 04
 
-> **Can I investigate suspicious authentication, convert hunting logic into a detection, generate an incident, and make a defensible analyst decision?**
+> **Can I convert manually validated KQL hunting logic into a working scheduled detection and troubleshoot it when it fails?**
 
 ## Lab 05
 
 > **Can I reconstruct suspicious PowerShell activity across process, file, network, user, timeline, and incident evidence and determine whether endpoint containment is justified?**
 
+## Lab 06
+
+> **Can I monitor Azure RBAC permission changes, detect successful role assignments, investigate the identity and cloud evidence, remove unnecessary access, and automate part of the alert-triage workflow?**
+
 The overall progression was:
 
 ```text
-SECURITY INFRASTRUCTURE
+BUILD SECURITY ENVIRONMENT
         ↓
-ENDPOINT ONBOARDING
+VALIDATE TELEMETRY
         ↓
-ENDPOINT TELEMETRY
+QUERY DATA
         ↓
-EDR DETECTION
+HUNT FOR BEHAVIOR
         ↓
-XDR INVESTIGATION
+BUILD DETECTIONS
         ↓
-CLOUD TELEMETRY
+GENERATE ALERTS
         ↓
-SIEM ANALYSIS
+INVESTIGATE INCIDENTS
         ↓
-KQL HUNTING
+CORRELATE EVIDENCE
         ↓
-IDENTITY TELEMETRY
+ASSESS RISK
         ↓
-DETECTION ENGINEERING
+MAKE RESPONSE DECISIONS
         ↓
-ALERT GENERATION
+MONITOR PRIVILEGED ACCESS
         ↓
-INCIDENT INVESTIGATION
+REMEDIATE EXCESSIVE PERMISSIONS
         ↓
-ENDPOINT THREAT HUNTING
+VERIFY LEAST PRIVILEGE
         ↓
-PROCESS ANCESTRY
-        ↓
-FILE CORRELATION
-        ↓
-NETWORK CORRELATION
-        ↓
-RESPONSE ASSESSMENT
-        ↓
-EVIDENCE-BASED DISPOSITION
+AUTOMATE APPROPRIATE ACTIONS
 ```
 
 ---
 
 # Week 17 Objectives
 
-The main objectives were to:
+The main objectives of Week 17 were to:
 
-- Build a functional Microsoft cloud security lab
-- Configure Microsoft Sentinel
-- Configure Azure Log Analytics
-- Configure Microsoft Defender XDR
+- Build a working Microsoft security lab
 - Configure Microsoft Defender for Endpoint
-- Establish a Microsoft Entra ID identity environment
-- Onboard a Windows 11 Enterprise endpoint
-- Validate Defender for Endpoint services
-- Troubleshoot endpoint onboarding
-- Validate endpoint telemetry
-- Generate controlled endpoint activity
-- Investigate Defender alerts
-- Investigate Defender incidents
-- Understand alerts versus incidents
-- Investigate device entities
-- Investigate user entities
-- Review Device Timeline activity
-- Analyze process execution
-- Analyze process ancestry
-- Analyze command lines
-- Correlate process IDs
-- Investigate encoded PowerShell
+- Validate endpoint onboarding
+- Understand Defender XDR alerts and incidents
+- Investigate devices and users
+- Work with endpoint response capabilities
+- Configure Microsoft Sentinel
+- Work with Azure Log Analytics
+- Connect Azure security telemetry
+- Validate Azure Activity ingestion
+- Configure Microsoft Entra sign-in telemetry
+- Investigate authentication activity
+- Use KQL for security investigations
+- Create scheduled analytics rules
+- Generate controlled security activity
+- Validate detection logic
+- Troubleshoot false negatives
+- Map detections to MITRE ATT&CK
+- Investigate suspicious PowerShell
+- Reconstruct parent-child process relationships
 - Investigate file creation
-- Investigate network communication
-- Investigate Registry activity
-- Use Microsoft Defender Advanced Hunting
-- Query endpoint telemetry with KQL
-- Configure Microsoft Sentinel telemetry ingestion
-- Understand data connectors
-- Understand diagnostic settings
-- Investigate `AzureActivity`
-- Investigate `SigninLogs`
-- Use `where`, `project`, `summarize`, `count()`, and `dcount()`
-- Reconstruct authentication timelines
-- Analyze authentication failure reasons
-- Compare successful and failed authentication
-- Build a scheduled Sentinel analytics rule
-- Configure detection thresholds
-- Configure rule scheduling
-- Configure entity mappings
-- Add alert enrichment
-- Map behavior to MITRE ATT&CK
-- Test detection logic
-- Troubleshoot a detection false negative
-- Correct detection logic
-- Generate an alert
-- Generate an incident
-- Validate incident evidence
-- Distinguish telemetry from alerts
-- Distinguish suspicious behavior from compromise
-- Evaluate endpoint response capabilities
+- Investigate network connections
+- Review Registry activity
+- Analyze Device Timeline
+- Validate incident timestamps
+- Evaluate endpoint isolation
 - Make evidence-based containment decisions
-- Document professional investigation findings
+- Work with Azure RBAC
+- Compare Reader and Contributor permissions
+- Monitor Azure role assignments
+- Detect successful RBAC write activity
+- Investigate privileged cloud changes
+- Remove unnecessary permissions
+- Apply least privilege
+- Verify final access
+- Create Sentinel automation rules
+- Scope automation to specific detections
+- Automate appropriate alert handling
 
 ---
 
-# Security Architecture
-
-## Cloud & Identity Layer
-
-```text
-Microsoft Entra ID
-        │
-        ├── Users
-        ├── Authentication
-        ├── Identity
-        └── Administrative Access
-        │
-        ▼
-Microsoft Azure
-        │
-        ▼
-RG-Microsoft-Security-Lab
-        │
-        ▼
-LAW-Microsoft-Security-Lab
-        │
-        ▼
-Microsoft Sentinel
-        │
-        ├── Data Connectors
-        ├── Logs
-        ├── Analytics
-        ├── Incidents
-        ├── Hunting
-        ├── Workbooks
-        ├── Watchlists
-        └── Automation
-```
-
-## Endpoint Layer
-
-```text
-Windows 11 Enterprise
-        │
-        ▼
-Microsoft Defender for Endpoint
-        │
-        ▼
-Endpoint Telemetry
-        │
-        ▼
-Microsoft Defender XDR
-        │
-        ├── Alerts
-        ├── Incidents
-        ├── Devices
-        ├── Users
-        ├── Evidence
-        ├── Entities
-        ├── Device Timeline
-        ├── Advanced Hunting
-        └── Response Actions
-```
-
-## SIEM / Detection Layer
-
-```text
-Security Activity
-        ↓
-Data Source
-        ↓
-Connector / Diagnostic Setting
-        ↓
-Log Analytics
-        ↓
-Security Table
-        ↓
-KQL
-        ↓
-Detection Logic
-        ↓
-Analytics Rule
-        ↓
-Alert
-        ↓
-Incident
-        ↓
-Investigation
-        ↓
-Response Decision
-```
-
----
-
-# Technologies & Platforms
+# Technologies Used
 
 | Technology | Purpose |
 | --- | --- |
-| **Microsoft Defender XDR** | Unified investigation, detection, evidence correlation, and incident response |
-| **Microsoft Defender for Endpoint** | Endpoint telemetry, EDR, investigation, hunting, and response |
-| **Microsoft Sentinel** | Cloud-native SIEM, detection, analytics, hunting, and incident management |
-| **Microsoft Entra ID** | Identity and authentication telemetry |
-| **Azure Log Analytics** | Central telemetry storage and KQL querying |
-| **Azure Activity Log** | Azure control-plane and administrative activity |
-| **Microsoft Defender Advanced Hunting** | Cross-telemetry endpoint investigation |
-| **KQL** | Security hunting, filtering, aggregation, correlation, and detection logic |
-| **Windows 11 Enterprise** | Monitored enterprise endpoint |
-| **PowerShell** | Controlled testing and endpoint activity generation |
-| **Oracle VirtualBox** | Virtualization platform |
-| **MITRE ATT&CK** | Standardized behavior and technique mapping |
+| **Microsoft Azure** | Cloud infrastructure and security lab environment |
+| **Microsoft Entra ID** | Identity, authentication, users, groups, and sign-in telemetry |
+| **Microsoft Defender XDR** | Cross-domain security operations and incident investigation |
+| **Microsoft Defender for Endpoint** | Endpoint detection, telemetry, investigation, and response |
+| **Microsoft Sentinel** | SIEM, analytics, detection, incident creation, and automation |
+| **Azure Log Analytics** | Security telemetry storage and KQL querying |
+| **Azure Activity Logs** | Azure management-plane and administrative telemetry |
+| **Azure RBAC** | Resource authorization, role assignments, permission review, and least privilege |
+| **Azure Network Security Groups** | Cloud network security configuration |
+| **Advanced Hunting** | Endpoint and identity threat hunting |
+| **Kusto Query Language** | Security telemetry querying and detection logic |
+| **DeviceProcessEvents** | Process execution telemetry |
+| **DeviceFileEvents** | File activity telemetry |
+| **DeviceNetworkEvents** | Endpoint network telemetry |
+| **DeviceRegistryEvents** | Registry activity telemetry |
+| **SigninLogs** | Microsoft Entra authentication telemetry |
+| **AzureActivity** | Azure administrative activity |
+| **Sentinel Analytics Rules** | Scheduled detection logic |
+| **Sentinel Automation Rules** | Automated security workflow actions |
+| **MITRE ATT&CK** | Standardized security behavior mapping |
+| **Windows 11 Enterprise** | Monitored endpoint |
+| **PowerShell** | Controlled security activity generation and investigation |
+| **VirtualBox** | Virtualized lab environment |
 
 ---
 
-# Core Security Tables Used
-
-| Table | Investigation Purpose |
-| --- | --- |
-| `DeviceInfo` | Endpoint inventory and device information |
-| `DeviceProcessEvents` | Process execution, command lines, users, process IDs, and ancestry |
-| `DeviceFileEvents` | File creation and filesystem activity |
-| `DeviceNetworkEvents` | Network connections, domains, IPs, ports, and protocols |
-| `DeviceRegistryEvents` | Registry activity and possible persistence evidence |
-| `DeviceEvents` | Additional endpoint security telemetry |
-| `AzureActivity` | Azure administrative and control-plane activity |
-| `SigninLogs` | Microsoft Entra interactive authentication |
-| `SecurityAlert` | Security alert telemetry |
-| `SecurityIncident` | Microsoft Sentinel incident information |
-
----
-
-# Lab 01 — Microsoft Security Environment Setup & EDR Investigation
+# Lab 01 — Microsoft Defender XDR & Defender for Endpoint Foundation
 
 ## Objective
 
-Build the Microsoft security infrastructure required for later investigations and validate the environment through a controlled endpoint-security exercise.
+The first lab focused on building the endpoint security foundation needed for the rest of Week 17.
 
-The objective was not simply:
+The main goal was to understand how an endpoint becomes visible inside Microsoft Defender and how security telemetry can then support detection and investigation.
 
-> **Turn Microsoft Defender on.**
-
-The objective was to understand the endpoint security pipeline:
+The workflow was:
 
 ```text
-Windows Endpoint
+WINDOWS ENDPOINT
         ↓
-Defender for Endpoint Sensor
+DEFENDER FOR ENDPOINT
         ↓
-Endpoint Telemetry
+ENDPOINT TELEMETRY
         ↓
-Microsoft Cloud Analytics
+MICROSOFT DEFENDER XDR
         ↓
-Detection Logic
+ALERTS
         ↓
-Defender Alert
+INCIDENTS
         ↓
-Analyst Investigation
+INVESTIGATION
+        ↓
+RESPONSE
 ```
 
 ---
 
-## Environment Setup
+## Endpoint Environment
 
-The implementation included:
+I used a Windows 11 Enterprise virtual machine as the monitored endpoint.
 
-1. Preparing the Windows endpoint
-2. Establishing the Microsoft Entra environment
-3. Configuring Microsoft Azure
-4. Creating `RG-Microsoft-Security-Lab`
-5. Creating `LAW-Microsoft-Security-Lab`
-6. Enabling Microsoft Sentinel
-7. Configuring Microsoft Defender XDR
-8. Configuring Microsoft Defender for Endpoint
-9. Onboarding Windows 11 Enterprise
-10. Validating Microsoft Defender services
-11. Confirming the endpoint in Device Inventory
-12. Generating controlled security activity
-13. Investigating resulting telemetry
-14. Reviewing process execution
-15. Reviewing process lineage
-16. Reviewing Device Timeline
-17. Hunting endpoint telemetry with KQL
-18. Correlating alerts with raw telemetry
-19. Classifying the activity
+Before relying on Defender telemetry, I needed to make sure the endpoint could properly support Defender for Endpoint.
 
----
+This required checking:
 
-## Endpoint Onboarding Troubleshooting
-
-During the initial onboarding process, the Microsoft Defender for Endpoint `SENSE` service was unavailable.
-
-I checked the service using:
-
-```powershell
-sc query sense
-```
-
-I validated the Windows edition using:
-
-```powershell
-DISM /Online /Get-CurrentEdition
-```
-
-I also investigated Defender for Endpoint capability information:
-
-```powershell
-DISM.EXE /Online /Get-CapabilityInfo /CapabilityName:Microsoft.Windows.Sense.Client~~~~
-```
+- Windows edition
+- Defender components
+- Security services
+- Endpoint onboarding
+- Device visibility
+- Sensor health
 
 This reinforced an important security engineering lesson:
 
-> A security product depends on operating-system capabilities, services, licensing, connectivity, permissions, configuration, and telemetry.
+> **Security monitoring depends on the underlying system being correctly configured.**
 
-Troubleshooting therefore requires identifying which dependency is failing rather than repeatedly attempting the same command.
+If the endpoint sensor is not working, later detections and investigations may be incomplete.
 
 ---
 
-## Controlled Detection Testing
+## Defender for Endpoint Onboarding
 
-After successfully onboarding the endpoint, I generated controlled Defender test activity.
+I worked through the endpoint onboarding process and validated that the Windows system appeared in Microsoft Defender.
+
+The process required more than simply running an onboarding command.
+
+I also reviewed service behavior and Windows security capabilities when the device did not immediately behave as expected.
+
+The troubleshooting process followed:
 
 ```text
-Controlled Activity
+CHECK WINDOWS EDITION
         ↓
-Endpoint Sensor
+CHECK DEFENDER CAPABILITIES
         ↓
-Process Telemetry
+CHECK REQUIRED SERVICES
         ↓
-Defender Cloud Analytics
+RUN ONBOARDING
         ↓
-Detection
+VERIFY DEVICE
         ↓
-Security Alert
-        ↓
-Investigation
+VERIFY TELEMETRY
 ```
 
-The resulting investigation included suspicious PowerShell activity.
+This gave me practical experience troubleshooting the security platform itself rather than assuming every problem was caused by an attacker.
 
 ---
 
-## Process Tree Analysis
+## Defender XDR Investigation Model
 
-The observed execution chain included:
+Once the endpoint was available, I reviewed how Microsoft Defender organizes security information.
+
+Important concepts included:
 
 ```text
-userinit.exe
-     ↓
-explorer.exe
-     ↓
-cmd.exe
-     ↓
-powershell.exe
+ALERT
+        ↓
+INCIDENT
+        ↓
+DEVICE
+        ↓
+USER
+        ↓
+EVIDENCE
+        ↓
+TIMELINE
+        ↓
+RESPONSE ACTION
 ```
 
-Instead of analyzing `powershell.exe` by itself, I reviewed:
+An alert represents a security detection.
 
-- Parent process
-- User context
-- Command line
-- Execution order
-- Related activity
+An incident can group related alerts and evidence into a broader investigation.
 
-This demonstrated why process lineage matters during endpoint investigations.
+This distinction became important throughout the remaining labs.
 
 ---
 
-## Advanced Hunting
+## Alerts Are Starting Points
 
-I used Microsoft Defender Advanced Hunting to validate the underlying endpoint telemetry.
-
-Example:
-
-```kusto
-DeviceProcessEvents
-| where Timestamp > ago(2h)
-| where DeviceName =~ "<LAB-ENDPOINT>"
-| where FileName in~ ("powershell.exe", "invoice.exe")
-    or ProcessCommandLine contains "test-MDATP-test"
-| project
-    Timestamp,
-    DeviceName,
-    AccountName,
-    FileName,
-    ProcessCommandLine,
-    InitiatingProcessFileName,
-    InitiatingProcessCommandLine
-| order by Timestamp desc
-```
-
-This demonstrated that I could independently validate what happened instead of trusting the alert title alone.
-
----
-
-## Lab 01 Final Classification
+One of the major lessons from Lab 01 was:
 
 ```text
-Detection Result:
-VALID DETECTION
-
-Activity:
-AUTHORIZED SECURITY TESTING
-
-Compromise:
-NO
-
-Disposition:
-EXPECTED / SECURITY TESTING
+ALERT
+  ≠
+FINAL CONCLUSION
 ```
 
-### Main Lesson
+An alert tells the analyst that something deserves investigation.
 
-> **A detection can correctly identify suspicious-looking behavior even when the behavior was intentionally generated.**
+It does not automatically prove:
 
-Detection accuracy and malicious intent are different questions.
+- Malware
+- Account compromise
+- Persistence
+- Lateral movement
+- Data theft
+- Command-and-control
+- Malicious intent
 
----
-
-# Lab 02 — Microsoft Defender XDR Fundamentals
-
-## Objective
-
-Develop practical familiarity with Microsoft Defender XDR and understand how security investigations move from high-level incidents into alerts, devices, users, processes, evidence, timelines, and response actions.
-
----
-
-## Investigation Workflow
-
-```text
-Defender XDR
-        ↓
-Incident Queue
-        ↓
-Incident
-        ↓
-Alert
-        ↓
-Evidence & Entities
-       ↙         ↘
-   Device        User
-      ↓            ↓
- Timeline       Context
-      ↓
-Process Lineage
-      ↓
-Additional Evidence
-      ↓
-Analyst Decision
-```
+The analyst still needs to investigate the evidence.
 
 ---
 
-# Alert vs. Incident
+## Endpoint Response Capabilities
 
-## Alert
+I also reviewed Defender endpoint response capabilities such as:
 
-An alert represents a specific detection.
-
-```text
-Telemetry
-    ↓
-Detection Logic
-    ↓
-Alert
-```
-
-An alert may contain:
-
-- Alert title
-- Severity
-- Detection source
-- User
-- Device
-- Process
-- File
-- IP address
-- Timestamp
-- Evidence
-- MITRE ATT&CK information
-
-> **An alert is a reason to investigate. It is not automatically proof of compromise.**
-
----
-
-## Incident
-
-An incident represents a broader security case.
-
-```text
-Alert 1 ─────┐
-              │
-Alert 2 ──────┼────► Incident
-              │
-Alert 3 ─────┘
-```
-
-An incident may connect:
-
-- Alerts
-- Users
-- Devices
-- Processes
-- Files
-- IP addresses
-- Evidence
-- Investigation context
-- Response actions
-
-The investigation therefore moves from:
-
-> **What does this alert say?**
-
-to:
-
-> **What happened across the environment and how are the signals connected?**
-
----
-
-# Device Investigation
-
-Device entity pages were reviewed for:
-
-- Device identity
-- Operating system
-- Risk
-- Exposure
-- Logged-on users
-- Alerts
-- Incidents
-- Software
+- Device isolation
+- Antivirus scanning
+- Live Response
+- Investigation package collection
+- Automated investigation
+- Device Timeline
 - Security recommendations
-- Timeline
-- Response options
+
+The main lesson was that response capabilities should not be used automatically just because they are available.
+
+Response should match the evidence and risk.
 
 ---
 
-# Device Timeline
+# Lab 01 Key Lessons
 
-Device Timeline helped reconstruct activity chronologically.
-
-```text
-Activity Before Detection
-        ↓
-Process Execution
-        ↓
-Related Activity
-        ↓
-Detection
-        ↓
-Post-Detection Activity
-```
-
-This helps answer:
-
-- What happened first?
-- What caused the detection?
-- What happened immediately beforehand?
-- What happened afterward?
-- Did activity continue?
-- Did additional processes become involved?
+- Endpoint telemetry depends on correct onboarding.
+- Security tooling can fail because of configuration problems.
+- Device health should be validated before trusting missing telemetry.
+- Alerts are investigation starting points.
+- Incidents provide broader context than individual alerts.
+- Devices and users are important investigation pivots.
+- Response actions should be evidence-based.
 
 ---
 
-# Process Lineage
-
-A suspicious process should not automatically be investigated in isolation.
-
-Instead of:
-
-```text
-powershell.exe
-```
-
-the investigation should consider:
-
-```text
-Parent Process
-      ↓
-Process
-      ↓
-Command Line
-      ↓
-Child Processes
-      ↓
-Files
-      ↓
-Network
-      ↓
-Registry
-```
-
-This provides substantially more context.
-
----
-
-# User Investigation
-
-User entity information was reviewed to understand:
-
-- Identity
-- Related alerts
-- Associated devices
-- Activity
-- Related evidence
-- Whether the behavior matched expected activity
-
-This became especially important during the identity investigation in Lab 04.
-
----
-
-# Response Capabilities Reviewed
-
-Microsoft Defender response capabilities included:
-
-- Isolate device
-- Run antivirus scan
-- Collect investigation package
-- Initiate Live Response
-- Restrict application execution
-- Investigate device
-- Review remediation activity
-
-These capabilities were evaluated but not automatically executed.
-
-> **The existence of a response action does not mean it should immediately be used.**
-
-Response should match:
-
-- Evidence
-- Severity
-- Scope
-- Confidence
-- Ongoing risk
-- Business impact
-
----
-
-# Lab 02 Major Lesson
-
-```text
-ALERT
-   ↓
-INVESTIGATE
-   ↓
-CORRELATE
-   ↓
-VALIDATE
-   ↓
-DECIDE
-```
-
-not:
-
-```text
-ALERT
-   ↓
-ASSUME COMPROMISE
-```
-
----
-
-# Lab 03 — Microsoft Sentinel & KQL Fundamentals
+# Lab 02 — Microsoft Sentinel & Azure Log Analytics
 
 ## Objective
 
-Develop practical experience with the Microsoft Sentinel SIEM data pipeline and understand how cloud activity becomes searchable telemetry and eventually detection logic.
+Lab 02 expanded the environment from endpoint security into cloud SIEM monitoring.
 
-The main question was:
+The main goal was to understand how Microsoft Sentinel receives security telemetry and how KQL can be used to investigate it.
 
-> **Can I understand where SIEM data comes from, validate that it exists, query it, identify patterns, and understand how those queries become detections?**
-
----
-
-# Lab 03 Data Pipeline
+The basic architecture was:
 
 ```text
-Generate Azure Activity
+AZURE / SECURITY DATA
         ↓
-Verify Source Activity
+LOG ANALYTICS
         ↓
-Azure Activity Connector
-        ↓
-Log Analytics
-        ↓
-AzureActivity
+MICROSOFT SENTINEL
         ↓
 KQL
         ↓
-Filtering
+ANALYTICS RULES
         ↓
-Aggregation
-        ↓
-Behavior Analysis
-        ↓
-Analytics Rule
-        ↓
-MITRE ATT&CK
-        ↓
-Alert
-        ↓
-Incident
+ALERTS / INCIDENTS
 ```
 
 ---
 
-# Lab Environment
+## Azure Log Analytics
+
+Azure Log Analytics provided the workspace where security telemetry could be stored and queried.
+
+This introduced one of the most important Week 17 concepts:
 
 ```text
-Microsoft Azure
-        │
-        ├── RG-Microsoft-Security-Lab
-        │
-        └── LAW-Microsoft-Security-Lab
-                    │
-                    ▼
-             Microsoft Sentinel
-                    │
-                    ├── Azure Activity
-                    ├── Logs
-                    ├── Analytics
-                    ├── Incidents
-                    ├── Workbooks
-                    └── Watchlists
+NO DATA
+   ↓
+NO QUERY
+   ↓
+NO DETECTION
+   ↓
+NO ALERT
+   ↓
+NO INVESTIGATION
 ```
 
-A temporary resource group was used to safely generate observable Azure administrative telemetry:
-
-```text
-rg-sentinel-kql-lab3-test
-```
+Before creating detections, I first needed to verify that the required data actually existed.
 
 ---
 
-# Understanding the SIEM Data Pipeline
+## Azure Activity
 
-One of the most important lessons was that enabling Sentinel does not automatically mean every security event is available.
-
-```text
-Activity
-   ↓
-Data Source
-   ↓
-Connector
-   ↓
-Log Analytics
-   ↓
-Table
-   ↓
-KQL
-   ↓
-Detection / Investigation
-```
-
-Possible failure points include:
+I worked with the:
 
 ```text
-No telemetry
-    ↓
-Nothing to ingest
+AzureActivity
 ```
 
-```text
-Connector not configured
-    ↓
-Telemetry does not reach workspace
-```
+table.
 
-```text
-Wrong table
-    ↓
-Query returns nothing useful
-```
+Azure Activity provides management-plane telemetry involving Azure resources.
 
-```text
-Wrong schema understanding
-    ↓
-Investigation logic fails
-```
+This can include:
 
----
+- Resource creation
+- Resource deletion
+- Resource modification
+- Administrative operations
+- Security configuration changes
+- Role assignments
+- Network configuration
 
-# Log Analytics vs. Microsoft Sentinel
-
-## Log Analytics
-
-Log Analytics stores and queries telemetry.
-
-```text
-Log Analytics
-    ├── Tables
-    ├── Rows
-    ├── Columns
-    ├── Retention
-    └── Queries
-```
-
-## Microsoft Sentinel
-
-Sentinel adds security operations functionality.
-
-```text
-Microsoft Sentinel
-    ├── Data Connectors
-    ├── Analytics Rules
-    ├── Hunting
-    ├── Incidents
-    ├── Workbooks
-    ├── Watchlists
-    └── Automation
-```
-
-Relationship:
-
-```text
-Telemetry
-    ↓
-Log Analytics
-    ↓
-Structured Data
-    ↓
-Microsoft Sentinel
-    ↓
-Detect
-Investigate
-Hunt
-Respond
-```
-
----
-
-# Azure Activity Investigation
-
-Important fields included:
-
-- `TimeGenerated`
-- `OperationNameValue`
-- `ActivityStatusValue`
-- `ResourceGroup`
-- `Caller`
-- `CallerIpAddress`
-- `SubscriptionId`
-- `ResourceId`
-- `CategoryValue`
-
----
-
-# KQL Fundamentals
-
-## Basic Query
+A basic investigation could begin with:
 
 ```kusto
 AzureActivity
-| take 10
-```
-
-## Selecting Useful Fields
-
-```kusto
-AzureActivity
-| project
-    TimeGenerated,
-    OperationNameValue,
-    ActivityStatusValue,
-    ResourceGroup,
-    Caller,
-    CallerIpAddress
 | take 20
 ```
 
-## Time Filtering
+From there, I could narrow the data using operators such as:
 
 ```kusto
-AzureActivity
-| where TimeGenerated >= ago(24h)
+where
+project
+summarize
+order by
 ```
-
-## Resource Filtering
-
-```kusto
-AzureActivity
-| where TimeGenerated >= ago(24h)
-| where ResourceGroup =~ "rg-sentinel-kql-lab3-test"
-| project
-    TimeGenerated,
-    OperationNameValue,
-    ActivityStatusValue,
-    ResourceGroup,
-    Caller
-| order by TimeGenerated desc
-```
-
-## Counting Events
-
-```kusto
-AzureActivity
-| where TimeGenerated >= ago(24h)
-| count
-```
-
-## Status Aggregation
-
-```kusto
-AzureActivity
-| where TimeGenerated >= ago(24h)
-| summarize EventCount = count() by ActivityStatusValue
-| order by EventCount desc
-```
-
-## Top Operations
-
-```kusto
-AzureActivity
-| where TimeGenerated >= ago(24h)
-| summarize EventCount = count() by OperationNameValue
-| top 10 by EventCount desc
-```
-
-These queries moved the analysis from:
-
-> **What does one event say?**
-
-to:
-
-> **What pattern does the collection of events show?**
 
 ---
 
-# Sentinel Analytics Rules
+## KQL Fundamentals
 
-A scheduled analytics rule can be understood as:
+Week 17 introduced and reinforced several KQL concepts.
 
-```text
-Security Telemetry
-       ↓
-Scheduled KQL Query
-       ↓
-Detection Condition
-       │
-       ├── Not Met → Continue Monitoring
-       │
-       └── Met
-             ↓
-           Alert
-             ↓
-          Incident
+### Filtering
+
+```kusto
+AzureActivity
+| where TimeGenerated > ago(24h)
 ```
 
-A rule can include:
+### Selecting Fields
 
-- Name
-- Description
-- Severity
-- Required data sources
-- KQL
-- Query frequency
-- Lookback period
-- Threshold
-- Entity mappings
-- Incident settings
-- MITRE ATT&CK mapping
-- Automated response
+```kusto
+AzureActivity
+| project TimeGenerated, Caller, OperationNameValue
+```
+
+### Counting Events
+
+```kusto
+AzureActivity
+| summarize count()
+```
+
+### Grouping
+
+```kusto
+AzureActivity
+| summarize count() by Caller
+```
+
+### Sorting
+
+```kusto
+AzureActivity
+| order by TimeGenerated desc
+```
+
+The important skill was not memorizing commands.
+
+It was learning how to convert a security question into a query.
+
+---
+
+# Lab 02 Detection Engineering Introduction
+
+I also reviewed how KQL can become automated Sentinel detection logic.
+
+```text
+SECURITY QUESTION
+        ↓
+KQL HUNT
+        ↓
+VALIDATE RESULTS
+        ↓
+ANALYTICS RULE
+        ↓
+ALERT
+        ↓
+INCIDENT
+```
+
+This became the foundation for later custom detections.
 
 ---
 
 # MITRE ATT&CK
 
-A Sentinel rule related to suspicious resource deployment was reviewed.
+Sentinel analytics rules can be mapped to MITRE ATT&CK behavior.
 
-It mapped to:
+This provides standardized security context.
+
+However:
 
 ```text
-Tactic:
-Impact
-
-Technique:
-T1496 — Resource Hijacking
+MITRE MAPPING
+      ≠
+PROOF OF ATTACK
 ```
 
-The important lesson was:
+MITRE ATT&CK helps describe behavior.
 
-> **MITRE ATT&CK provides standardized language for behavior. It does not prove attacker intent.**
+The investigation still determines what actually happened.
 
 ---
 
-# Lab 03 Final Result
+# Lab 02 Key Lessons
 
-```text
-Microsoft Sentinel:
-CONFIGURED
-
-Log Analytics:
-VALIDATED
-
-Azure Activity:
-INGESTED
-
-AzureActivity:
-QUERYABLE
-
-KQL:
-SUCCESSFULLY USED
-
-Aggregation:
-COMPLETED
-
-Analytics Rules:
-REVIEWED
-
-MITRE ATT&CK:
-APPLIED
-
-SIEM DATA PIPELINE:
-UNDERSTOOD & VALIDATED
-```
+- Telemetry must exist before detection.
+- Log Analytics provides the data foundation for Sentinel.
+- KQL allows analysts to turn raw events into investigation evidence.
+- Sentinel analytics rules automate detection logic.
+- MITRE ATT&CK provides standardized behavioral context.
+- A successful query is not automatically a good detection.
 
 ---
 
-# Lab 04 — Microsoft Entra Failed Login Investigation, Detection Engineering & Incident Response
+# Lab 03 — Microsoft Entra Identity Investigation
 
 ## Objective
 
-Investigate repeated Microsoft Entra failed sign-ins from beginning to end and determine whether the authentication behavior represented normal activity, authorized testing, or a possible identity attack.
+Lab 03 focused on identity security.
 
-Lab 04 combined:
+The goal was to investigate Microsoft Entra authentication activity and understand how failed sign-ins appear in security telemetry.
 
-```text
-IDENTITY
-   +
-AUTHENTICATION
-   +
-LOG INGESTION
-   +
-KQL
-   +
-SIEM
-   +
-DETECTION ENGINEERING
-   +
-ALERT TRIAGE
-   +
-INCIDENT INVESTIGATION
-   +
-ANALYST JUDGMENT
-```
-
-The central question was:
-
-> **Can I investigate failed authentication using raw evidence, build detection logic around the behavior, and make a final decision supported by evidence?**
-
----
-
-# Security Scenario
-
-Repeated authentication failures may represent:
-
-- User password mistakes
-- Forgotten passwords
-- Expired credentials
-- Applications using stale credentials
-- Authentication configuration problems
-- Password guessing
-- Brute force
-- Password spraying
-- Credential stuffing
-- Authorized testing
-
-Therefore:
+The workflow was:
 
 ```text
-FAILED LOGIN
-    ≠
-CONFIRMED ATTACK
-```
-
-A stronger investigation asks:
-
-```text
-WHO?
-Which account?
-
-FROM WHERE?
-Which IP?
-
-WHEN?
-Which timestamps?
-
-HOW OFTEN?
-How many attempts?
-
-HOW QUICKLY?
-Seconds, minutes, or hours?
-
-WHAT APPLICATION?
-What was accessed?
-
-WHY?
-Why did authentication fail?
-
-WHAT HAPPENED NEXT?
-More failures or eventual success?
-
-WHAT IS THE CONTEXT?
-Known user? Known IP? Controlled test?
-
-WHAT SHOULD HAPPEN?
-Close? Monitor? Escalate? Contain?
-```
-
----
-
-# Identity Telemetry Architecture
-
-```text
-Microsoft Entra ID
+USER AUTHENTICATION
         ↓
-Interactive Sign-In Activity
+MICROSOFT ENTRA ID
         ↓
-SignInLogs Diagnostic Category
+SIGN-IN LOGS
         ↓
-Entra Diagnostic Setting
-        ↓
-LAW-Microsoft-Security-Lab
-        ↓
-SigninLogs
-        ↓
-Microsoft Sentinel
+LOG ANALYTICS
         ↓
 KQL
         ↓
-Scheduled Analytics Rule
-        ↓
-Alert
-        ↓
-Microsoft Defender Incident
-        ↓
-Investigation
-        ↓
-Disposition
+IDENTITY INVESTIGATION
 ```
 
 ---
 
-# Phase 1 — Testing Telemetry
+# Sign-In Telemetry
 
-I first tested:
+The main table used was:
+
+```text
+SigninLogs
+```
+
+Important fields included:
+
+- `TimeGenerated`
+- `UserPrincipalName`
+- `IPAddress`
+- `AppDisplayName`
+- `ResultType`
+- `ResultDescription`
+- `AuthenticationRequirement`
+- `ConditionalAccessStatus`
+
+These fields helped answer:
+
+```text
+WHO attempted authentication?
+        ↓
+WHEN did it happen?
+        ↓
+WHERE did it come from?
+        ↓
+WHICH application was targeted?
+        ↓
+DID it succeed?
+        ↓
+WHY did it fail?
+```
+
+---
+
+# Missing SigninLogs Troubleshooting
+
+An important part of the lab occurred when expected Entra sign-in data was not initially available in Log Analytics.
+
+Instead of assuming the query was wrong, I worked through the telemetry pipeline.
+
+```text
+MICROSOFT ENTRA ID
+        ↓
+DIAGNOSTIC SETTINGS
+        ↓
+LOG ANALYTICS WORKSPACE
+        ↓
+SIGNINLOGS TABLE
+        ↓
+KQL
+```
+
+This reinforced a broader troubleshooting method:
+
+```text
+SOURCE
+   ↓
+CONNECTOR / SENSOR
+   ↓
+WORKSPACE
+   ↓
+TABLE
+   ↓
+QUERY
+   ↓
+DETECTION
+```
+
+---
+
+# Failed Authentication Investigation
+
+I generated controlled failed authentication activity and investigated it using KQL.
+
+A query could begin with:
 
 ```kusto
 SigninLogs
-| take 10
-```
-
-Initially, no records were returned.
-
-I then checked which tables contained data:
-
-```kusto
-search *
-| summarize Events=count() by $table
-| sort by Events desc
-```
-
-The workspace contained other telemetry, but `SigninLogs` was not being populated.
-
-This established:
-
-```text
-Log Analytics:
-WORKING
-
-Sentinel:
-WORKING
-
-Other Telemetry:
-WORKING
-
-Entra Sign-In Telemetry:
-MISSING
-```
-
-The lesson:
-
-> **A query cannot investigate data that was never collected.**
-
----
-
-# Phase 2 — Configuring Entra Diagnostic Settings
-
-Microsoft Entra diagnostic settings were configured to send:
-
-```text
-AuditLogs
-SigninLogs
-```
-
-to:
-
-```text
-LAW-Microsoft-Security-Lab
-```
-
-The pipeline became:
-
-```text
-Microsoft Entra
-      ↓
-Sign-In Activity
-      ↓
-Diagnostic Settings
-      ↓
-Log Analytics
-      ↓
-SigninLogs
-      ↓
-Microsoft Sentinel
-```
-
-Another important lesson:
-
-> **Configuration is not validation.**
-
-I still needed to prove that telemetry arrived.
-
----
-
-# Phase 3 — Controlled Authentication Activity
-
-A dedicated lab account was used to safely generate known failed authentication.
-
-```text
-Controlled Failed Login
-        ↓
-Microsoft Entra
-        ↓
-Diagnostic Setting
-        ↓
-Log Analytics
-        ↓
-SigninLogs
-        ↓
-Investigation
-```
-
-This separated two questions:
-
-> **Did the authentication happen?**
-
-from:
-
-> **Did the detection identify it?**
-
----
-
-# Phase 4 — Initial Investigation
-
-```kusto
-SigninLogs
+| where TimeGenerated > ago(24h)
 | where ResultType != 0
-| project
-    TimeGenerated,
-    UserPrincipalName,
-    UserDisplayName,
-    IPAddress,
-    Location,
-    AppDisplayName,
-    ResourceDisplayName,
-    ClientAppUsed,
-    ResultType,
-    ResultDescription,
-    ConditionalAccessStatus,
-    AuthenticationRequirement
-| sort by TimeGenerated desc
 ```
 
-Important investigation fields included:
+I then reviewed:
 
-| Field | Question Answered |
-| --- | --- |
-| `TimeGenerated` | When did it happen? |
-| `UserPrincipalName` | Which identity? |
-| `IPAddress` | Which source IP? |
-| `Location` | What geographic context exists? |
-| `AppDisplayName` | Which application? |
-| `ResultType` | Success or failure? |
-| `ResultDescription` | Why did authentication fail? |
+- User
+- Source IP
+- Failure volume
+- Failure timing
+- Failure reason
+- Application
+- Successful authentication afterward
 
 ---
 
-# Failed Sign-ins by User
+# Why Success After Failure Matters
 
-```kusto
-SigninLogs
-| where ResultType != 0
-| summarize FailedSignins = count() by UserPrincipalName
-| sort by FailedSignins desc
-```
-
-This changed the question from:
-
-> Failed logins exist.
-
-to:
-
-> Which identities are experiencing them?
-
----
-
-# Failed Sign-ins by IP
-
-```kusto
-SigninLogs
-| where ResultType != 0
-| summarize
-    FailedSignins = count(),
-    TargetedUsers = dcount(UserPrincipalName)
-    by IPAddress
-| sort by FailedSignins desc
-```
-
-This allowed me to distinguish:
-
-```text
-1 IP
-100 failures
-1 user
-```
-
-from:
-
-```text
-1 IP
-100 failures
-50 users
-```
-
-The second pattern may be more consistent with password spraying.
-
-Neither proves an attack without additional evidence.
-
----
-
-# Authentication Timeline
-
-```kusto
-let TargetUser = "<LAB-ACCOUNT>";
-SigninLogs
-| where UserPrincipalName =~ TargetUser
-| project
-    TimeGenerated,
-    UserPrincipalName,
-    IPAddress,
-    Location,
-    AppDisplayName,
-    ClientAppUsed,
-    ResultType,
-    ResultDescription
-| sort by TimeGenerated asc
-```
-
-Chronological reconstruction helped determine:
-
-- What happened first
-- How quickly attempts occurred
-- Whether failures continued
-- Whether authentication eventually succeeded
-
----
-
-# Success vs. Failure Correlation
-
-```kusto
-let TargetUser = "<LAB-ACCOUNT>";
-SigninLogs
-| where UserPrincipalName =~ TargetUser
-| extend Outcome = iff(ResultType == 0, "SUCCESS", "FAILURE")
-| project
-    TimeGenerated,
-    Outcome,
-    UserPrincipalName,
-    IPAddress,
-    Location,
-    AppDisplayName,
-    ResultType,
-    ResultDescription
-| sort by TimeGenerated asc
-```
-
-Compare:
-
-```text
-FAIL
-FAIL
-FAIL
-```
-
-with:
-
-```text
-FAIL
-FAIL
-FAIL
-SUCCESS
-```
-
-The second deserves additional investigation.
-
----
-
-# Failure Reason Analysis
-
-```kusto
-SigninLogs
-| where ResultType != 0
-| summarize
-    FailureCount = count()
-    by ResultType, ResultDescription
-| sort by FailureCount desc
-```
-
-This moved the analysis from:
-
-```text
-Authentication Failed
-```
-
-to:
-
-```text
-WHY did authentication fail?
-```
-
----
-
-# Creating the Detection
-
-I created:
-
-```text
-Repeated Failed Microsoft Entra Sign-ins
-```
-
-Configuration:
-
-```text
-Severity:
-Medium
-
-Rule Type:
-Scheduled
-
-MITRE ATT&CK:
-T1110 — Brute Force
-
-Run Frequency:
-5 minutes
-
-Lookback:
-10 minutes
-
-Incident Creation:
-Enabled
-```
-
----
-
-# Entity Mapping
-
-## Account
-
-```text
-Name
-→ AccountName
-
-UPNSuffix
-→ AccountUPNSuffix
-```
-
-## IP
-
-```text
-Address
-→ IPAddress
-```
-
-Custom alert details included:
-
-```text
-FailedAttempts
-FirstAttempt
-LastAttempt
-```
-
----
-
-# Detection Engineering Failure
-
-The first version used:
-
-```kusto
-| summarize
-    FailedAttempts = count()
-    by UserPrincipalName, IPAddress, bin(TimeGenerated, 5m)
-| where FailedAttempts >= 3
-```
-
-It returned:
-
-```text
-0 results
-```
-
-even though the authentication failures existed.
-
-Instead of assuming Sentinel was broken, I returned to the raw telemetry.
-
-```text
-DATA INGESTION:
-WORKING
-
-SIGNINLOGS:
-WORKING
-
-FAILED LOGIN EVENTS:
-PRESENT
-
-DETECTION:
-NOT MATCHING
-```
-
-Therefore, the problem was the detection logic.
-
----
-
-# Root Cause — Time Bucket Boundary
-
-The attempts crossed a fixed five-minute boundary.
+Repeated failed authentication followed by a successful sign-in can deserve additional attention.
 
 Conceptually:
 
 ```text
-8:29:59 → Bucket 1
-8:32:11 → Bucket 2
-8:33:19 → Bucket 2
+FAIL
+   ↓
+FAIL
+   ↓
+FAIL
+   ↓
+SUCCESS
 ```
 
-The query saw:
+This does not automatically prove account compromise.
 
-```text
-8:25–8:30
-1 failure
-
-8:30–8:35
-2 failures
-```
-
-The threshold required:
-
-```text
-FailedAttempts >= 3
-```
-
-Neither bucket contained three failures.
-
-This produced one of the most important lessons of Week 17:
-
-> **A detection query can be syntactically correct and still be behaviorally wrong.**
+However, it can increase the importance of the investigation.
 
 ---
 
-# Corrected Detection
+# Lab 03 Key Lessons
+
+- Identity telemetry is critical to modern security investigations.
+- Failed authentication needs context.
+- Source IP addresses can support investigation.
+- Authentication timelines matter.
+- Failure reasons matter.
+- Success after repeated failure can increase risk.
+- Missing telemetry should be troubleshot from the source forward.
+
+---
+
+# Lab 04 — Custom Detection Engineering
+
+## Objective
+
+Lab 04 focused on turning manually investigated authentication behavior into a repeatable Sentinel detection.
+
+This lab was especially important because the first version of the detection did not behave as expected.
+
+That failure became part of the learning process.
+
+---
+
+# Initial Detection Goal
+
+The goal was to detect repeated failed authentication attempts against a Microsoft Entra identity.
+
+The basic concept was:
+
+```text
+MULTIPLE FAILED LOGINS
+        ↓
+SAME USER
+        ↓
+SHORT TIME PERIOD
+        ↓
+DETECTION
+```
+
+I first verified that the underlying events existed.
+
+Then I created the detection logic.
+
+---
+
+# Detection Logic Problem
+
+The first version grouped authentication events using fixed five-minute time buckets.
+
+Conceptually:
 
 ```kusto
-SigninLogs
-| where ResultType != 0
-| extend
-    AccountName = tostring(split(UserPrincipalName, "@")[0]),
-    AccountUPNSuffix = tostring(split(UserPrincipalName, "@")[1])
-| summarize
-    FailedAttempts = count(),
-    FirstAttempt = min(TimeGenerated),
-    LastAttempt = max(TimeGenerated)
-    by UserPrincipalName, AccountName, AccountUPNSuffix, IPAddress
-| where FailedAttempts >= 3
-| extend TimeGenerated = LastAttempt
-| project
-    TimeGenerated,
-    UserPrincipalName,
-    AccountName,
-    AccountUPNSuffix,
-    IPAddress,
-    FailedAttempts,
-    FirstAttempt,
-    LastAttempt
+bin(TimeGenerated, 5m)
 ```
 
-The corrected query successfully matched.
+This appeared reasonable.
+
+However, the controlled failed logins occurred near the boundary between two fixed time buckets.
+
+Instead of:
 
 ```text
-TELEMETRY:
-✓
-
-QUERY:
-✓
-
-AGGREGATION:
-✓
-
-THRESHOLD:
-✓
-
-ENTITY FIELDS:
-✓
-
-DETECTION:
-✓
+Bucket A:
+Failure 1
+Failure 2
+Failure 3
 ```
+
+the events became:
+
+```text
+Bucket A:
+Failure 1
+
+Bucket B:
+Failure 2
+Failure 3
+```
+
+The threshold was never reached.
+
+The query executed successfully.
+
+But the detection logic did not represent the intended behavior.
 
 ---
 
-# Alert & Incident Generation
+# Detection Engineering Lesson
 
-Fresh failed authentication generated:
+This created one of the most important lessons of Week 17:
 
-```text
-Failed Login
-      ↓
-Failed Login
-      ↓
-Failed Login
-      ↓
-SigninLogs
-      ↓
-Scheduled Sentinel Rule
-      ↓
-FailedAttempts >= 3
-      ↓
-Detection Match
-      ↓
-Alert
-      ↓
-Incident
-```
+> **A query that executes successfully is not automatically a good detection.**
 
-The resulting incident was:
+Detection engineering requires more than valid syntax.
 
-```text
-Repeated Failed Microsoft Entra Sign-ins
-```
-
-with:
-
-```text
-Severity:
-Medium
-```
+The logic must correctly represent the behavior being detected.
 
 ---
 
-# Incident Investigation
+# Troubleshooting Process
 
-I reviewed:
+I worked backward through the detection pipeline.
 
-- Incident name
-- Severity
-- Status
-- Alert
-- Account entity
+```text
+NO ALERT
+   ↓
+CHECK ANALYTICS RULE
+   ↓
+CHECK QUERY
+   ↓
+CHECK QUERY RESULTS
+   ↓
+CHECK RAW SIGNINLOGS
+   ↓
+CONFIRM EVENTS EXIST
+   ↓
+IDENTIFY GROUPING PROBLEM
+   ↓
+CORRECT LOGIC
+   ↓
+RETEST
+```
+
+After correcting the query, I generated new controlled activity.
+
+The updated rule successfully produced the expected security detection.
+
+---
+
+# Alert and Incident Validation
+
+After the corrected analytics rule ran, I validated:
+
+- Alert creation
+- Incident creation
+- User context
 - Source IP
-- Detection evidence
-- Failed attempt count
-- Authentication timing
-- Query information
-- Incident activity
+- Authentication evidence
+- Detection timestamps
+- Rule logic
 
-The key distinction became:
-
-```text
-DETECTION QUESTION
-
-Did repeated failed authentication occur?
-        ↓
-YES
-```
-
-versus:
-
-```text
-INVESTIGATION QUESTION
-
-Was the activity unauthorized or malicious?
-        ↓
-REQUIRES CONTEXT
-```
-
----
-
-# Lab 04 Final Decision
-
-The failures had been intentionally generated.
-
-```text
-Did the failures happen?
-YES
-
-Did Sentinel detect them?
-YES
-
-Did the rule behave correctly?
-YES
-
-Was the activity authorized?
-YES
-
-Was compromise identified?
-NO
-```
+The activity was real, but it was generated intentionally for the lab.
 
 Final disposition:
 
 ```text
-Incident:
-Repeated Failed Microsoft Entra Sign-ins
+DETECTION:
+VALID
 
-Severity:
-Medium
+ACTIVITY:
+REAL
 
-Status:
-Resolved
-
-Classification:
-Informational / Expected Confirmed Activity
-
-Detection:
-Successful
-
-Unauthorized Compromise:
-Not Identified
-```
-
-This was not simply a "false positive."
-
-The detection correctly identified the behavior.
-
-The investigation established that the behavior had an authorized explanation.
-
----
-
-# Lab 04 Major Lessons
-
-1. A SIEM cannot investigate telemetry it never received.
-2. Always validate the source data.
-3. Authentication failures require context.
-4. Timeline analysis changes the meaning of events.
-5. Success after repeated failures deserves additional attention.
-6. Raw logs, alerts, and incidents serve different purposes.
-7. Detection logic must be behaviorally tested.
-8. Troubleshooting should isolate the broken layer.
-9. A correct detection does not automatically mean malicious intent.
-
----
-
-# Lab 04 Final Result
-
-```text
-Data Collection:
-SUCCESSFUL
-
-SigninLogs Ingestion:
-SUCCESSFUL
-
-KQL Investigation:
-SUCCESSFUL
-
-Authentication Analysis:
-SUCCESSFUL
-
-Detection Rule:
-SUCCESSFUL
-
-Detection Troubleshooting:
-SUCCESSFUL
-
-MITRE ATT&CK:
-T1110 — Brute Force
-
-Alert Generation:
-SUCCESSFUL
-
-Incident Generation:
-SUCCESSFUL
-
-Incident Investigation:
-SUCCESSFUL
-
-Final Status:
-RESOLVED
-
-Final Classification:
-EXPECTED CONFIRMED ACTIVITY
-
-Confirmed Compromise:
+MALICIOUS:
 NO
+
+CONTEXT:
+AUTHORIZED TESTING
 ```
+
+---
+
+# Lab 04 Key Lessons
+
+- Detection logic must be behaviorally tested.
+- Raw telemetry is essential when troubleshooting detections.
+- Fixed time buckets can create false negatives.
+- A successful KQL query can still contain flawed detection logic.
+- Alerts should be validated against source events.
+- A valid detection can still represent expected activity.
 
 ---
 
@@ -1961,265 +868,55 @@ NO
 
 ## Objective
 
-Lab 05 expanded the endpoint investigation side of Week 17.
+Lab 05 focused on deeper endpoint investigation.
 
-The central question was:
+The goal was to generate controlled PowerShell activity and reconstruct what happened using Microsoft Defender telemetry.
 
-> **What did PowerShell actually do?**
-
-Rather than assuming PowerShell was malicious because it used suspicious-looking options, I generated controlled PowerShell activity and reconstructed its behavior using Microsoft Defender endpoint telemetry.
-
-The investigation included:
+The activity included:
 
 - Encoded PowerShell
-- Full command lines
-- User context
-- Parent processes
-- Child processes
-- Process IDs
-- File activity
-- Network activity
-- Registry investigation
-- Device Timeline
-- Existing incident validation
-- Endpoint response assessment
-- Containment decision-making
+- Child-process creation
+- Command execution
+- File creation
+- HTTPS network activity
 
----
+The investigation asked:
 
-# Lab 05 Environment
-
-```text
-Operating System:
-Windows 11 Enterprise
-
-Defender Device:
-desktop-3sepq1q
-
-Local IP:
-10.0.2.15
-
-Virtualization:
-Oracle VirtualBox
-
-Network:
-NAT
-```
-
-The endpoint was onboarded into Microsoft Defender for Endpoint and actively sending telemetry.
-
----
-
-# Defender Protection Verification
-
-Before generating controlled activity, I verified Defender protection.
-
-```text
-AntivirusEnabled:
-True
-
-RealTimeProtectionEnabled:
-True
-
-BehaviorMonitorEnabled:
-True
-
-IoavProtectionEnabled:
-True
-
-IsTamperProtected:
-True
-```
-
-Security intelligence was also updated.
-
-This established a known monitoring baseline before testing.
+> **What did PowerShell actually do?**
 
 ---
 
 # Controlled PowerShell Activity
 
-I generated harmless activity that could resemble attacker behavior during an investigation.
+The activity intentionally generated security-relevant behavior.
 
-The controlled activity included:
+This included an encoded PowerShell command.
 
-1. Base64-encoded PowerShell execution
-2. File creation
-3. HTTPS communication
-4. PowerShell launching CMD
-5. CMD launching WHOAMI
+Encoded PowerShell deserves attention because attackers may use encoding to make commands harder to quickly interpret.
 
-No malware was intentionally downloaded or executed.
+However:
+
+```text
+ENCODED POWERSHELL
+        ≠
+MALWARE
+```
+
+The investigation still needs to determine what the command actually did.
 
 ---
 
-# Ground Truth
+# DeviceProcessEvents Investigation
 
-Known artifacts included:
-
-```text
-week17-lab5.txt
-week17-example.html
-week17-user.txt
-```
-
-Known processes included:
+I used:
 
 ```text
-powershell.exe
-cmd.exe
-whoami.exe
-```
-
-Known network activity included:
-
-```text
-example.com
-TCP 443
-```
-
-Creating known ground truth allowed me to compare:
-
-```text
-WHAT I KNOW I DID
-```
-
-against:
-
-```text
-WHAT DEFENDER TELEMETRY SHOWS
-```
-
----
-
-# Encoded PowerShell
-
-A harmless PowerShell command was converted into Base64 and executed using:
-
-```powershell
-powershell.exe -NoProfile -EncodedCommand <Base64-data>
-```
-
-The encoded command created:
-
-```text
-week17-lab5.txt
-```
-
-Important lesson:
-
-```text
--EncodedCommand
-      ≠
-Automatic Malware
-```
-
-Encoding is a security signal.
-
-It is not a final verdict.
-
-Legitimate scripts, administrators, automation platforms, software, and attackers may all use encoded PowerShell.
-
----
-
-# Advanced Hunting
-
-The primary endpoint tables were:
-
-```text
-DeviceInfo
 DeviceProcessEvents
-DeviceFileEvents
-DeviceNetworkEvents
-DeviceRegistryEvents
-DeviceEvents
 ```
 
----
+to investigate process execution.
 
-# PowerShell Process Investigation
-
-```kusto
-DeviceProcessEvents
-| where Timestamp > ago(1d)
-| where DeviceName =~ "desktop-3sepq1q"
-| where FileName in~ ("powershell.exe", "pwsh.exe")
-| project
-    Timestamp,
-    DeviceName,
-    AccountName,
-    InitiatingProcessFileName,
-    InitiatingProcessCommandLine,
-    FileName,
-    ProcessCommandLine,
-    ProcessId,
-    InitiatingProcessId,
-    SHA1
-| order by Timestamp desc
-```
-
-This exposed:
-
-- Timestamp
-- User
-- Process
-- Full command line
-- Initiating process
-- Initiating command line
-- Process ID
-- Initiating process ID
-- Hash information
-
----
-
-# Encoded PowerShell Hunting
-
-```kusto
-DeviceProcessEvents
-| where Timestamp > ago(1d)
-| where DeviceName =~ "desktop-3sepq1q"
-| where FileName =~ "powershell.exe"
-| where ProcessCommandLine contains "-EncodedCommand"
-| project
-    Timestamp,
-    DeviceName,
-    AccountName,
-    InitiatingProcessFileName,
-    InitiatingProcessCommandLine,
-    ProcessCommandLine,
-    ProcessId,
-    InitiatingProcessId,
-    SHA1
-| order by Timestamp desc
-```
-
-Defender successfully returned:
-
-```text
-powershell.exe -NoProfile -EncodedCommand ...
-```
-
-The correct investigation model became:
-
-```text
-OBSERVATION
-Encoded PowerShell occurred
-        ↓
-QUESTION
-What was encoded?
-        ↓
-QUESTION
-What process launched it?
-        ↓
-QUESTION
-What happened afterward?
-```
-
----
-
-# Parent & Child Process Analysis
-
-The main controlled process chain was:
+The evidence showed a process relationship involving:
 
 ```text
 powershell.exe
@@ -2229,598 +926,241 @@ cmd.exe
 whoami.exe
 ```
 
-Telemetry showed:
-
-```text
-InitiatingProcessFileName = powershell.exe
-FileName                  = cmd.exe
-```
-
-followed by:
-
-```text
-InitiatingProcessFileName = cmd.exe
-FileName                  = whoami.exe
-```
-
-This demonstrated process ancestry.
+This was more useful than looking at `whoami.exe` alone.
 
 ---
 
 # Why Process Ancestry Matters
 
-These are all legitimate Windows executables:
+A process name without context may tell only a small part of the story.
 
-```text
-powershell.exe
-cmd.exe
-whoami.exe
-```
-
-Seeing:
+Compare:
 
 ```text
 whoami.exe
-```
-
-alone provides limited information.
-
-Seeing:
-
-```text
-powershell.exe
-      ↓
-cmd.exe
-      ↓
-whoami.exe
-```
-
-provides much more context.
-
-Process ancestry is valuable across:
-
-- Incident response
-- Endpoint security
-- Threat hunting
-- Malware investigations
-- SOC investigations
-- Detection engineering
-- Cyber defense
-- Security engineering
-
----
-
-# Process ID Correlation
-
-I also used:
-
-```text
-ProcessId
-InitiatingProcessId
-```
-
-to support the parent-child relationships.
-
-Conceptually:
-
-```text
-cmd.exe
-PID 6772
-    ↓
-whoami.exe
-InitiatingProcessId 6772
-```
-
-This strengthened the execution-chain reconstruction.
-
----
-
-# Focused Process Timeline
-
-```kusto
-DeviceProcessEvents
-| where Timestamp > ago(1d)
-| where DeviceName =~ "desktop-3sepq1q"
-| where ProcessCommandLine contains "EncodedCommand"
-    or ProcessCommandLine contains "week17-user.txt"
-    or ProcessCommandLine contains "whoami"
-| project
-    Timestamp,
-    AccountName,
-    InitiatingProcessFileName,
-    FileName,
-    ProcessCommandLine,
-    ProcessId,
-    InitiatingProcessId
-| order by Timestamp asc
-```
-
-This reconstructed the relevant execution in chronological order.
-
----
-
-# File Investigation
-
-Using `DeviceFileEvents`, I identified:
-
-```text
-week17-example.html
 ```
 
 with:
 
 ```text
-ActionType:
-FileCreated
-
-InitiatingProcessFileName:
 powershell.exe
+      ↓
+cmd.exe
+      ↓
+whoami.exe
 ```
 
-The evidence chain became:
+The second view provides execution context.
 
-```text
-PowerShell
-    ↓
-Web Request
-    ↓
-File Creation
-    ↓
-week17-example.html
-```
+Process ancestry can help determine:
+
+- What launched a process
+- What the process launched
+- Whether the chain makes sense
+- Whether scripting was involved
+- Whether activity matches known attack behavior
 
 ---
 
-# Network Investigation
+# Command-Line Analysis
 
-PowerShell made a harmless HTTPS request to:
+Full command-line information was important during the investigation.
 
-```text
-https://example.com
-```
+A process name may appear normal while the command-line arguments reveal suspicious behavior.
 
-Defender recorded:
+I reviewed:
 
-```text
-Initiating Process:
-powershell.exe
+- Executable
+- Command line
+- Encoded arguments
+- Parent process
+- Child process
+- Process IDs
+- Timestamps
 
-Remote URL:
-example.com
+This reinforced:
 
-Remote IP:
-104.20.23.154
-
-Remote Port:
-443
-
-Protocol:
-Tcp
-
-Action:
-ConnectionSuccess
-```
-
-This was a major distinction.
-
-A command containing:
-
-```text
-https://example.com
-```
-
-shows what PowerShell was instructed to do.
-
-`DeviceNetworkEvents` showing:
-
-```text
-example.com
-104.20.23.154
-443
-Tcp
-ConnectionSuccess
-```
-
-shows observed network behavior.
+> **Process names provide identity. Command lines provide behavior.**
 
 ---
 
-# File + Network Correlation
+# DeviceFileEvents Investigation
 
-The combined evidence showed:
-
-```text
-powershell.exe
-      ↓
-example.com
-      ↓
-104.20.23.154
-      ↓
-TCP 443
-      ↓
-ConnectionSuccess
-      ↓
-week17-example.html
-```
-
-Different telemetry answered different questions:
+I used:
 
 ```text
-DeviceProcessEvents
-→ What executed?
-
 DeviceFileEvents
-→ What happened to the filesystem?
-
-DeviceNetworkEvents
-→ Where did the process communicate?
 ```
 
-Together, the tables produced a stronger reconstruction.
+to investigate file activity.
+
+The controlled PowerShell activity created:
+
+```text
+week17-example.html
+```
+
+File telemetry helped answer:
+
+```text
+DID THE COMMAND CHANGE THE FILESYSTEM?
+        ↓
+WHAT FILE?
+        ↓
+WHEN?
+        ↓
+WHICH PROCESS WAS INVOLVED?
+```
+
+---
+
+# DeviceNetworkEvents Investigation
+
+I used:
+
+```text
+DeviceNetworkEvents
+```
+
+to determine whether PowerShell actually created network activity.
+
+The evidence showed communication with:
+
+```text
+example.com
+```
+
+and the remote IP:
+
+```text
+104.20.23.154
+```
+
+using:
+
+```text
+TCP 443
+```
+
+The telemetry showed:
+
+```text
+ConnectionSuccess
+```
+
+This distinction was important.
+
+A URL appearing inside a command represents intent.
+
+A successful `DeviceNetworkEvents` record represents observed network behavior.
+
+```text
+COMMAND CONTAINS URL
+        ↓
+INTENT
+```
+
+versus:
+
+```text
+DeviceNetworkEvents
+        ↓
+ConnectionSuccess
+        ↓
+OBSERVED BEHAVIOR
+```
 
 ---
 
 # Registry Investigation
 
-I checked `DeviceRegistryEvents` for relevant PowerShell Registry modifications.
+I also reviewed Registry telemetry.
 
-No Registry persistence associated with the controlled Lab 05 activity was identified.
+Registry activity can help identify:
 
-This was useful negative evidence.
+- Persistence
+- Run keys
+- Configuration changes
+- Application behavior
+- Security-setting changes
 
-A complete investigation should document:
-
-```text
-WHAT WAS FOUND
-```
-
-and:
-
-```text
-WHAT WAS CHECKED BUT NOT FOUND
-```
+Even when no malicious persistence is found, checking the Registry can provide useful negative evidence.
 
 ---
 
-# Device Timeline Investigation
+# Device Timeline
 
-I reviewed the Microsoft Defender Device Timeline for:
+Device Timeline provided chronological endpoint context.
 
-- Process execution
-- PowerShell activity
-- Command lines
-- Timestamps
-- Process IDs
-- Image paths
-- Users
-- Network activity
-- Defender events
+This allowed events to be reviewed around the investigation period.
 
-Not every PowerShell event belonged to Lab 05.
+Timeline analysis helps answer:
 
-I only used evidence that could be correlated using:
-
-- Timestamp
-- Device
-- User
-- Process
-- Command line
-- Known artifacts
-- File activity
-- Network activity
+```text
+WHAT HAPPENED FIRST?
+        ↓
+WHAT HAPPENED NEXT?
+        ↓
+WHAT ELSE OCCURRED NEARBY?
+```
 
 ---
 
 # Existing Incident Validation
 
-The endpoint already contained:
+During the investigation, existing Defender incidents appeared to have names that could potentially relate to the PowerShell activity.
 
-```text
-Suspicious PowerShell command line
-```
+However, timestamp validation showed that those incidents occurred weeks before the controlled Lab 05 activity.
 
-and:
+I therefore excluded them.
 
-```text
-Execution incident on one endpoint
-```
+This was an important lesson:
 
-The names initially looked relevant.
+> **Similar names do not prove that events belong to the same investigation.**
 
-However, both were from:
-
-```text
-August 6, 2026
-```
-
-while Lab 05 occurred on:
-
-```text
-August 31, 2026
-```
-
-The older execution incident had already been classified:
-
-```text
-Resolved
-Benign Positive
-```
-
-Therefore:
-
-```text
-INCIDENT LOOKS RELEVANT
-        ↓
-CHECK TIMESTAMP
-        ↓
-TIMESTAMP DOES NOT MATCH
-        ↓
-EXCLUDE FROM LAB 05
-```
-
-This prevented incorrect evidence attribution.
+Evidence must match the timeline.
 
 ---
 
-# Telemetry vs. Alert
+# Endpoint Isolation Assessment
 
-## Telemetry
+Because the activity included:
 
-Telemetry means:
+- Encoded PowerShell
+- CMD
+- WHOAMI
+- File creation
+- Outbound network activity
 
-> **The security platform recorded activity.**
+endpoint isolation had to be considered.
 
-Examples:
+However, the investigation found no evidence of:
 
-```text
-PowerShell execution
-Encoded command
-CMD execution
-WHOAMI execution
-File creation
-Network connection
-Remote IP
-Remote port
-```
-
-## Alert
-
-An alert means:
-
-> **Detection logic determined that activity met a suspicious condition.**
-
-Therefore:
-
-```text
-TELEMETRY
-    ≠
-ALERT
-
-ALERT
-    ≠
-COMPROMISE
-```
-
-Lab 05 remained a successful investigation even without validating a new incident generated by the controlled activity.
-
-Advanced Hunting provided the evidence needed to reconstruct what happened.
-
----
-
-# Endpoint Response Assessment
-
-Available Defender response options included:
-
-```text
-Collect Investigation Package
-Initiate Automated Investigation
-Initiate Live Response Session
-Isolate Device
-Go Hunt
-```
-
-The important question was:
-
-> **Should the endpoint actually be isolated?**
-
----
-
-# Initial Reasons for Concern
-
-The activity contained:
-
-```text
-Encoded PowerShell
-        +
-PowerShell child processes
-        +
-CMD
-        +
-WHOAMI
-        +
-File creation
-        +
-Outbound HTTPS communication
-```
-
-These behaviors deserve investigation.
-
-However, the complete evidence showed:
-
-```text
-Known lab endpoint
-Known user
-Authorized testing
-Known harmless destination
-No malicious payload
-No persistence
-No credential theft
-No lateral movement
-No command-and-control
-No exfiltration
-No continued attacker access
-```
-
-Therefore:
-
-```text
-DEVICE ISOLATION:
-NOT REQUIRED
-```
-
----
-
-# Why Isolation Was Not Required
-
-Isolation is a powerful response action that can affect:
-
-- Users
-- Applications
-- Business operations
-- Network access
-- Remote administration
-- Investigation workflows
-
-The appropriate model is:
-
-```text
-SUSPICIOUS SIGNAL
-        ↓
-INVESTIGATE
-        ↓
-CORRELATE
-        ↓
-ASSESS RISK
-        ↓
-CONTAIN IF JUSTIFIED
-```
-
-not:
-
-```text
-SUSPICIOUS SIGNAL
-        ↓
-AUTOMATIC ISOLATION
-```
-
----
-
-# What Would Increase the Need for Isolation?
-
-Examples include:
-
-- Malware execution
-- Known malicious hash
-- Credential dumping
-- LSASS access
-- Ransomware
+- Malicious payload execution
 - Persistence
-- Malicious scheduled tasks
-- Malicious service creation
-- Registry persistence
-- Command-and-control
-- Beaconing
-- Known malicious infrastructure
+- Credential theft
 - Lateral movement
-- Data staging
+- Command-and-control
 - Data exfiltration
-- Continued unauthorized activity
+- Continued unauthorized access
 
----
+The activity was known controlled testing.
 
-# Final Lab 05 Investigation Chain
+Therefore:
 
 ```text
-AUTHORIZED LAB USER
+DEVICE ISOLATION
         ↓
-powershell.exe
-        ↓
--EncodedCommand
-        ↓
-Controlled File Creation
-
-powershell.exe
-        ↓
-cmd.exe
-        ↓
-whoami.exe
-
-powershell.exe
-        ↓
-example.com
-        ↓
-104.20.23.154
-        ↓
-TCP 443
-        ↓
-ConnectionSuccess
-        ↓
-week17-example.html
-
-        ↓
-
-No Malicious Payload
-No Persistence
-No Credential Theft
-No Lateral Movement
-No Command-and-Control
-No Exfiltration
-No Continued Unauthorized Access
-
-        ↓
-
-BENIGN AUTHORIZED SECURITY TESTING
-
-        ↓
-
-NO DEVICE ISOLATION REQUIRED
+NOT JUSTIFIED
 ```
 
----
-
-# Lab 05 Final Classification
-
-| Category | Result |
-| --- | --- |
-| Investigation | Suspicious PowerShell Endpoint Activity |
-| Platform | Microsoft Defender XDR / Defender for Endpoint |
-| Hunting | Advanced Hunting |
-| Query Language | KQL |
-| Endpoint | `desktop-3sepq1q` |
-| Initial Assessment | Suspicious / Requires Investigation |
-| Initial Risk | Medium |
-| Encoded PowerShell | Confirmed |
-| Child Process Activity | Confirmed |
-| File Creation | Confirmed |
-| Network Activity | Confirmed |
-| Network Result | `ConnectionSuccess` |
-| Malware | Not Identified |
-| Persistence | Not Identified |
-| Credential Theft | Not Identified |
-| Lateral Movement | Not Identified |
-| Command-and-Control | Not Identified |
-| Exfiltration | Not Identified |
-| Existing Incidents | Reviewed and excluded by timestamp |
-| Final Classification | Benign / Authorized Security Testing |
-| Final Risk | Low |
-| Device Isolation | Not Required |
+This reinforced that containment decisions should be based on evidence and risk.
 
 ---
 
-# What Did PowerShell Actually Do?
+# Lab 05 Final Process Reconstruction
 
-The investigation established that PowerShell:
-
-1. Executed a controlled Base64-encoded command.
-2. Created a harmless text artifact.
-3. Launched `cmd.exe`.
-4. Caused `cmd.exe` to launch `whoami.exe`.
-5. Made an HTTPS request to `example.com`.
-6. Established a successful TCP connection.
-7. Connected to `104.20.23.154`.
-8. Used TCP port `443`.
-9. Created `week17-example.html`.
-10. Did not execute a malicious payload during the controlled test.
+The investigation established:
 
 ```text
 powershell.exe
@@ -2844,6 +1184,36 @@ powershell.exe
 
 ---
 
+# Lab 05 Final Classification
+
+```text
+Activity:
+AUTHORIZED SECURITY TESTING
+
+Malware:
+NOT IDENTIFIED
+
+Persistence:
+NOT IDENTIFIED
+
+Credential Theft:
+NOT IDENTIFIED
+
+Lateral Movement:
+NOT IDENTIFIED
+
+Command-and-Control:
+NOT IDENTIFIED
+
+Exfiltration:
+NOT IDENTIFIED
+
+Device Isolation:
+NOT REQUIRED
+```
+
+---
+
 # Lab 05 Major Lessons
 
 ## PowerShell Is Not Automatically Malicious
@@ -2854,7 +1224,9 @@ powershell.exe
 Malware
 ```
 
-The investigation must determine how PowerShell was used.
+PowerShell is a legitimate administrative tool.
+
+Its behavior determines whether it deserves escalation.
 
 ---
 
@@ -2866,17 +1238,11 @@ The investigation must determine how PowerShell was used.
 Confirmed Attack
 ```
 
-It should increase investigation interest but still requires behavioral analysis.
+Encoding increases investigation interest but does not prove malicious intent.
 
 ---
 
 ## Process Ancestry Matters
-
-```text
-whoami.exe
-```
-
-provides less context than:
 
 ```text
 powershell.exe
@@ -2886,25 +1252,7 @@ cmd.exe
 whoami.exe
 ```
 
----
-
-## Intent and Observed Behavior Are Different
-
-```text
-Command contains URL
-        ↓
-INTENT
-```
-
-versus:
-
-```text
-DeviceNetworkEvents
-        ↓
-ConnectionSuccess
-        ↓
-OBSERVED BEHAVIOR
-```
+provides much more context than a single process name.
 
 ---
 
@@ -2918,39 +1266,1173 @@ The absence of:
 - C2
 - Exfiltration
 
-helped inform the final risk assessment.
+helped support the final risk decision.
 
 ---
 
-## Evidence Must Match the Timeline
+# Lab 06 — Azure RBAC Security Monitoring, Detection & Automated Triage
 
-Existing PowerShell incidents were not attached to Lab 05 simply because their names looked relevant.
+## Objective
 
-Timestamp validation showed they were unrelated.
+Lab 06 expanded Week 17 into cloud identity, access control, privileged activity monitoring, detection engineering, least-privilege remediation, and security automation.
 
----
+The central question was:
 
-## Containment Must Be Evidence-Based
+> **Can I generate a controlled Azure permission change, prove it through telemetry, detect it with KQL, investigate the identity and cloud context, remove unnecessary access, and automate part of the response workflow?**
 
-Response actions should be based on:
+This lab connected:
 
 ```text
-Evidence
+AZURE RBAC
    +
-Scope
+AZURE ACTIVITY
    +
-Confidence
+MICROSOFT ENTRA ID
    +
-Ongoing Risk
+KQL
    +
-Business Impact
+MICROSOFT SENTINEL
+   +
+DETECTION ENGINEERING
+   +
+LEAST PRIVILEGE
+   +
+SECURITY AUTOMATION
 ```
+
+---
+
+# Lab 06 Environment
+
+The main resources used during the lab were:
+
+```text
+Resource Group:
+rg-week17-lab6-security
+
+Network Security Group:
+nsg-week17-lab6
+
+Test Identity:
+Lab Cloud User
+
+Analytics Rule:
+Lab - Azure RBAC Role Assignment Activity
+
+Automation Rule:
+Lab - RBAC Incident Triage Automation
+```
+
+The environment was intentionally controlled so administrative activity could be safely generated, collected, investigated, detected, remediated, and verified.
+
+---
+
+# Lab 06 Architecture
+
+```text
+MICROSOFT ENTRA ID
+        │
+        │ Identity / Authentication
+        ↓
+   LAB CLOUD USER
+        │
+        │ Azure RBAC
+        ↓
+AZURE RESOURCE GROUP
+rg-week17-lab6-security
+        │
+        ├── Network Security Group
+        │   nsg-week17-lab6
+        │
+        └── Administrative Activity
+                    ↓
+             Azure Activity Logs
+                    ↓
+             Log Analytics
+                    ↓
+           Microsoft Sentinel
+                    ↓
+                  KQL
+                    ↓
+          RBAC Analytics Rule
+                    ↓
+                 Alert
+                    ↓
+           Automation Rule
+                    ↓
+         Investigation / Triage
+                    ↓
+       Least-Privilege Remediation
+```
+
+---
+
+# Azure Resource Group
+
+I used the dedicated resource group:
+
+```text
+rg-week17-lab6-security
+```
+
+Keeping the lab resources together made it easier to isolate the security exercise and filter Azure Activity events related specifically to the lab.
+
+This also created a controlled scope for RBAC testing.
+
+---
+
+# Azure Network Security Group
+
+I created:
+
+```text
+nsg-week17-lab6
+```
+
+The Network Security Group provided a cloud security resource where controlled administrative changes could be made.
+
+A controlled inbound security rule was also used during the exercise.
+
+Example:
+
+```text
+Name:
+Deny-Lab-SSH
+
+Service:
+SSH
+
+Destination Port:
+22
+
+Protocol:
+TCP
+
+Action:
+Deny
+```
+
+The purpose was not simply to create an NSG rule.
+
+The larger security lesson was:
+
+```text
+CLOUD CONFIGURATION CHANGE
+        ↓
+AZURE RECORDS ACTIVITY
+        ↓
+TELEMETRY BECOMES SEARCHABLE
+        ↓
+SECURITY TEAM CAN INVESTIGATE
+```
+
+Cloud configuration changes are security evidence.
+
+---
+
+# Microsoft Entra Test Identity
+
+I used a controlled identity named:
+
+```text
+Lab Cloud User
+```
+
+The identity allowed me to test access controls and generate activity without using the main administrative identity for every action.
+
+This made it possible to investigate the relationship between:
+
+```text
+IDENTITY
+   +
+AUTHENTICATION
+   +
+AUTHORIZATION
+   +
+RESOURCE ACTIVITY
+```
+
+---
+
+# Authentication vs. Authorization
+
+One of the important concepts reinforced by this lab was the difference between authentication and authorization.
+
+```text
+AUTHENTICATION
+
+Who are you?
+Did you successfully sign in?
+```
+
+versus:
+
+```text
+AUTHORIZATION
+
+What are you allowed to do?
+Which Azure resources can you access?
+Which actions can you perform?
+```
+
+A user can authenticate successfully while still having limited permissions.
+
+Both areas need to be investigated during cloud security incidents.
+
+---
+
+# Microsoft Entra Security Group
+
+I also worked with a Microsoft Entra security group for controlled access organization.
+
+The test user was added as a member.
+
+This provided practice working with identity grouping rather than thinking about cloud access only as individual user accounts.
+
+In larger environments, groups can make permission management more consistent and scalable.
+
+---
+
+# Azure RBAC
+
+Azure Role-Based Access Control determines what identities are allowed to do with Azure resources.
+
+Conceptually:
+
+```text
+IDENTITY
+    +
+ROLE
+    +
+SCOPE
+    =
+AZURE ACCESS
+```
+
+This means an investigation should consider all three parts.
+
+For example:
+
+```text
+WHO:
+Lab Cloud User
+
+ROLE:
+Reader / Contributor
+
+SCOPE:
+rg-week17-lab6-security
+```
+
+---
+
+# Reader Role Baseline
+
+The test identity had the:
+
+```text
+Reader
+```
+
+role at the lab resource-group scope.
+
+Reader provides visibility into resources without providing the same ability to modify them as Contributor.
+
+This created a lower-permission baseline.
+
+```text
+Lab Cloud User
+      ↓
+Reader
+      ↓
+View Resources
+```
+
+This baseline became important when the account was temporarily elevated and later returned to Reader.
+
+---
+
+# Controlled Contributor Assignment
+
+For the controlled security test, the test identity temporarily received:
+
+```text
+Contributor
+```
+
+Contributor provides significantly greater ability to manage Azure resources.
+
+The assignment was intentional.
+
+However, the behavior itself represents an important security event because similar permission changes could occur during unauthorized activity.
+
+This created realistic RBAC telemetry for investigation.
+
+---
+
+# Why Role Assignments Matter
+
+A compromised identity may initially have limited access.
+
+An attacker may attempt to increase that access.
+
+Conceptually:
+
+```text
+COMPROMISED LOW-PRIVILEGE IDENTITY
+        ↓
+ROLE ASSIGNMENT
+        ↓
+INCREASED PERMISSIONS
+        ↓
+GREATER POTENTIAL IMPACT
+```
+
+This is why unexpected role assignments deserve monitoring.
+
+Examples of roles that may require close attention include:
+
+- Contributor
+- Owner
+- User Access Administrator
+- Privileged custom roles
+
+Not every assignment is malicious.
+
+But privileged-access changes deserve visibility.
+
+---
+
+# Azure Activity Monitoring
+
+The main cloud telemetry source was:
+
+```text
+AzureActivity
+```
+
+Azure Activity records management-plane operations involving Azure resources.
+
+This can include:
+
+- Resource creation
+- Resource modification
+- Resource deletion
+- Network changes
+- Administrative operations
+- Role assignments
+- Permission changes
+
+Before creating a detection, I verified that the activity was actually present.
+
+This followed the same security engineering principle used throughout Week 17:
+
+> **Validate the telemetry before trusting the detection layer.**
+
+---
+
+# Resource Group Investigation with KQL
+
+I used KQL to narrow Azure Activity to the lab resource group.
+
+Example:
+
+```kusto
+AzureActivity
+| where TimeGenerated > ago(24h)
+| where ResourceGroup =~ "rg-week17-lab6-security"
+| project
+    TimeGenerated,
+    Caller,
+    CallerIpAddress,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup
+| order by TimeGenerated desc
+```
+
+This provided a focused view of activity involving the controlled environment.
+
+---
+
+# Important AzureActivity Fields
+
+| Field | Investigation Value |
+| --- | --- |
+| `TimeGenerated` | When the activity occurred |
+| `Caller` | Identity associated with the action |
+| `CallerIpAddress` | Source IP associated with the request |
+| `OperationNameValue` | Azure operation that occurred |
+| `ActivityStatusValue` | Whether the operation succeeded or failed |
+| `ResourceGroup` | Resource group associated with the activity |
+
+Together, these fields can move an investigation from:
+
+```text
+Something changed.
+```
+
+to:
+
+```text
+A specific identity
+performed a specific operation
+against a specific Azure environment
+at a specific time
+from a specific source.
+```
+
+---
+
+# User-Specific Azure Activity
+
+I also filtered the Azure Activity telemetry around the controlled test identity.
+
+Example:
+
+```kusto
+AzureActivity
+| where TimeGenerated > ago(24h)
+| where ResourceGroup =~ "rg-week17-lab6-security"
+| where Caller =~ "<LAB-CLOUD-USER-UPN>"
+| project
+    TimeGenerated,
+    Caller,
+    CallerIpAddress,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup
+| order by TimeGenerated desc
+```
+
+The public README uses a placeholder rather than exposing the full lab user principal name.
+
+This query demonstrated how an investigation can pivot from a resource to a specific identity.
+
+---
+
+# Microsoft Entra Sign-In Investigation
+
+I also investigated authentication activity associated with `Lab Cloud User`.
+
+The main table was:
+
+```text
+SigninLogs
+```
+
+Example:
+
+```kusto
+SigninLogs
+| where UserPrincipalName =~ "<LAB-CLOUD-USER-UPN>"
+| project
+    TimeGenerated,
+    UserPrincipalName,
+    AppDisplayName,
+    ResultType,
+    ResultDescription,
+    AuthenticationRequirement,
+    ConditionalAccessStatus
+| order by TimeGenerated desc
+```
+
+The results provided additional identity context, including activity involving Azure services.
+
+---
+
+# Why Identity Correlation Matters
+
+An Azure administrative event should not always be investigated in isolation.
+
+A stronger investigation can connect:
+
+```text
+SIGN-IN ACTIVITY
+        +
+AZURE RESOURCE ACTIVITY
+        +
+RBAC PERMISSIONS
+```
+
+This helps answer:
+
+- Who authenticated?
+- When did authentication occur?
+- Which application was used?
+- Did authentication succeed?
+- What permissions did the identity have?
+- What Azure actions followed?
+- Were those actions expected?
+
+This creates a much stronger investigation than looking at only one event source.
+
+---
+
+# Hunting Azure RBAC Role Assignments
+
+I then focused specifically on Azure role-assignment activity.
+
+A broad KQL hunt followed this pattern:
+
+```kusto
+AzureActivity
+| where TimeGenerated > ago(24h)
+| where OperationNameValue contains "ROLEASSIGNMENTS"
+| project
+    TimeGenerated,
+    Caller,
+    CallerIpAddress,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup
+| order by TimeGenerated desc
+```
+
+The purpose was to first prove that role-assignment operations were visible in the raw telemetry.
+
+---
+
+# RBAC Detection Logic
+
+After validating the source activity, I narrowed the logic to successful role-assignment writes.
+
+The core detection logic was:
+
+```kusto
+AzureActivity
+| where OperationNameValue contains "ROLEASSIGNMENTS"
+| where OperationNameValue contains "WRITE"
+| where ActivityStatusValue =~ "Success"
+```
+
+Useful investigation fields could then be projected.
+
+Example:
+
+```kusto
+AzureActivity
+| where OperationNameValue contains "ROLEASSIGNMENTS"
+| where OperationNameValue contains "WRITE"
+| where ActivityStatusValue =~ "Success"
+| project
+    TimeGenerated,
+    Caller,
+    CallerIpAddress,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup
+```
+
+---
+
+# Why Detect Successful Writes?
+
+The goal was to focus on role-assignment operations that actually succeeded.
+
+A failed attempt may still be interesting.
+
+However, a successful write confirms that a permission-changing operation completed.
+
+Conceptually:
+
+```text
+ROLE ASSIGNMENT ATTEMPT
+        ↓
+SUCCESS
+        ↓
+ACCESS STATE MAY HAVE CHANGED
+        ↓
+INVESTIGATION REQUIRED
+```
+
+---
+
+# Microsoft Sentinel Analytics Rule
+
+After validating the KQL logic, I converted it into a Microsoft Sentinel analytics rule.
+
+The rule was named:
+
+```text
+Lab - Azure RBAC Role Assignment Activity
+```
+
+The configuration included:
+
+```text
+Severity:
+Medium
+
+Status:
+Enabled
+
+MITRE ATT&CK Tactic:
+Privilege Escalation
+
+Rule Frequency:
+Every 5 minutes
+
+Lookback Period:
+Last 10 minutes
+
+Trigger:
+More than 0 matching results
+```
+
+This changed the workflow from manual hunting to repeatable monitoring.
+
+```text
+MANUAL QUERY
+        ↓
+VALIDATED DETECTION LOGIC
+        ↓
+SENTINEL ANALYTICS RULE
+        ↓
+REPEATED EVALUATION
+        ↓
+SECURITY ALERT
+```
+
+---
+
+# Why Medium Severity?
+
+Role assignments can be completely legitimate administrative activity.
+
+At the same time, unexpected role assignments can significantly increase an identity's capabilities.
+
+Using Medium severity provided meaningful security attention without automatically treating every permission change as a confirmed critical compromise.
+
+The investigation still determines the final risk.
+
+---
+
+# MITRE ATT&CK Mapping
+
+The rule was associated with:
+
+```text
+Privilege Escalation
+```
+
+This mapping makes sense because unauthorized permission changes can increase the privileges available to an identity.
+
+However:
+
+```text
+PRIVILEGE ESCALATION MAPPING
+        ≠
+CONFIRMED MALICIOUS PRIVILEGE ESCALATION
+```
+
+MITRE ATT&CK describes relevant behavior.
+
+Evidence and context determine whether an actual attack occurred.
+
+---
+
+# Detection vs. Investigation
+
+The controlled role assignment actually occurred.
+
+Therefore:
+
+```text
+DID THE RBAC ACTIVITY HAPPEN?
+YES
+```
+
+But the next question was different:
+
+```text
+WAS THE ACTIVITY MALICIOUS?
+```
+
+That required context.
+
+Because the role assignment was intentionally generated as part of the controlled lab:
+
+```text
+Activity:
+REAL
+
+Authorized:
+YES
+
+Malicious:
+NO
+```
+
+This reinforced one of the strongest Week 17 lessons:
+
+> **A correct detection can identify real security-relevant behavior without that behavior being malicious.**
+
+---
+
+# Least-Privilege Remediation
+
+After the controlled test was complete, the `Contributor` role was no longer needed.
+
+I removed Contributor from `Lab Cloud User`.
+
+Before remediation:
+
+```text
+Lab Cloud User
+      ↓
+Contributor
+      ↓
+Resource Management Capability
+```
+
+After remediation:
+
+```text
+Lab Cloud User
+      ↓
+Reader
+      ↓
+Lower-Permission Access
+```
+
+This was not simply cleanup.
+
+It was a security control.
+
+---
+
+# Principle of Least Privilege
+
+Least privilege means that identities should have only the permissions required for their current responsibilities.
+
+The Lab 06 workflow applied this directly:
+
+```text
+START WITH LOWER ACCESS
+        ↓
+TEMPORARILY GRANT REQUIRED ACCESS
+        ↓
+PERFORM CONTROLLED TASK
+        ↓
+MONITOR ACTIVITY
+        ↓
+INVESTIGATE
+        ↓
+REMOVE ACCESS WHEN NO LONGER NEEDED
+        ↓
+VERIFY FINAL PERMISSIONS
+```
+
+This is stronger than simply knowing the definition of least privilege.
+
+The lab required actually applying it.
+
+---
+
+# Why Contributor Removal Matters
+
+If a user no longer needs Contributor but the role remains assigned, the environment contains unnecessary risk.
+
+If the account is later compromised, the attacker may inherit those permissions.
+
+Therefore:
+
+```text
+UNNECESSARY PRIVILEGE
+        =
+UNNECESSARY ATTACK SURFACE
+```
+
+Removing Contributor reduced the possible impact of misuse of the test identity.
+
+---
+
+# Final RBAC Verification
+
+After removing Contributor, I verified that the test identity returned to:
+
+```text
+Reader
+```
+
+This final verification was important.
+
+A remediation action should not simply be assumed successful.
+
+The final state should be checked.
+
+```text
+REMEDIATE
+    ↓
+VERIFY
+    ↓
+DOCUMENT
+```
+
+---
+
+# Microsoft Sentinel Automation
+
+The final major technical part of Lab 06 introduced security automation.
+
+I created:
+
+```text
+Lab - RBAC Incident Triage Automation
+```
+
+The automation was connected specifically to the RBAC analytics rule.
+
+---
+
+# Automation Condition
+
+The automation condition was:
+
+```text
+Property:
+Analytic Rule Name
+
+Operator:
+Equals
+
+Value:
+Lab - Azure RBAC Role Assignment Activity
+```
+
+This meant the automation was scoped to the intended RBAC detection rather than applying broadly to unrelated security alerts.
+
+This is important because automation should be controlled.
+
+---
+
+# Automated Alert Handling
+
+The rule used an alert-update action to support the triage workflow.
+
+Conceptually:
+
+```text
+AZURE RBAC CHANGE
+        ↓
+AZURE ACTIVITY
+        ↓
+KQL DETECTION
+        ↓
+SENTINEL ANALYTICS RULE
+        ↓
+SECURITY ALERT
+        ↓
+AUTOMATION RULE
+        ↓
+AUTOMATED ALERT UPDATE
+        ↓
+INVESTIGATION
+```
+
+This introduced basic SOAR concepts into the project.
+
+---
+
+# Detection Before Automation
+
+One of the most important Lab 06 lessons was the order in which security automation should be built.
+
+```text
+UNDERSTAND BEHAVIOR
+        ↓
+VERIFY TELEMETRY
+        ↓
+BUILD QUERY
+        ↓
+TEST QUERY
+        ↓
+CREATE DETECTION
+        ↓
+VALIDATE DETECTION
+        ↓
+THEN AUTOMATE
+```
+
+Automation can reduce repetitive work.
+
+However, automation built on poor detection logic can also create unnecessary actions at greater speed.
+
+---
+
+# Cloud Security Investigation Model
+
+Lab 06 connected several security layers:
+
+```text
+IDENTITY
+Who is the user?
+        ↓
+AUTHENTICATION
+Did the user successfully sign in?
+        ↓
+AUTHORIZATION
+What is the user allowed to do?
+        ↓
+ADMINISTRATIVE ACTIVITY
+What did the user actually do?
+        ↓
+DETECTION
+Did the activity match security logic?
+        ↓
+INVESTIGATION
+Was the activity expected?
+        ↓
+REMEDIATION
+Should access be changed?
+        ↓
+VERIFICATION
+Is the final state correct?
+        ↓
+AUTOMATION
+Can appropriate repetitive actions be automated?
+```
+
+---
+
+# Lab 06 Investigation Questions
+
+A repeatable Azure RBAC investigation should answer questions such as:
+
+1. What role-assignment operation occurred?
+2. When did the activity happen?
+3. Which identity performed the operation?
+4. Which identity received the role?
+5. Which role was assigned?
+6. What Azure scope was affected?
+7. Did the operation succeed?
+8. What source IP was associated with the activity?
+9. Did the caller recently authenticate?
+10. Which application was used?
+11. Was the assignment expected?
+12. Was the assigned access actually required?
+13. What did the identity do after receiving the role?
+14. Were additional roles assigned?
+15. Were other identities affected?
+16. Is the elevated permission still present?
+17. Should the permission be removed?
+18. Should the identity be contained?
+19. Does the activity require escalation?
+20. Can appropriate parts of the workflow be automated?
+
+---
+
+# Lab 06 Incident Classification
+
+The controlled role-assignment activity was intentionally generated.
+
+Final classification:
+
+```text
+Activity Occurred:
+YES
+
+Detection Relevant:
+YES
+
+Authorized:
+YES
+
+Malicious:
+NO
+
+Privilege Change:
+YES
+
+Unnecessary Access Remaining:
+NO
+
+Contributor Removed:
+YES
+
+Final Role:
+READER
+
+Automation Configured:
+YES
+```
+
+Final disposition:
+
+```text
+AUTHORIZED ADMINISTRATIVE SECURITY TESTING
+```
+
+---
+
+# Lab 06 Final Results
+
+| Control | Result |
+| --- | --- |
+| Dedicated Azure resource group | Created |
+| Network Security Group | Created |
+| Controlled cloud configuration activity | Generated |
+| Test identity | Configured |
+| Entra security group membership | Configured |
+| Reader access | Configured |
+| Temporary Contributor access | Configured for testing |
+| Azure Activity telemetry | Validated |
+| User-specific Azure Activity | Investigated |
+| Microsoft Entra sign-in activity | Investigated |
+| RBAC hunting query | Validated |
+| Successful RBAC write logic | Validated |
+| Sentinel RBAC analytics rule | Created |
+| Analytics rule | Enabled |
+| Severity | Medium |
+| MITRE ATT&CK mapping | Privilege Escalation |
+| Contributor access | Removed |
+| Final test-user role | Reader |
+| Least-privilege state | Verified |
+| Sentinel automation rule | Created |
+| Automation scope | RBAC analytics rule |
+| Automated alert handling | Configured |
+| Final lab status | Completed |
+
+---
+
+# Lab 06 Major Lessons
+
+## Authentication and Authorization Are Different
+
+```text
+AUTHENTICATION
+Who are you?
+```
+
+does not answer:
+
+```text
+AUTHORIZATION
+What can you do?
+```
+
+Cloud investigations often need both.
+
+---
+
+## Privileged Changes Deserve Visibility
+
+```text
+ROLE ASSIGNMENT
+        ↓
+PERMISSION CHANGE
+        ↓
+SECURITY-RELEVANT ACTIVITY
+```
+
+This does not automatically mean an attack occurred.
+
+It means the activity deserves context.
+
+---
+
+## Least Privilege Requires Action
+
+```text
+TEMPORARY ACCESS
+        ↓
+TASK COMPLETED
+        ↓
+REMOVE ACCESS
+        ↓
+VERIFY FINAL STATE
+```
+
+Temporary access should remain temporary.
+
+---
+
+## Detection Is Not a Verdict
+
+```text
+RBAC ROLE ASSIGNMENT DETECTED
+        ≠
+MALICIOUS PRIVILEGE ESCALATION CONFIRMED
+```
+
+The alert begins the investigation.
+
+It does not finish it.
+
+---
+
+## Automation Should Be Scoped
+
+Automation should be tied to specific, understood security conditions.
+
+The Lab 06 automation was limited to the RBAC analytics rule instead of broadly changing unrelated alerts.
+
+---
+
+## Cloud and Identity Evidence Are Stronger Together
+
+```text
+SigninLogs
+     +
+AzureActivity
+     +
+RBAC State
+     =
+STRONGER INVESTIGATION
+```
+
+---
+
+# What I Would Do in a Real Unexpected RBAC Incident
+
+If the role assignment were unknown or unauthorized instead of controlled testing, I would investigate:
+
+- Caller identity
+- Target identity
+- Assigned role
+- Assignment scope
+- Source IP address
+- Recent sign-in activity
+- Authentication results
+- MFA context
+- Conditional Access context
+- Other role assignments by the caller
+- Other permissions assigned to the target
+- Resource changes after privilege increase
+- Network-security changes
+- New resources
+- Credential changes
+- Application activity
+- Group membership changes
+- Active sessions
+- Persistence
+- Lateral movement
+- Sensitive data access
+- Possible exfiltration
+- Whether elevated access remains active
+
+Potential response actions could include:
+
+- Remove unauthorized role assignment
+- Reduce access to least privilege
+- Disable the affected identity when justified
+- Revoke active sessions
+- Reset credentials when justified
+- Review MFA configuration
+- Review Conditional Access
+- Investigate source IP
+- Hunt related Azure Activity
+- Hunt related sign-in activity
+- Review other privileged changes
+- Preserve investigation evidence
+- Escalate when malicious activity is supported
 
 ---
 
 # Cross-Lab Detection Engineering Lessons
 
-Week 17 developed the following detection engineering process:
+Week 17 developed a repeatable detection engineering process.
 
 ```text
 1. Identify Behavior
@@ -2984,6 +2466,12 @@ Week 17 developed the following detection engineering process:
 15. Investigate
         ↓
 16. Tune
+        ↓
+17. Remediate
+        ↓
+18. Verify Final State
+        ↓
+19. Automate Appropriate Actions
 ```
 
 The central lesson was:
@@ -2996,7 +2484,7 @@ Detection logic must accurately represent the behavior it is intended to identif
 
 # Week 17 Investigation Method
 
-A repeatable investigation method emerged across all five labs:
+A repeatable investigation method emerged across all six labs.
 
 ```text
 OBSERVATION
@@ -3012,7 +2500,7 @@ TIMELINE
 What happened before and after?
         ↓
 BEHAVIOR
-What did the system, process, or user actually do?
+What did the system, process, identity, or user actually do?
         ↓
 INTERPRETATION
 What explanation best fits the evidence?
@@ -3026,13 +2514,24 @@ Is there evidence of continued threat?
 DECISION
 What should happen next?
         ↓
-RESPONSE
-Close, monitor, escalate, contain, isolate, or remediate?
+REMEDIATION
+Does anything need to be changed or removed?
+        ↓
+VERIFICATION
+Did the response produce the intended security state?
+        ↓
+AUTOMATION
+Can an appropriate repetitive step be safely automated?
+        ↓
+DOCUMENTATION
+Can the final conclusion be defended with evidence?
 ```
 
 ---
 
 # KQL Skills Demonstrated
+
+Week 17 provided hands-on practice with:
 
 ```text
 where
@@ -3059,57 +2558,103 @@ in~
 =~
 ```
 
-The important skill was not simply memorizing syntax.
+The important skill was not memorizing syntax.
 
 It was converting investigation questions into queries.
 
-Examples:
+---
 
-```text
-QUESTION:
-Which users have the most failed authentication?
+# Examples of Security Questions Converted into KQL
 
-KQL:
-summarize count() by UserPrincipalName
+## Which users have the most failed authentication?
+
+```kusto
+SigninLogs
+| where ResultType != 0
+| summarize FailedAttempts = count() by UserPrincipalName
+| order by FailedAttempts desc
 ```
 
-```text
-QUESTION:
-How many users did one IP target?
+---
 
-KQL:
-dcount(UserPrincipalName)
+## Which source IPs generated authentication failures?
+
+```kusto
+SigninLogs
+| where ResultType != 0
+| summarize FailedAttempts = count() by IPAddress
+| order by FailedAttempts desc
 ```
 
-```text
-QUESTION:
-Which PowerShell processes executed?
+---
 
-TABLE:
+## Which PowerShell processes executed?
+
+```kusto
 DeviceProcessEvents
+| where FileName =~ "powershell.exe"
+| project
+    Timestamp,
+    DeviceName,
+    AccountName,
+    FileName,
+    ProcessCommandLine
 ```
 
-```text
-QUESTION:
-What file did PowerShell create?
+---
 
-TABLE:
-DeviceFileEvents
-```
+## What network activity was associated with PowerShell?
 
-```text
-QUESTION:
-Where did PowerShell connect?
-
-TABLE:
+```kusto
 DeviceNetworkEvents
+| where InitiatingProcessFileName =~ "powershell.exe"
+| project
+    Timestamp,
+    DeviceName,
+    RemoteUrl,
+    RemoteIP,
+    RemotePort,
+    ActionType
+```
+
+---
+
+## Which Azure operations affected the lab resource group?
+
+```kusto
+AzureActivity
+| where ResourceGroup =~ "rg-week17-lab6-security"
+| project
+    TimeGenerated,
+    Caller,
+    CallerIpAddress,
+    OperationNameValue,
+    ActivityStatusValue
+```
+
+---
+
+## Which successful RBAC role-assignment writes occurred?
+
+```kusto
+AzureActivity
+| where OperationNameValue contains "ROLEASSIGNMENTS"
+| where OperationNameValue contains "WRITE"
+| where ActivityStatusValue =~ "Success"
+| project
+    TimeGenerated,
+    Caller,
+    CallerIpAddress,
+    OperationNameValue,
+    ActivityStatusValue,
+    ResourceGroup
 ```
 
 ---
 
 # Cybersecurity Skills Demonstrated
 
-## Cybersecurity Analysis
+## Security Analysis
 
 - Security telemetry analysis
 - Endpoint analysis
@@ -3124,45 +2669,46 @@ DeviceNetworkEvents
 - Risk assessment
 - Technical documentation
 
-## Incident Response
+---
 
-- Incident triage
+## Incident Investigation
+
+- Alert triage
+- Incident investigation
 - Scope determination
+- User investigation
+- Device investigation
 - Process-chain reconstruction
 - File investigation
 - Network investigation
+- Identity correlation
 - Persistence checks
 - Credential-theft assessment
 - Lateral-movement assessment
 - C2 assessment
 - Exfiltration assessment
+- Privileged-access review
 - Containment evaluation
-- Endpoint isolation assessment
 - Evidence-based disposition
 
-## Security Operations
-
-- Alert triage
-- Incident investigation
-- Entity investigation
-- Device investigation
-- User investigation
-- Timeline analysis
-- Evidence correlation
-- Incident classification
-- Incident resolution
+---
 
 ## Threat Hunting
 
 - Advanced Hunting
+- KQL
 - Behavior-based hunting
 - PowerShell hunting
-- Encoded command hunting
+- Encoded-command hunting
 - Process-chain hunting
 - File telemetry hunting
 - Network telemetry hunting
 - Identity hunting
-- Cross-table correlation
+- Azure Activity hunting
+- RBAC hunting
+- Cross-table investigation
+
+---
 
 ## Detection Engineering
 
@@ -3175,6 +2721,11 @@ DeviceNetworkEvents
 - Alert enrichment
 - MITRE ATT&CK mapping
 - Detection tuning
+- RBAC detection
+- Scheduled analytics rules
+- Detection-to-automation workflows
+
+---
 
 ## Endpoint Security
 
@@ -3192,50 +2743,97 @@ DeviceNetworkEvents
 - Device Timeline
 - Endpoint response capabilities
 
+---
+
 ## Identity Security
 
-- Microsoft Entra authentication
+- Microsoft Entra ID
+- Microsoft Entra security groups
+- Group membership
 - `SigninLogs`
-- Failed login investigation
+- Failed-login investigation
 - Source IP analysis
 - Authentication timelines
 - Success/failure correlation
-- Failure reason analysis
+- Authentication-result analysis
 - Identity entity mapping
+- Authentication vs. authorization
+- Permission review
+
+---
+
+## Cloud Security
+
+- Microsoft Azure
+- Azure resource groups
+- Azure Activity
+- Azure RBAC
+- Role assignments
+- Reader permissions
+- Contributor permissions
+- Network Security Groups
+- Cloud configuration changes
+- Administrative activity monitoring
+- Privileged-access monitoring
+- Least-privilege remediation
+- Cloud identity correlation
+
+---
 
 ## SIEM Engineering
 
 - Microsoft Sentinel
-- Log Analytics
+- Azure Log Analytics
 - Data connectors
 - Diagnostic settings
 - Security telemetry ingestion
 - Table validation
 - Analytics rules
+- Alert generation
 - Incident generation
 - KQL
+- Automation rules
+- Alert-update automation
+- Automation-rule scoping
+
+---
+
+## Security Automation
+
+- Sentinel automation rules
+- Detection-based automation conditions
+- Automated alert updates
+- Scoped security automation
+- Detection-to-response workflow
+- Basic SOAR concepts
+
+---
 
 ## Security Engineering
 
 - Security environment deployment
 - Endpoint onboarding
 - Security service validation
-- Telemetry-pipeline troubleshooting
+- Telemetry pipeline troubleshooting
 - Detection testing
 - Detection troubleshooting
 - Security control validation
+- Cloud permission management
+- Least-privilege validation
 - Response capability assessment
+- Automation design
 
 ---
 
 # MITRE ATT&CK Exposure
 
-| Technique | Context |
+| Mapping | Context |
 | --- | --- |
 | **T1110 — Brute Force** | Repeated Microsoft Entra failed sign-in detection |
 | **T1496 — Resource Hijacking** | Sentinel suspicious resource deployment analytics-rule review |
+| **Privilege Escalation — Tactic** | Azure RBAC role-assignment monitoring and detection |
 
-MITRE ATT&CK was treated as a standardized behavioral framework rather than proof that an attacker was responsible.
+MITRE ATT&CK was used as a standardized behavioral framework rather than proof that an attacker was responsible.
 
 ---
 
@@ -3244,51 +2842,31 @@ MITRE ATT&CK was treated as a standardized behavioral framework rather than proo
 ## Telemetry Comes Before Detection
 
 ```text
-No Data
+NO DATA
    ↓
-No Query
+NO QUERY
    ↓
-No Detection
+NO DETECTION
    ↓
-No Alert
+NO ALERT
    ↓
-No Investigation
+NO INVESTIGATION
 ```
-
----
-
-## Telemetry Can Be Useful Without an Alert
-
-Lab 05 demonstrated:
-
-```text
-Endpoint Activity
-        ↓
-Telemetry
-        ↓
-Advanced Hunting
-        ↓
-Investigation
-        ↓
-Conclusion
-```
-
-Threat hunting does not always begin with an alert.
 
 ---
 
 ## Detection Comes Before Automation
 
 ```text
-Understand Behavior
+UNDERSTAND BEHAVIOR
         ↓
-Build Detection
+BUILD DETECTION
         ↓
-Validate Detection
+VALIDATE DETECTION
         ↓
-Tune Detection
+TUNE DETECTION
         ↓
-Then Consider Automation
+THEN AUTOMATE
 ```
 
 ---
@@ -3296,16 +2874,32 @@ Then Consider Automation
 ## Investigation Comes Before Response
 
 ```text
-Suspicious Behavior
+SUSPICIOUS BEHAVIOR
         ↓
-Investigation
+INVESTIGATION
         ↓
-Evidence
+EVIDENCE
         ↓
-Risk Assessment
+RISK ASSESSMENT
         ↓
-Response Decision
+RESPONSE DECISION
 ```
+
+---
+
+## Remediation Should Be Verified
+
+```text
+IDENTIFY RISK
+        ↓
+REMEDIATE
+        ↓
+CHECK FINAL STATE
+        ↓
+VERIFY RISK WAS REDUCED
+```
+
+Lab 06 demonstrated this by removing Contributor access and then confirming that the test identity retained Reader access.
 
 ---
 
@@ -3328,56 +2922,36 @@ ALERT
    ↓
 INCIDENT
    ↓
+AUTOMATION
+   ↓
 RESPONSE
 ```
 
 ---
 
-# What I Would Do in a Real Suspicious PowerShell Incident
+# What I Troubleshot
 
-If the activity were unknown rather than controlled, I would continue investigating:
+During Week 17, I worked through problems involving:
 
-- Which user executed PowerShell
-- Whether the account was privileged
-- Whether PowerShell usage was normal for that user
-- What launched PowerShell
-- Full command line
-- Encoded command contents
-- Execution-policy bypasses
-- Hidden execution
-- Download activity
-- Downloaded file hashes
-- Threat-intelligence matches
-- Domains contacted
-- Remote IP reputation
-- Beaconing
-- Persistence
-- Scheduled tasks
-- Services
-- Registry Run keys
-- Credential access
-- LSASS access
-- Lateral movement
-- Remote execution
-- Other affected endpoints
-- Data staging
-- Data exfiltration
-- Additional Defender alerts
-- Related suspicious authentication
+- Defender endpoint onboarding
+- Defender service dependencies
+- Windows endpoint capabilities
+- Missing Microsoft Entra `SigninLogs`
+- Diagnostic settings
+- Log Analytics ingestion
+- KQL results
+- Sentinel entity mappings
+- Scheduled analytics timing
+- Detection logic across fixed time buckets
+- PowerShell Advanced Hunting queries
+- Network-event field handling
+- Timestamp differences
+- Unrelated existing incidents
+- Azure RBAC role-assignment visibility
+- Permission-state verification
+- Sentinel automation-rule scoping
 
-Potential response actions could include:
-
-- Isolate endpoint
-- Collect investigation package
-- Start Live Response
-- Run antivirus scan
-- Block malicious hashes
-- Block malicious infrastructure
-- Disable compromised account
-- Revoke sessions
-- Preserve forensic evidence
-- Escalate to Incident Response
-- Hunt across other endpoints
+Troubleshooting was an important part of the project because real security environments do not always behave exactly as expected.
 
 ---
 
@@ -3385,7 +2959,7 @@ Potential response actions could include:
 
 ## What I Built
 
-I configured and operated a working Microsoft cybersecurity lab containing:
+I configured and operated a Microsoft cybersecurity lab containing:
 
 - Microsoft Azure
 - Microsoft Entra ID
@@ -3397,12 +2971,16 @@ I configured and operated a working Microsoft cybersecurity lab containing:
 - Endpoint telemetry
 - Cloud administrative telemetry
 - Authentication telemetry
+- Azure RBAC
+- Network Security Groups
 - KQL hunting
 - Advanced Hunting
 - Custom detection logic
 - Alert generation
 - Incident generation
 - Incident investigation
+- Least-privilege remediation
+- Security automation
 - Response assessment
 
 ---
@@ -3429,23 +3007,33 @@ I configured and operated a working Microsoft cybersecurity lab containing:
 
 ### Identity
 
-- Failed Microsoft Entra authentication
+- Microsoft Entra authentication
+- Failed authentication
 - Repeated failures
-- Source IPs
+- Source IP addresses
 - Authentication timing
 - Failure reasons
 - Success/failure sequences
 - Targeted applications
+- Security-group membership
+- Authentication vs. authorization
 
 ### Cloud
 
 - Azure administrative operations
 - Azure Activity telemetry
 - Resource activity
+- Azure RBAC
+- Role assignments
+- Reader permissions
+- Contributor permissions
+- Network Security Groups
+- Privileged-access changes
+- Least-privilege verification
 
 ### Detection Engineering
 
-- Detection query development
+- Detection-query development
 - Thresholds
 - Time windows
 - False-negative troubleshooting
@@ -3453,8 +3041,11 @@ I configured and operated a working Microsoft cybersecurity lab containing:
 - MITRE ATT&CK
 - Alert generation
 - Incident generation
+- RBAC role-assignment detection
+- Privilege Escalation mapping
+- Detection-to-automation workflow
 
-### Incident Response
+### Security Response
 
 - Initial triage
 - Evidence validation
@@ -3462,58 +3053,51 @@ I configured and operated a working Microsoft cybersecurity lab containing:
 - Process correlation
 - File correlation
 - Network correlation
+- Identity correlation
 - Persistence assessment
 - Containment assessment
+- Permission remediation
+- Least-privilege verification
 - Final disposition
-
----
-
-# What I Troubleshot
-
-- Defender endpoint onboarding
-- Defender service dependencies
-- Windows endpoint capabilities
-- Missing Entra `SigninLogs`
-- Diagnostic settings
-- Log Analytics ingestion
-- KQL results
-- Sentinel entity mappings
-- Scheduled analytics timing
-- Detection logic across fixed time buckets
-- PowerShell Advanced Hunting queries
-- Network-event field handling
-- Timestamp differences
-- Unrelated existing incidents
+- Automated triage support
 
 ---
 
 # Interview-Ready Project Explanation
 
-> I built and operated a Microsoft cybersecurity lab using Microsoft Defender XDR, Defender for Endpoint, Microsoft Sentinel, Microsoft Entra ID, Azure Log Analytics, and KQL.
+> I built and operated a Microsoft cybersecurity lab using Microsoft Defender XDR, Defender for Endpoint, Microsoft Sentinel, Microsoft Entra ID, Azure Log Analytics, Azure RBAC, Advanced Hunting, and KQL.
 >
-> I began by configuring the cloud and endpoint environment and onboarding a Windows 11 Enterprise endpoint into Defender for Endpoint. I encountered an onboarding problem involving the Defender endpoint service, so I validated the Windows edition, endpoint capabilities, and service dependencies before completing the onboarding.
+> I began by configuring the cloud and endpoint environment and onboarding a Windows 11 Enterprise endpoint into Defender for Endpoint. I encountered an onboarding problem involving the endpoint security services, so I validated the Windows edition, endpoint capabilities, and service dependencies before completing the onboarding.
 >
 > I generated controlled endpoint activity, investigated Defender detections, reviewed process lineage, and validated the underlying telemetry through Advanced Hunting.
 >
 > I then worked with Microsoft Defender XDR to understand the relationship between alerts, incidents, devices, users, evidence, timelines, and endpoint response actions.
 >
-> I expanded the environment into Microsoft Sentinel and Log Analytics, connected Azure Activity telemetry, and used KQL to filter, project, aggregate, and analyze cloud administrative activity. I also studied how KQL becomes scheduled detection logic and how detections map to MITRE ATT&CK.
+> I expanded the environment into Microsoft Sentinel and Log Analytics, connected Azure Activity telemetry, and used KQL to filter, project, aggregate, and analyze cloud administrative activity.
 >
-> For the identity-security investigation, I discovered that Microsoft Entra sign-in telemetry was initially missing from Log Analytics. I configured diagnostic settings, validated `SigninLogs` ingestion, generated controlled failed authentication attempts, and investigated the account, source IP, timestamps, applications, and failure reasons.
+> For the identity-security investigation, I discovered that Microsoft Entra sign-in telemetry was initially missing from Log Analytics. I configured the required logging, validated `SigninLogs` ingestion, generated controlled failed authentication attempts, and investigated the account, source IP, timestamps, applications, and failure reasons.
 >
-> I converted the manually validated hunting logic into a scheduled Sentinel analytics rule for repeated failed sign-ins. The first version did not trigger even though the source events existed. I traced the problem to fixed five-minute time buckets that split related authentication attempts across different groups. I corrected the KQL, validated the logic, generated new activity, and successfully produced a Sentinel alert and Microsoft Defender incident.
+> I converted manually validated hunting logic into a scheduled Sentinel analytics rule for repeated failed sign-ins. The first version did not trigger even though the source events existed. I traced the problem to fixed five-minute time buckets that split related authentication attempts across separate groups. I corrected the KQL, validated the logic again, generated new activity, and successfully produced the expected security detection.
 >
-> I investigated that incident and determined that the detection was valid but the activity was authorized testing. I documented the evidence and resolved the incident without unnecessary containment.
+> I investigated the resulting activity and determined that the detection was valid but the behavior was authorized testing. I documented the evidence instead of treating a valid alert as automatic proof of compromise.
 >
-> In Lab 05, I performed a deeper suspicious PowerShell endpoint investigation. I generated controlled encoded PowerShell, child-process, file, and network activity and reconstructed the behavior using Advanced Hunting.
+> I then performed a deeper suspicious PowerShell endpoint investigation. I generated controlled encoded PowerShell, child-process, file, and network activity and reconstructed the behavior using Advanced Hunting.
 >
-> `DeviceProcessEvents` showed the encoded PowerShell execution and a `powershell.exe → cmd.exe → whoami.exe` process chain. `DeviceFileEvents` showed file creation. `DeviceNetworkEvents` proved that PowerShell successfully connected to `example.com` over TCP port 443.
+> `DeviceProcessEvents` showed encoded PowerShell execution and a `powershell.exe → cmd.exe → whoami.exe` process chain. `DeviceFileEvents` showed file creation. `DeviceNetworkEvents` proved that PowerShell successfully communicated with `example.com` over TCP port 443.
 >
-> I also reviewed Device Timeline and existing Defender incidents. Two incidents looked relevant based on their names, but timestamp validation showed that they occurred weeks before my Lab 05 activity, so I excluded them instead of incorrectly forcing them into the investigation.
+> I also reviewed Device Timeline and existing Defender incidents. Some existing incidents looked relevant based on their names, but timestamp validation showed they occurred weeks before my controlled activity, so I excluded them rather than incorrectly forcing them into the investigation.
 >
-> Finally, I evaluated endpoint response capabilities including isolation, Live Response, automated investigation, and investigation-package collection. Because I found no malicious payload, persistence, credential theft, lateral movement, command-and-control, exfiltration, or continuing unauthorized access, I determined that endpoint isolation was not justified.
+> I evaluated endpoint response capabilities including isolation, Live Response, automated investigation, and investigation-package collection. Because I found no malicious payload, persistence, credential theft, lateral movement, command-and-control, exfiltration, or continuing unauthorized access, I determined that endpoint isolation was not justified.
 >
-> The main lesson from the entire project was that cybersecurity investigation is not about trusting an alert title or reacting to a suspicious process name. It requires validating telemetry, reconstructing behavior, correlating evidence, testing detection logic, understanding context, assessing risk, and making a defensible response decision.
+> In Lab 06, I expanded the project into Azure access-control monitoring. I created a dedicated resource group and Network Security Group, worked with Microsoft Entra identity controls, assigned Azure RBAC permissions, and generated controlled role-assignment activity.
+>
+> I used `AzureActivity` and `SigninLogs` to investigate the cloud and identity evidence, then built and enabled the Sentinel analytics rule `Lab - Azure RBAC Role Assignment Activity` to detect successful RBAC role-assignment writes.
+>
+> I temporarily assigned Contributor to the controlled test identity, removed that access when it was no longer required, and verified that the final role was Reader. This gave me practical experience applying least privilege rather than only learning it as a theory.
+>
+> I also created `Lab - RBAC Incident Triage Automation`, a Sentinel automation rule scoped specifically to the RBAC analytics rule. This connected validated detection logic with automated alert handling.
+>
+> The main lesson from the project was that security investigation is not about trusting an alert title or reacting automatically to suspicious-looking behavior. It requires validating telemetry, reconstructing behavior, correlating evidence, testing detection logic, understanding identity and permissions, assessing risk, remediating unnecessary access, verifying the final state, and making defensible response decisions.
 
 ---
 
@@ -3556,7 +3140,7 @@ I configured and operated a working Microsoft cybersecurity lab containing:
         ↓
 18. Look for persistence / credential theft / lateral movement / C2 / exfiltration
         ↓
-19. Determine benign vs suspicious vs malicious
+19. Determine benign vs. suspicious vs. malicious
         ↓
 20. Contain if justified
         ↓
@@ -3565,10 +3149,10 @@ I configured and operated a working Microsoft cybersecurity lab containing:
 
 ---
 
-# Interview Question — How Do You Investigate Failed Logins?
+# Interview Question — How Would You Investigate Failed Logins?
 
 ```text
-1. Confirm the authentication activity
+1. Confirm authentication activity
         ↓
 2. Identify affected account
         ↓
@@ -3599,6 +3183,50 @@ I configured and operated a working Microsoft cybersecurity lab containing:
 
 ---
 
+# Interview Question — How Would You Investigate an Unexpected Azure RBAC Role Assignment?
+
+```text
+1. Confirm role-assignment event
+        ↓
+2. Identify caller
+        ↓
+3. Identify target identity
+        ↓
+4. Identify assigned role
+        ↓
+5. Identify Azure scope
+        ↓
+6. Confirm operation status
+        ↓
+7. Review source IP
+        ↓
+8. Correlate SigninLogs
+        ↓
+9. Review authentication context
+        ↓
+10. Determine whether assignment was expected
+        ↓
+11. Review activity after privilege change
+        ↓
+12. Hunt for additional role assignments
+        ↓
+13. Determine whether access is still required
+        ↓
+14. Remove unauthorized or unnecessary access
+        ↓
+15. Verify least privilege
+        ↓
+16. Escalate or contain if evidence supports it
+        ↓
+17. Document final disposition
+```
+
+The key idea is:
+
+> **A role assignment is a security-relevant event, but the investigation must establish whether the change was authorized, necessary, and safe.**
+
+---
+
 # Interview Question — What Did You Learn About Detection Engineering?
 
 > A detection rule is not correct simply because the KQL executes without errors.
@@ -3607,7 +3235,7 @@ I configured and operated a working Microsoft cybersecurity lab containing:
 >
 > The threshold therefore never reached three.
 >
-> I verified the source telemetry, isolated the failure to the query logic, corrected the detection to evaluate the events across the rule's lookback window, validated it again, and successfully generated the expected alert and incident.
+> I verified the source telemetry, isolated the failure to the query logic, corrected the detection, validated it again, and successfully generated the expected security detection.
 >
 > That demonstrated that detection engineering requires behavioral testing, not only syntax validation.
 
@@ -3615,11 +3243,11 @@ I configured and operated a working Microsoft cybersecurity lab containing:
 
 # Interview Question — Why Is Encoded PowerShell Suspicious?
 
-> `-EncodedCommand` deserves investigation because attackers can use encoded PowerShell to make commands harder to quickly interpret.
+> `-EncodedCommand` deserves investigation because encoded PowerShell can make commands harder to quickly interpret.
 >
 > However, encoding does not automatically prove malicious activity.
 >
-> Administrators, automation systems, software, scripts, and security tools may also use encoded PowerShell.
+> Administrators, automation systems, scripts, software, and security tools may also use encoded commands.
 >
 > I therefore treat encoding as an investigation signal and determine what the command actually did by correlating process, file, network, user, and timeline telemetry.
 
@@ -3629,69 +3257,46 @@ I configured and operated a working Microsoft cybersecurity lab containing:
 
 > I considered isolation because the activity involved encoded PowerShell, CMD, WHOAMI, file creation, and outbound network communication.
 >
-> However, the investigation established that the behavior was authorized testing and I found no evidence of malware, persistence, credential theft, lateral movement, command-and-control, exfiltration, or continued unauthorized access.
+> However, the investigation established that the behavior was authorized testing, and I found no evidence of malware, persistence, credential theft, lateral movement, command-and-control, exfiltration, or continued unauthorized access.
 >
-> Isolation would therefore not have been supported by the evidence.
+> Isolation therefore was not supported by the evidence.
 >
 > The lab reinforced that containment decisions should be based on risk and evidence rather than automatically triggered by suspicious-looking behavior.
 
 ---
 
-# Interview Question — How Do You Avoid Overreacting to Alerts?
+# Interview Question — What Did Lab 06 Teach You About Least Privilege?
 
-I separate:
+> I temporarily assigned Contributor access to a controlled Azure test identity so I could generate realistic RBAC activity and validate the monitoring workflow.
+>
+> After testing was complete, I removed Contributor and verified that the account retained only Reader access.
+>
+> This demonstrated least privilege as an operational process rather than only a definition. Access should be granted for a reason, reviewed, removed when it is no longer required, and verified afterward.
 
-```text
-OBSERVATION
-What happened?
-```
+---
 
-from:
+# Interview Question — Why Automate Only After Validating the Detection?
 
-```text
-INTERPRETATION
-What might it mean?
-```
-
-from:
-
-```text
-DECISION
-What should I do?
-```
-
-Example:
-
-```text
-Observation:
-Encoded PowerShell executed.
-
-Interpretation:
-Could represent suspicious or malicious execution.
-
-Evidence:
-Known controlled test, known endpoint, known user, harmless artifacts,
-known destination, no persistence, no credential theft, no C2.
-
-Decision:
-No isolation required.
-```
+> Automation can make security operations faster, but it can also make bad logic act faster.
+>
+> In Lab 06, I first generated the RBAC activity, verified the raw `AzureActivity` telemetry, built and reviewed the detection logic, created the analytics rule, and then created an automation rule scoped specifically to the RBAC detection.
+>
+> This reinforced that automation should sit on top of validated telemetry and validated detection logic.
 
 ---
 
 # Week 17 Final Findings
 
-The five labs established that:
+The six labs established that:
 
 - A Microsoft security environment can be built from the ground up.
-- Defender for Endpoint depends on working OS services and capabilities.
+- Defender for Endpoint depends on working operating-system services and capabilities.
 - Endpoint telemetry can be independently validated.
 - Alerts and incidents are not the same thing.
 - Alerts are investigation starting points.
 - XDR incidents provide broader context than individual detections.
-- Device and user entities provide useful pivots.
+- Device and user entities provide useful investigation pivots.
 - Process lineage provides more context than process names alone.
-- Process IDs can support process ancestry.
 - Full command lines are critical investigation evidence.
 - PowerShell is not automatically malicious.
 - Encoded PowerShell is a signal, not a verdict.
@@ -3727,6 +3332,16 @@ The five labs established that:
 - A valid detection can still represent authorized behavior.
 - Incident disposition should be supported by evidence.
 - Containment should be supported by evidence.
+- Azure RBAC changes can be monitored through `AzureActivity`.
+- Authentication and authorization should be investigated separately and correlated.
+- Role assignments can be real security-relevant activity without being malicious.
+- Successful RBAC write activity can become a scheduled Sentinel detection.
+- Privilege-related detections require context before malicious classification.
+- Temporary Contributor access should be removed when no longer required.
+- Least privilege requires verification after remediation.
+- Sentinel automation rules can be scoped to specific analytics rules.
+- Detection should be validated before response automation is added.
+- Cloud identity, permission, and resource activity are stronger when investigated together.
 
 ---
 
@@ -3734,9 +3349,9 @@ The five labs established that:
 
 Week 17 provided practical exposure to:
 
-> **Telemetry Generation → Collection → Ingestion → Storage → Querying → Hunting → Detection → Alerting → Correlation → Investigation → Timeline Reconstruction → Process Analysis → File Analysis → Network Analysis → Validation → Classification → Risk Assessment → Response → Documentation**
+> **Telemetry Generation → Collection → Ingestion → Storage → Querying → Hunting → Detection → Alerting → Correlation → Investigation → Timeline Reconstruction → Process Analysis → File Analysis → Network Analysis → Identity Analysis → RBAC Analysis → Validation → Classification → Risk Assessment → Least-Privilege Remediation → Verification → Automation → Response → Documentation**
 
-The five-lab progression was:
+The six-lab progression became:
 
 ```text
 BUILD
@@ -3760,6 +3375,12 @@ ASSESS
 DECIDE
     ↓
 RESPOND
+    ↓
+REMEDIATE
+    ↓
+VERIFY
+    ↓
+AUTOMATE
 ```
 
 ---
@@ -3797,7 +3418,7 @@ COMPLETED
 Identity Investigation:
 COMPLETED
 
-Custom Analytics Rule:
+Custom Analytics Rules:
 CREATED & ENABLED
 
 Detection Troubleshooting:
@@ -3806,8 +3427,8 @@ COMPLETED
 Alert Generation:
 VALIDATED
 
-Incident Generation:
-VALIDATED
+Incident Investigation:
+COMPLETED
 
 Failed Login Investigation:
 COMPLETED
@@ -3850,6 +3471,39 @@ NOT REQUIRED
 
 Confirmed Lab 05 Compromise:
 NO
+
+Azure RBAC Investigation:
+COMPLETED
+
+RBAC Analytics Rule:
+CREATED & ENABLED
+
+RBAC Detection Severity:
+MEDIUM
+
+MITRE ATT&CK RBAC Mapping:
+PRIVILEGE ESCALATION
+
+Temporary Contributor Access:
+REMOVED
+
+Final Lab Cloud User Role:
+READER
+
+Least-Privilege Verification:
+COMPLETED
+
+Sentinel Automation Rule:
+CREATED & ENABLED
+
+Automated Alert Handling:
+CONFIGURED
+
+Lab 06 Classification:
+AUTHORIZED ADMINISTRATIVE SECURITY TESTING
+
+Confirmed Lab 06 Compromise:
+NO
 ```
 
 ---
@@ -3880,6 +3534,22 @@ ENCODED COMMAND
 COMPROMISE
 ```
 
+Lab 06 added:
+
+```text
+ROLE ASSIGNMENT
+  ≠
+MALICIOUS PRIVILEGE ESCALATION
+```
+
+and:
+
+```text
+AUTOMATION
+  ≠
+REPLACEMENT FOR INVESTIGATION
+```
+
 The correct workflow is:
 
 ```text
@@ -3901,6 +3571,12 @@ RISK ASSESSMENT
       ↓
 CONCLUSION
       ↓
+REMEDIATION
+      ↓
+VERIFICATION
+      ↓
+APPROPRIATE AUTOMATION
+      ↓
 RESPONSE
 ```
 
@@ -3910,7 +3586,7 @@ RESPONSE
 
 > **Security tools generate information. Security professionals turn that information into defensible decisions.**
 
-Week 17 strengthened my ability to move from raw endpoint, cloud, identity, process, file, and network telemetry to a final security conclusion using Microsoft Defender XDR, Microsoft Defender for Endpoint, Microsoft Sentinel, Microsoft Entra ID, Azure Log Analytics, Advanced Hunting, and KQL.
+Week 17 strengthened my ability to move from raw endpoint, cloud, identity, process, file, network, authentication, and privileged-access telemetry to a final security conclusion using Microsoft Defender XDR, Microsoft Defender for Endpoint, Microsoft Sentinel, Microsoft Entra ID, Azure Log Analytics, Azure RBAC, Network Security Groups, Advanced Hunting, Sentinel analytics rules, Sentinel automation, and KQL.
 
 The most important outcome was not learning where buttons are located.
 
@@ -3920,6 +3596,10 @@ It was learning how to follow the evidence:
 What happened?
       ↓
 Who or what was involved?
+      ↓
+Which identity authenticated?
+      ↓
+What permissions did that identity have?
       ↓
 Which process executed?
       ↓
@@ -3935,7 +3615,9 @@ Where did it connect?
       ↓
 Did the connection succeed?
       ↓
-Which identity was involved?
+Which Azure resources changed?
+      ↓
+Were permissions modified?
       ↓
 What happened before and after?
       ↓
@@ -3945,11 +3627,59 @@ Why did the detection trigger?
       ↓
 Does the alert actually belong to this activity?
       ↓
+Was the behavior authorized?
+      ↓
 Is there evidence of continued compromise?
       ↓
 What explanation best fits all of the evidence?
       ↓
 What response is actually justified?
+      ↓
+Does unnecessary access need to be removed?
+      ↓
+Was the final security state verified?
+      ↓
+Can part of the workflow be safely automated?
 ```
 
-That is the investigation and security engineering mindset I am continuing to develop across cybersecurity analysis, security operations, incident response, endpoint security, threat hunting, detection engineering, SIEM engineering, identity security, cloud security, and security engineering.
+That is the investigation and security engineering mindset I am continuing to develop across endpoint security, identity security, cloud security, SIEM, threat hunting, detection engineering, incident investigation, incident response, access control, security automation, and security engineering.
+
+---
+
+# Week 17 Completion
+
+```text
+LAB 01
+Microsoft Defender XDR & Defender for Endpoint
+        ↓
+COMPLETED
+
+LAB 02
+Microsoft Sentinel & Azure Log Analytics
+        ↓
+COMPLETED
+
+LAB 03
+Microsoft Entra Identity Investigation
+        ↓
+COMPLETED
+
+LAB 04
+Custom Detection Engineering
+        ↓
+COMPLETED
+
+LAB 05
+Suspicious PowerShell Endpoint Investigation & Response
+        ↓
+COMPLETED
+
+LAB 06
+Azure RBAC Security Monitoring, Detection & Automated Triage
+        ↓
+COMPLETED
+```
+
+## Final Week 17 Status
+
+**COMPLETED**
