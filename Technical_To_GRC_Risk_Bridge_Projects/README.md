@@ -1181,23 +1181,23 @@ README.md
 ```
 
 ```text
-Week20_Lab1_Compliance_Assessment.md
+Lab1_Compliance_Assessment.md
 ```
 
 ```text
-Week20_Lab1_Control_Evidence_Tracker.md
+Lab1_Control_Evidence_Tracker.md
 ```
 
 ```text
-Week20_Lab1_POAM.md
+Lab1_POAM.md
 ```
 
 ```text
-Week_20_NIST800-171_CMMC_Evidence_Control_Assessment_Technical_Analysis_writeup.md
+Lab1_NIST800-171_CMMC_Evidence_Control_Assessment_Technical_Analysis_writeup.md
 ```
 
 ```text
-Week_20_NIST800-171_CMMC_MFA_Compliance_Gap_Incident_Case_Study.md
+Lab1_NIST800-171_CMMC_MFA_Compliance_Gap_Incident_Case_Study.md
 ```
 
 The project also includes screenshots collected during the technical implementation and assessment process.
@@ -1212,11 +1212,11 @@ NIST-800-171-CMMC-Evidence-Control-Assessment/
 ├── README.md
 │
 ├── documentation/
-│   ├── Week20_Lab1_Compliance_Assessment.md
-│   ├── Week20_Lab1_Control_Evidence_Tracker.md
-│   ├── Week20_Lab1_POAM.md
-│   ├── Week_20_NIST800-171_CMMC_Evidence_Control_Assessment_Technical_Analysis_writeup.md
-│   └── Week_20_NIST800-171_CMMC_MFA_Compliance_Gap_Incident_Case_Study.md
+│   ├── Lab1_Compliance_Assessment.md
+│   ├── Lab1_Control_Evidence_Tracker.md
+│   ├── Lab1_POAM.md
+│   ├── Lab1_NIST800-171_CMMC_Evidence_Control_Assessment_Technical_Analysis_writeup.md
+│   └── Lab1_NIST800-171_CMMC_MFA_Compliance_Gap_Incident_Case_Study.md
 │
 └── screenshots/
     ├── network/
@@ -1661,4 +1661,4 @@ All findings and assessment results apply only to the defined training environme
 
 ---
 
-**Week 20 Lab 2 — NIST SP 800-171 / CMMC Evidence & Control Assessment**
+**Lab 1 — NIST SP 800-171 / CMMC Evidence & Control Assessment**
