@@ -2,7 +2,7 @@
 
 ## 🛡️ Applied Security Projects, Technical Investigations, Engineering, Automation & Control Validation
 
-Welcome to my cybersecurity portfolio.
+Welcome to my cybersecurity portfolio!
 
 This repository documents hands-on cybersecurity work across **network security, endpoint security, identity and access management, incident response, detection engineering, cloud security, security automation, Linux administration, infrastructure security, and technical risk/control validation**.
 
