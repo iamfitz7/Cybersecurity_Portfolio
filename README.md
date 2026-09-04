@@ -1,492 +1,1396 @@
-# 🔐 Cybersecurity & Networking Labs Portfolio
+# 🔐 Cybersecurity Portfolio
 
-Welcome! 👋  
-This repository documents my hands-on work in **networking, defensive security, and SOC-style investigation workflows**.
+## 🛡️ Applied Security Projects, Technical Investigations, Engineering, Automation & Control Validation
 
-This is **not a code repository**.  
-It is **evidence of practical technical work** showing how I build environments, validate network/host behavior, investigate security signals in a SIEM, and document findings using **screenshots, logs, configurations, exports, and structured write-ups**.
+Welcome to my cybersecurity portfolio.
 
-Everything here is written to reflect real analyst habits: **verify the data → reduce noise → capture evidence → explain what it proves → document limits → decide next action**.
+This repository documents hands-on cybersecurity work across **network security, endpoint security, identity and access management, incident response, detection engineering, cloud security, security automation, Linux administration, infrastructure security, and technical risk/control validation**.
 
----
+The purpose of this portfolio is not simply to show which tools I have used. Each project is designed to demonstrate how I approach technical security work through **implementation, investigation, validation, troubleshooting, evidence collection, decision-making, remediation, and documentation**.
 
-## 🎯 Purpose of This Repository
-
-This portfolio exists to:
-
-- ✅ Demonstrate **real hands-on practice** with verifiable proof (screenshots, logs, configs, exports)
-- ✅ Build strong fundamentals in **networking + defensive security** that SOC work depends on
-- ✅ Practice a repeatable investigation loop: **observe → validate → scope → enrich → document → decide**
-- ✅ Show how I think during investigations (what I checked, why I checked it, and what I concluded)
-- ✅ Keep my work **accurate and defensible** (no exaggerated claims, no guessing beyond telemetry)
-
----
-
-## 🧭 What You’ll Find Here
-
-### 🌐 Networking Foundations (Cisco Packet Tracer)
-Hands-on labs that prove I can configure, validate, and troubleshoot basic networks.
-
-What I did (evidence-based):
-- Assigned **static IPs** correctly on the same subnet and verified connectivity using **ICMP ping**
-- Subnetted networks and documented:
-  - **network address**
-  - **broadcast address**
-  - **usable host ranges**
-  - common boundaries used in real environments (examples: /24, /25, /26, /28, /16, /22)
-- Built **VLAN segmentation** to separate broadcast domains and validated segmentation behavior using connectivity tests
-- Performed **traceroute path analysis** to understand hop-by-hop routing visibility and identify where a path breaks
-- Practiced explaining what tests actually prove:
-  - ping = reachability (not “the app is working”)
-  - traceroute = path visibility (not full end-to-end service validation)
-
-Portfolio proof you’ll see:
-- Topology screenshots, IP schemes, VLAN diagrams, ping/traceroute validation screenshots, and short write-ups explaining results.
-
----
-
-### 🕵️ Traffic Analysis (Wireshark / tcpdump)
-Packet-level labs showing I can collect traffic, filter effectively, and interpret what happened on the wire.
-
-What I did (evidence-based):
-- Captured and explained the **TCP 3-way handshake** (SYN → SYN/ACK → ACK) and what each flag proves
-- Compared **TCP vs UDP** behavior using real captures (stateful session vs connectionless packets)
-- Captured and analyzed **DNS queries/responses**, explaining what the packets prove about resolution
-- Captured **HTTP** traffic and explained request/response behavior (GET/POST, headers, status codes)
-- Demonstrated the visibility limits of **HTTPS** and why encryption changes what analysts can confirm from packet captures
-- Built “story” captures that show real flow:
-  - **DNS resolves → client connects → HTTP request occurs**
-- Practiced investigation efficiency:
-  - filtering by protocol, port, IP, and key fields to isolate signal fast
-
-Portfolio proof you’ll see:
-- PCAP screenshots, filter screenshots, and write-ups that connect packet fields to what’s actually happening.
-
----
-
-### 🧱 Defensive Network Security (pfSense / Suricata / VPN + Validation)
-Labs focused on building and validating defensive controls the way small enterprise environments work.
-
-What I did (hands-on + validation):
-- Built firewall policies in **pfSense** and validated enforcement with before/after testing:
-  - allow vs deny behavior
-  - rule matching and why **rule order matters**
-- Configured and documented **NAT** behavior and how it changes traffic flow and visibility
-- Deployed **Suricata IDS** and generated alerts using controlled scan-style traffic
-- Tuned IDS settings to reduce noise:
-  - adjusted thresholds / reduced repetitive alerts
-  - documented why tuning is a real SOC skill (signal-to-noise)
-- Deployed a **VPN tunnel** and validated it worked end-to-end
-- Proved encryption with packet-level evidence:
-  - captured traffic while VPN was active
-  - confirmed tunnel behavior vs plaintext expectations
-- Built an integrated “stack” lab:
-  - **Firewall + IDS + VPN** working together as defense-in-depth
-  - documented what each layer contributes and what each layer can/can’t see
-
-Portfolio proof you’ll see:
-- pfSense rule screenshots, NAT screenshots, Suricata alert evidence, VPN setup evidence, Wireshark validation screenshots, and layered-security explanations.
-
----
-
-### 🧩 Identity & Windows Security (Active Directory / Group Policy / Windows Logs)
-Identity and endpoint monitoring fundamentals that support real investigations.
-
-What I did (hands-on + evidence):
-- Built Active Directory structure:
-  - created users, groups, and OUs
-  - documented why OU structure matters for administration and policy targeting
-- Created and applied **Group Policy Objects (GPOs)**:
-  - verified policies actually applied (not just created)
-- Implemented basic hardening via policy (example: password policy controls) and explained why it reduces credential risk
-- Used **Windows Event Viewer** to identify authentication anomalies:
-  - reviewed Security logs
-  - captured evidence of failed logins and explained how logs support detection
-
-Portfolio proof you’ll see:
-- AD screenshots, OU/group structure evidence, GPO configuration screenshots, policy validation screenshots, and Windows event log evidence.
-
----
-
-### 🔐 Cryptography & TLS / PKI (Evidence-Based)
-Labs that show I understand crypto in practical security terms — not just definitions.
-
-What I did (hands-on + validation):
-- Generated and compared hashes (SHA-256 vs MD5) and documented integrity verification use cases
-- Generated a **self-signed certificate** and documented how certificates map identity to key pairs
-- Enabled **TLS on a local web server** and documented the configuration and browser trust behavior
-- Verified TLS with evidence:
-  - confirmed TLS usage via browser indicators
-  - validated handshake behavior at a high level in Wireshark (ClientHello/ServerHello concepts)
-- Built an integrated security reasoning example:
-  - how encryption + identity + secure transport fit together in real systems
-
-Portfolio proof you’ll see:
-- OpenSSL outputs, certificate artifacts, TLS configuration evidence, and Wireshark/browsers validation screenshots.
-
----
-
-### 📊 SIEM & SOC Investigations (Splunk Enterprise / Splunk ES)
-The highest job-relevance section: SIEM hygiene, SPL accuracy, Mission Control workflow discipline, and case-style investigations.
-
-#### ✅ SIEM Foundations (How I avoid rookie mistakes)
-What I did (hands-on):
-- **Index discovery + telemetry mapping**
-  - identified which indexes contain SOC-relevant data (example: CrowdStrike-style telemetry index)
-  - verified events exist before assuming “no evidence”
-- **Field extraction awareness**
-  - compared raw logs (`_raw`) vs parsed fields
-  - documented how missing extraction causes false “empty results”
-- **SPL logic validation**
-  - practiced AND/OR precedence, parentheses grouping, and accurate filtering
-  - compared GUI click-to-filter SPL vs manual SPL to confirm result consistency
-- **Mission Control workflow hygiene**
-  - took ownership of alerts
-  - updated statuses (New → In Progress)
-  - opened detection rules directly from alerts
-  - reproduced detection SPL in Search & Reporting to validate alerts before investigating deeper
-
----
-
-## ⭐ Featured SOC Investigations (High-Signal Work)
-
-These are the investigations that best demonstrate real SOC L1 habits: validation, scoping, enrichment, and defensible decisions.
-
-### 1) Suspicious PowerShell LOLBAS Investigation (Splunk Mission Control + OSINT)
-What I did (end-to-end):
-- Opened alert in Mission Control and captured alert context (host/user/time window)
-- Opened the linked detection rule and reproduced SPL in Search & Reporting
-- Reviewed returned events and focused on high-signal fields:
-  - host/user identifiers
-  - command-line arguments
-  - embedded URLs
-- Deduplicated indicators to reduce noise and isolate unique signals
-- Enriched indicators with OSINT (VirusTotal) to support (not replace) behavioral analysis
-- Escalated based on command-line behavior consistent with LOLBAS abuse (not just “VT is red”)
-
-What this proves:
-- I can interpret suspicious PowerShell behavior and escalate with evidence, not assumptions.
-
----
-
-### 2) Malicious Domain Access Allowed (Zscaler Proxy + OSINT Correlation)
-What I did (end-to-end):
-- Investigated an alert sourced from proxy logs with emphasis on **allowed** traffic exposure risk
-- Reproduced SPL and isolated relevant fields:
-  - domain, user, category, action (allowed)
-- Aggregated results to identify:
-  - repeated domain access
-  - domains accessed by multiple users (stronger signal)
-- Exported and deduplicated domains to reduce noise
-- Performed OSINT enrichment (VirusTotal + urlscan.io)
-- Classified outcomes:
-  - high-confidence malicious → recommend blocking/escalate
-  - low-confidence/unconfirmed → monitor or tune, avoid overreaction
-  - unresolved domains → document limitations and handle proportionally
-
-What this proves:
-- I can triage proxy-based risk and balance security vs noise using evidence.
-
----
-
-### 3) SOC Decision-Making Lab (True Positive vs False Positive vs Tuning)
-What I did:
-- Investigated separate alerts and formally documented:
-  - classification (TP / FP / tune)
-  - evidence used
-  - action taken (close / escalate / recommend tuning)
-- Documented SOC L1 boundaries clearly:
-  - what I can conclude from available telemetry
-  - what must be handed off to L2/L3/IR or detection engineering
-
-What this proves:
-- I understand that **judgment + restraint** are core SOC skills, not just tool usage.
-
----
-
-### 4) High-Volume Outbound Transfer Detection & Prioritization (Zscaler Logs + SPL Workflow)
-What I built and validated:
-- Verified the correct data source and required fields existed before building logic
-- Normalized byte values into MB for human-readable evidence
-- Applied a threshold to isolate anomalous transfers (volume anomaly signal)
-- Produced ranked “top offenders” views:
-  - top users
-  - top hosts
-  - top departments
-  - top destination IPs
-- Documented correct framing:
-  - volume anomaly ≠ confirmed exfiltration
-  - this is triage and prioritization for investigation
-
-What this proves:
-- I can turn large log volumes into a short prioritized list (real SOC workflow).
-
----
-
-### 5) Vulnerable Notepad++ Execution Investigation (Sysmon + Splunk)
-What I did (from raw telemetry, not alerts):
-- Validated dataset/index availability and set the correct time range
-- Identified vulnerable versions and measured frequency (version sprawl exposure)
-- Scoped impacted hosts (blast radius) using distinct host counts
-- Prioritized by frequency (triage signal, not proof of compromise)
-- Analyzed process lineage (parent processes) and execution context (paths/directories)
-- Attempted network correlation and documented telemetry limits honestly
-- Produced a defensible conclusion and recommended patching to reduce exposure
-
-What this proves:
-- I can scope vulnerable software exposure and avoid false claims when telemetry is limited.
-
----
-
-## 🛡️ 6) Potential Data Exfiltration (Splunk)
-
-Week 12 is a full SOC-style case folder built around a single alert and expanded into a complete investigation package.  
-This work reflects how an L1 analyst investigates potential exfiltration in a real SOC: **validate the alert, reduce noise, enrich with context, identify indicators, and escalate with defensible evidence**.
-
-### ✅ Lab 1 (Strongest): SOC Case File — Potential Data Exfiltration to Cloud Storage
-What I did (end-to-end case workflow):
-- Opened the alert in Mission Control and documented why it fired (alert context + detection intent)
-- Reproduced the detection SPL in Search & Reporting to confirm the alert is valid and repeatable
-- Converted outbound byte counts to MB to make evidence readable and report-ready
-- Built prioritization views to identify the highest-risk behavior:
-  - top users, hosts, departments, destinations
-- Pivoted from volume-focused logs into proxy/web logs for enrichment:
-  - URLs, content types, categories, user agents
-- Identified scripted transfer indicators (ex: curl/python user-agent patterns) and separated automation from normal browser traffic
-- Documented what is known, unknown, and outside telemetry scope
-- Wrote escalation notes with:
-  - evidence summary
-  - why it matters
-  - what IR should validate next (endpoint review, credential review, data ownership confirmation)
-
-Artifacts included:
-- Alert context screenshots
-- Detection SPL reproduction evidence
-- Prioritization tables (ranked offenders)
-- Web log enrichment screenshots
-- Escalation notes + case summary
-
-Correct framing:
-- ✅ “High-volume outbound transfer activity consistent with potential exfiltration”
-- ❌ Not “confirmed exfiltration”
-
----
-
-### ✅ Lab 2 (Support Lab): SPL Workflow — High-Volume Outbound Transfer Triage Pack
-What I built:
-A reusable set of SPL searches designed to answer the same triage questions fast:
-
-- Who is sending the most outbound data?
-- Which hosts are responsible?
-- Which departments show spikes?
-- Which destinations repeat?
-- What time window is hottest?
-
-What I did:
-- Confirmed field availability and index readiness before building searches
-- Normalized bytes to MB so results are readable
-- Built modular queries that produce ranked outputs and time-based spike views
-- Documented why this matters:
-  - this is how SOCs reduce “tons of logs” into a short prioritized queue
-
-Artifacts included:
-- Saved SPL searches
-- Ranked results screenshots
-- Time-window / spike analysis screenshots
-
----
-
-## 🧾 Evidence Standards
-
-Most labs include:
-
-- ✅ Clear goal (what I’m validating or investigating)
-- ✅ Tools used and what the tool is proving
-- ✅ Repeatable steps (enough for someone else to reproduce)
-- ✅ Evidence (screenshots, logs, exports, configs)
-- ✅ Findings + what the evidence supports
-- ✅ Limits (what I cannot confirm from available telemetry)
-- ✅ Outcome (close / escalate / recommend tuning / recommend hardening)
-
-I avoid exaggeration.  
-If something can’t be proven with telemetry, I document that limitation instead of guessing.
-
----
-
-## 🧰 Tools & Platforms Used
-
-You may see these tools across the repository:
-
-- Splunk Enterprise / Splunk ES (Search & Reporting, Mission Control, Detection Rules)
-- Wireshark and tcpdump
-- Cisco Packet Tracer
-- pfSense firewall
-- Suricata IDS
-- VPN deployment + encryption validation workflows
-- Windows Server (Active Directory, Group Policy)
-- Windows Event Viewer (Security logs)
-- Linux CLI utilities (users/groups, permissions, OpenSSL)
-- SQL (MariaDB) for structured security event analysis
-- OSINT enrichment tools:
-  - VirusTotal
-  - urlscan.io
-
----
-
-## ✅ How to Review This Repository
-
-For reviewers:
-
-- Start with **Networking + Traffic Analysis** to see fundamentals and evidence discipline
-- Review **Defensive Network Security + Identity** to see control implementation and validation
-- Focus on **SIEM + SOC Investigations** for the most job-relevant work:
-  - SPL accuracy
-  - Mission Control workflow discipline
-  - case files with evidence + escalation reasoning
-  - Week 12 is the strongest “full case” example
-
----
-
-## 📌 Safety & Ethics
-
-⚠️ All work in this repository is performed in **isolated lab environments**.
-
-- ❌ No unauthorized scanning or testing of real systems
-- ❌ No real-world attacks
-- ✅ Educational and defensive practice only
-
----
-
-## 📫 Contact & Links
-
-- **GitHub:** https://github.com/iamfitz7  
-- **LinkedIn:** https://www.linkedin.com/in/fitzgerald-afari-minta-868177352/
-
-Thanks for taking the time to review my work! 🙌
-
----
-
-## 🗂️ My Repository Structure
+My general workflow is:
 
 ```text
-Cybersecurity_Portfolio/
-├── README.md
-├── screenshots-guidelines.md
+Build / Configure
+      ↓
+Generate or Observe Activity
+      ↓
+Collect Telemetry
+      ↓
+Investigate
+      ↓
+Correlate Evidence
+      ↓
+Validate Findings
+      ↓
+Make a Decision
+      ↓
+Remediate or Improve
+      ↓
+Re-Validate
+      ↓
+Document
+```
 
-├── networking-fundamentals/
-│   ├── packet-tracer-labs/
-│   ├── subnetting-exercises/
-│   ├── vlan-segmentation/
-│   ├── traceroute-analysis/
-│   ├── screenshots/
-│   └── README.md
+Projects throughout this repository include **configurations, scripts, KQL queries, SPL searches, logs, packet captures, screenshots, process trees, detection rules, investigation timelines, control assessments, reports, risk documentation, and other technical evidence**.
 
-├── traffic-analysis/
-│   ├── wireshark-handshakes/
-│   ├── dns-analysis/
-│   ├── http-https-analysis/
-│   ├── tcp-vs-udp-comparisons/
-│   ├── filters-notes/
-│   ├── combined-traffic-narratives/
-│   ├── screenshots/
-│   └── README.md
+> ### 👀 Short on time?
+>
+> Start with the projects below. They represent some of the strongest and most complete work currently in this portfolio:
+>
+> ☁️ **Microsoft Defender XDR, Microsoft Sentinel & Azure Security**  
+> 🛡️ **NIST SP 800-171 / CMMC Technical Control Assessment**  
+> 🐧 **Linux Server Administration & Security Hardening**  
+> ⚙️ **Python & Security Automation**  
+> 🔎 **Windows / Endpoint Incident Investigations**  
+> 🌐 **Network Defense, Firewall, IDS/IPS & VPN Security**
 
-├── defensive-network-security/
-│   ├── firewall-rules/
-│   ├── nat-analysis/
-│   ├── ids-alert-testing/
-│   ├── ids-tuning/
-│   ├── vpn-validation/
-│   ├── layered-defense-stack/
-│   ├── screenshots/
-│   └── README.md
+---
 
-├── identity-and-endpoint-security/
-│   ├── active-directory/
-│   ├── group-policy/
-│   ├── password-policy-hardening/
-│   ├── windows-event-logs/
-│   ├── vpn-ad-integration/
-│   ├── screenshots/
-│   └── README.md
+# 📌 Portfolio at a Glance
 
-├── cryptography-and-tls/
-│   ├── hashing-integrity/
-│   ├── certificates-pki/
-│   ├── tls-server-setup/
-│   ├── tls-handshake-validation/
-│   ├── screenshots/
-│   └── README.md
+| Security Area | Hands-On Work Demonstrated | Technologies / Concepts |
+|---|---|---|
+| 🌐 **Networking & Network Security** | Network design, subnetting, VLANs, packet analysis, firewall policy, IDS/IPS, VPN validation | TCP/IP, DNS, DHCP, Cisco Packet Tracer, Wireshark, tcpdump, pfSense, Suricata |
+| 🪟 **Windows & Identity Security** | Active Directory administration, Group Policy, authentication analysis, access control | Windows Server, AD DS, GPO, Windows Security Logs |
+| 🔎 **Security Monitoring & Investigation** | Alert triage, telemetry analysis, event correlation, investigation timelines, evidence review | Splunk, Elastic Security, Microsoft Sentinel |
+| 🛡️ **Endpoint Security & EDR** | Process analysis, endpoint timelines, command-line review, malware prevention investigation | Microsoft Defender XDR, Defender for Endpoint, Elastic Defend |
+| 🚨 **Incident Response** | Triage, scoping, evidence correlation, classification, response recommendations, validation | Windows Events, EDR telemetry, SIEM data, MITRE ATT&CK |
+| 🎯 **Detection Engineering** | Detection logic, KQL hunting, analytics rules, thresholds, ATT&CK mapping, detection validation | Microsoft Sentinel, KQL, SPL |
+| ☁️ **Cloud Security** | Identity monitoring, RBAC analysis, administrative activity, least privilege, cloud detections | Microsoft Azure, Entra ID, Azure RBAC, Log Analytics, Sentinel |
+| ⚙️ **Security Automation** | Structured data processing, scripting, IOC-focused workflows, repeatable security tasks | Python, PowerShell, Bash, JSON, CSV, APIs, regex |
+| 🐧 **Linux Security** | Administration, SSH, user permissions, service management, firewalling, auditing, hardening | Ubuntu Linux, Kali Linux, Bash |
+| 📋 **Risk & Control Validation** | Requirement mapping, technical evidence, control assessment, risk identification, remediation tracking | NIST SP 800-171 Rev. 2, CMMC Level 2, POA&M-style documentation |
 
-├── siem-and-detections/
-│   ├── splunk-installation/
-│   ├── index-validation/
-│   ├── spl-workflows/
-│   ├── alert-logic/
-│   ├── log-parsing-and-fields/
-│   ├── mission-control-workflow/
-│   ├── screenshots/
-│   └── README.md
+---
 
-├── soc-investigations/
-│   ├── suspicious-powershell-lolbas/
-│   │   ├── osint-enrichment/
-│   │   ├── escalation-notes/
-│   │   ├── screenshots/
-│   │   └── README.md
-│   │
-│   ├── malicious-domain-access-allowed/
-│   │   ├── proxy-log-analysis/
-│   │   ├── osint-enrichment/
-│   │   ├── escalation-decision/
-│   │   ├── screenshots/
-│   │   └── README.md
-│   │
-│   ├── decision-notes/
-│   │   ├── escalation-summaries/
-│   │   ├── false-positive-closures/
-│   │   ├── tuning-recommendations/
-│   │   └── README.md
-│   │
-│   ├── volume-detection/
-│   │   ├── zscaler-high-volume-transfers/
-│   │   ├── screenshots/
-│   │   └── README.md
-│   │
-│   ├── vulnerable-software/
-│   │   ├── notepadpp-analysis/
-│   │   ├── screenshots/
-│   │   └── README.md
-│   │
-│   ├── fallback-endpoint-pivot/
-│   │   ├── telemetry-inventory/
-│   │   ├── limitations-and-escalation/
-│   │   ├── screenshots/
-│   │   └── README.md
-│   │
-│   └── week-12-potential-data-exfiltration/
-│       ├── soc-case-file/
-│       │   ├── alert-context/
-│       │   ├── detection-reproduction/
-│       │   ├── prioritization/
-│       │   ├── enrichment/
-│       │   ├── escalation-notes/
-│       │   ├── screenshots/
-│       │   └── README.md
-│       │
-│       └── triage-pack/
-│           ├── spl-searches/
-│           ├── ranked-results/
-│           ├── time-window-analysis/
-│           ├── screenshots/
-│           └── README.md
+# ⭐ Featured Technical Projects
 
-└── additional-security-labs/
-    ├── linux-iam-permissions/
-    ├── suricata-tcpdump-installation/
-    ├── sql-security-event-analysis/
-    ├── openssl-crypto-and-integrity/
-    ├── network-ir-traffic-analysis/
-    ├── compliance-controls-assessment/
-    ├── web-app-incident-response/
-    └── README.md
+## ☁️ 1. Microsoft Security Environment Deployment, Defender for Endpoint Onboarding & EDR Investigation
+
+📁 **[Explore Week 17 — Microsoft Defender XDR & Microsoft Sentinel Investigations](./Week17_Defender_XDR_Sentinel_Investigations)**
+
+Designed and deployed a Microsoft security lab environment integrating:
+
+- Microsoft Azure
+- Microsoft Entra ID
+- Microsoft Defender XDR
+- Microsoft Defender for Endpoint
+- Microsoft Sentinel
+- Azure Log Analytics
+- Windows 11 Enterprise
+- PowerShell
+- IIS
+- Advanced Hunting
+- KQL
+
+### 🔧 Environment Deployment & Troubleshooting
+
+One of the most important parts of this project involved troubleshooting Microsoft Defender for Endpoint onboarding.
+
+The original Windows endpoint failed to onboard and returned **Error ID 15**.
+
+Rather than forcing an unsupported workaround, I investigated the endpoint and identified that the Microsoft Defender for Endpoint **SENSE service was unavailable because the operating system edition did not properly support the required MDE functionality**.
+
+I replaced the endpoint with a supported **Windows 11 Enterprise** system and rebuilt the deployment correctly.
+
+I then validated:
+
+- ✅ Microsoft Defender Antivirus service health
+- ✅ Microsoft Defender for Endpoint `SENSE` service
+- ✅ Endpoint onboarding status
+- ✅ Required registry configuration
+- ✅ Communication with Microsoft Defender cloud services
+- ✅ Device visibility inside Defender XDR
+- ✅ Endpoint telemetry collection
+
+### 🧪 EDR Detection Validation
+
+After successful deployment, I performed Microsoft's official EDR detection test and investigated the generated activity through Defender XDR.
+
+The investigation included:
+
+- 🚨 Incident review
+- 🔎 Alert analysis
+- 🧭 Device timeline investigation
+- 🌳 Process tree review
+- 💻 Command-line analysis
+- 🎯 Advanced Hunting
+- 🧪 KQL queries
+- 👤 User correlation
+- 🖥️ Device correlation
+- ⚙️ Process correlation
+- 🌐 Network activity review
+
+Based on the available evidence and known testing context, the activity was classified as:
+
+> **Informational / Expected Activity / Security Testing**
+
+### 🧹 Cleanup & Validation
+
+The project did not stop after generating the detection.
+
+Temporary testing components were removed, IIS-related services were stopped and disabled, temporary files were deleted, TCP port 80 exposure was removed, and the endpoint was returned to a safer state.
+
+### 💡 Key Takeaway
+
+This project demonstrated the complete workflow of:
+
+**deployment → troubleshooting → telemetry validation → detection testing → investigation → classification → cleanup → re-validation**
+
+---
+
+## 🎯 2. Azure Identity, RBAC Monitoring, KQL Threat Hunting & Detection Engineering
+
+📁 **[Explore Week 17 — Defender XDR, Sentinel & Azure Security](./Week17_Defender_XDR_Sentinel_Investigations)**
+
+Built an Azure security monitoring and detection workflow focused on **identity, administrative activity, authorization, RBAC, least privilege, and cloud telemetry**.
+
+### 🧰 Technologies Used
+
+- Microsoft Azure
+- Microsoft Entra ID
+- Azure RBAC
+- Microsoft Sentinel
+- Azure Log Analytics
+- Azure Activity Logs
+- Sign-in Logs
+- KQL
+- Sentinel Analytics Rules
+- Sentinel Automation Rules
+
+### 🔎 Investigation Workflow
+
+I analyzed cloud activity using telemetry including:
+
+```text
+AzureActivity
+SigninLogs
+```
+
+The investigation connected several important cloud security concepts:
+
+```text
+Authentication
+      ↓
+Authorization
+      ↓
+Administrative Action
+      ↓
+Telemetry
+      ↓
+Detection
+      ↓
+Investigation
+      ↓
+Remediation
+```
+
+### 🚨 Custom Microsoft Sentinel Detection
+
+I developed a custom Sentinel analytics rule:
+
+> **Lab - Azure RBAC Role Assignment Activity**
+
+The rule was configured with:
+
+- 🟡 **Severity:** Medium
+- ⏱️ **Query frequency:** Every 5 minutes
+- 🕒 **Lookback period:** 10 minutes
+- 🎯 **Alert threshold:** Greater than 0
+- 🧭 **MITRE ATT&CK mapping:** Privilege Escalation
+
+The detection focused on successful Azure RBAC role-assignment activity.
+
+### 🔐 Least-Privilege Remediation
+
+Temporary Contributor permissions used during testing were removed.
+
+Final access was validated using **Reader** permissions, restoring a more appropriate least-privilege configuration.
+
+### ⚠️ Documented Limitation
+
+Microsoft Entra Conditional Access was reviewed as an additional security control.
+
+It was **not implemented** because the lab did not have the required Microsoft Entra ID P1 licensing.
+
+Rather than presenting the control as completed, the limitation was documented clearly.
+
+A scoped Microsoft Sentinel automation rule was also configured to support incident triage workflow.
+
+### 💡 Key Takeaway
+
+This project connected:
+
+**cloud identity → permissions → administrative activity → telemetry → KQL → detection engineering → investigation → least-privilege remediation**
+
+---
+
+## 📋 3. NIST SP 800-171 Rev. 2 / CMMC Level 2 Technical Control Assessment
+
+📁 **[Explore Technical-to-GRC Risk Bridge Projects](./Technical_To_GRC_Risk_Bridge_Projects)**
+
+Built an isolated security environment and used it to connect technical security implementation with **control requirements, evidence, assessment, risk, remediation, and validation**.
+
+### 🏗️ Lab Environment
+
+The environment included:
+
+- 🔥 pfSense boundary firewall/router
+- 🖥️ Windows Server 2022 Domain Controller
+- 👥 Active Directory Domain Services
+- 🌐 Windows DNS
+- 🔐 Group Policy
+- 💻 Windows 11 Enterprise endpoint
+- 🛡️ Microsoft Defender Antivirus
+- 🛡️ Microsoft Defender for Endpoint
+- 📑 Windows Security Event Logs
+- 💻 PowerShell
+- 📦 Oracle VirtualBox
+
+### 🔎 Assessment Methodology
+
+Instead of treating compliance as a checklist exercise, I used an evidence-driven process:
+
+```text
+Requirement
+    ↓
+Implementation
+    ↓
+Evidence
+    ↓
+Assessment
+    ↓
+MET / NOT MET
+    ↓
+Gap
+    ↓
+Risk
+    ↓
+Remediation
+    ↓
+Owner
+    ↓
+Validation
+```
+
+### 📚 Requirements Assessed
+
+Selected NIST SP 800-171 Rev. 2 / CMMC Level 2 requirements included:
+
+#### 🔐 Access Control
+
+- `AC.L2-3.1.1`
+- `AC.L2-3.1.5`
+
+#### 🧾 Audit & Accountability
+
+- `AU.L2-3.3.1`
+- `AU.L2-3.3.2`
+
+#### 👤 Identification & Authentication
+
+- `IA.L2-3.5.1`
+- `IA.L2-3.5.3`
+
+#### 🌐 System & Communications Protection
+
+- `SC.L2-3.13.1`
+
+#### 🛡️ System & Information Integrity
+
+- `SI.L2-3.14.1`
+- `SI.L2-3.14.2`
+- `SI.L2-3.14.6`
+
+### 📊 Technical-to-Risk Translation
+
+Technical findings were translated into:
+
+- ✅ Control status
+- 📎 Evidence
+- ⚠️ Security gaps
+- 📊 Risk statements
+- 🛠️ Remediation actions
+- 👤 Ownership
+- 🔄 Validation requirements
+- 📋 POA&M-style remediation tracking
+
+### 💡 Key Takeaway
+
+The goal was not simply to say that a security control existed.
+
+The goal was to answer:
+
+> **What technical evidence proves that the control is actually implemented and operating as expected?**
+
+---
+
+## 🐧 4. Linux Server Administration, Hardening & Security Validation
+
+📁 **[Explore Week 21 — Linux Administration & Scripting](./Week21_Linux_Administration_%26_Scripting)**
+
+Built an enterprise-style Linux security administration lab using:
+
+- 🖥️ `linux-srv01` — Ubuntu Linux server
+- 💻 `kali-admin01` — Kali Linux administrative/testing workstation
+- 🔒 Private VirtualBox management network
+- 🌐 Separate NAT connectivity for package management and updates
+
+### 🛠️ Areas Covered
+
+- Linux user administration
+- Group management
+- File and directory permissions
+- Administrative privilege management
+- Secure remote access
+- SSH
+- Host firewall configuration
+- Network configuration
+- Linux service management
+- Logging
+- Auditing
+- Package management
+- System updates
+- Security hardening
+- Bash scripting
+- Administrative validation
+- Security testing from a separate system
+
+### 🔎 Validation Mindset
+
+The lab follows a simple security principle:
+
+> **A configuration should not be considered complete simply because a command executed successfully. The resulting system behavior should also be tested and validated.**
+
+That means checking the system from both the administrative and security perspective after changes are made.
+
+---
+
+## ⚙️ 5. Python & Security Automation
+
+📁 **[Explore Week 20 — Python & Security Automation](./Week20_Python_%26_Security_Automation)**
+
+This section expands the portfolio from primarily manual workflows into repeatable security automation.
+
+### 🐍 Areas of Focus
+
+- Python
+- File handling
+- CSV processing
+- JSON processing
+- Regular expressions
+- IOC validation
+- API interaction
+- Error handling
+- Logging
+- Structured output
+- Security reporting
+- Automation workflow design
+
+### 🔍 Indicator Types
+
+Security automation work includes processing indicators such as:
+
+```text
+IP Addresses
+Domains
+URLs
+File Hashes
+```
+
+The objective is not simply to write code.
+
+The objective is to use programming to improve the **speed, consistency, repeatability, and documentation** of security workflows.
+
+---
+
+## 🪟 6. Windows Event Log Analysis & Incident Response
+
+📁 **[Explore Week 13 — Windows Event Logs & Incident Response](./Week13_Windows_EventLogs_IncidentResponse)**
+
+Performed Windows security investigations using **Windows Event Viewer and Windows Security logs**.
+
+### 🔎 Authentication Events Investigated
+
+| Event ID | Meaning |
+|---|---|
+| `4624` | Successful logon |
+| `4625` | Failed logon |
+| `4634` | Account logoff |
+| `4672` | Special privileges assigned to a new logon |
+
+I generated controlled failed-authentication activity and investigated the resulting Event ID `4625` events.
+
+The investigation considered:
+
+- ⏱️ Timing
+- 🔢 Number of failures
+- 👤 User account
+- 🔐 Authentication result
+- ✅ Surrounding successful logons
+- 🧠 Expected versus unexpected behavior
+- 🚨 Potential brute-force indicators
+
+The activity was ultimately classified as **expected lab testing** because the surrounding evidence supported that conclusion.
+
+The activity was also mapped to:
+
+> **MITRE ATT&CK T1110 — Brute Force**
+
+### 💡 Key Takeaway
+
+> **Security events are evidence, not conclusions.**
+
+A failed login could represent a user mistake, broken service, password spraying, brute-force behavior, expected testing, or another condition.
+
+Context determines its meaning.
+
+---
+
+## 🌐 7. Network Security, Firewall, IDS/IPS & VPN Validation
+
+📁 **[Explore Week 5 — pfSense](./Week5_pfSense)**  
+📁 **[Explore Week 6 — Advanced Firewall & VPN Security](./Week6_Firewall_Advanced_VPN)**
+
+Built and tested network defense environments using **pfSense, Suricata, VPN technology, and packet-level validation**.
+
+### 🛡️ Work Performed
+
+- Firewall rule creation
+- Traffic filtering
+- ICMP control
+- NAT
+- Rule priority testing
+- Network segmentation
+- Suricata IDS monitoring
+- Nmap-generated test traffic
+- IDS alert validation
+- Detection tuning
+- VPN configuration
+- Encrypted tunnel validation
+- Packet capture analysis
+
+A recurring validation workflow was:
+
+```text
+Configure Control
+      ↓
+Generate Traffic
+      ↓
+Observe Behavior
+      ↓
+Capture Evidence
+      ↓
+Verify Result
+```
+
+The same principle was applied to firewall, IDS/IPS, and VPN testing.
+
+---
+
+## 🔎 8. Splunk SIEM Investigations
+
+📁 **[Explore Week 9 — Splunk SIEM](./Week9_Splunk_SIEM)**  
+📁 **[Explore Week 10 — Splunk Investigations](./Week10_Splunk2)**  
+📁 **[Explore Week 12 — Potential Data Exfiltration](./Week12_Potential_Data_Exfiltration)**
+
+Developed progressively deeper Splunk investigation workflows involving:
+
+- Index discovery
+- Raw event review
+- Field identification
+- SPL
+- Search refinement
+- Event filtering
+- Timeline reconstruction
+- Endpoint investigation
+- Authentication analysis
+- Web activity analysis
+- Process activity
+- Data-transfer analysis
+- Alert validation
+- Evidence collection
+
+### 🚨 Investigation Scenarios
+
+Projects included analysis of:
+
+- Suspicious PowerShell activity
+- Living-off-the-land behavior
+- Potentially malicious domain activity
+- High-volume outbound transfers
+- Potential data exfiltration
+- Endpoint software visibility
+- Security alert prioritization
+- True-positive versus false-positive decisions
+
+The objective was not simply to locate an event.
+
+The objective was to determine:
+
+> **What happened, what evidence supports it, how significant it is, and what should happen next?**
+
+---
+
+# 🧭 Portfolio Progression
+
+This repository intentionally progresses from technical foundations into increasingly integrated security work.
+
+```text
+🌐 Networking Fundamentals
+          ↓
+🔬 Packet & Protocol Analysis
+          ↓
+🔥 Firewalls / IDS / VPN
+          ↓
+🪟 Windows / Active Directory
+          ↓
+🔐 Cryptography / TLS
+          ↓
+📊 SIEM
+          ↓
+🔎 Security Investigations
+          ↓
+🚨 Incident Response
+          ↓
+🛡️ Endpoint Security / EDR
+          ↓
+☁️ Microsoft Security & Azure
+          ↓
+🎯 Detection Engineering
+          ↓
+🔐 Identity / RBAC Security
+          ↓
+⚙️ Security Automation
+          ↓
+🐧 Linux Security Administration
+          ↓
+📋 Technical Risk & Control Validation
+```
+
+| Stage | Focus | Representative Skills |
+|---|---|---|
+| 🌐 Foundations | Networking | OSI, TCP/IP, subnetting, DNS, DHCP, VLANs |
+| 🔬 Traffic Analysis | Packet-level visibility | Wireshark, tcpdump, TCP, UDP, DNS, HTTP, TLS |
+| 🔥 Network Defense | Preventive and detective controls | pfSense, Suricata, firewalling, NAT, VPN |
+| 👤 Identity | Authentication and authorization | Active Directory, GPO, Entra ID, RBAC |
+| 🔐 Data Protection | Cryptography | Hashing, AES, TLS, certificates |
+| 📊 SIEM | Centralized telemetry | Splunk, SPL, Microsoft Sentinel |
+| 🚨 Incident Response | Investigation | Windows logs, timelines, event correlation |
+| 🛡️ Endpoint Security | Endpoint telemetry | Defender XDR, MDE, Elastic Defend |
+| 🎯 Detection Engineering | Detection creation | KQL, analytics rules, ATT&CK mapping |
+| ☁️ Cloud Security | Cloud identity and activity | Azure, Entra ID, RBAC, Log Analytics |
+| ⚙️ Automation | Repeatable workflows | Python, PowerShell, Bash |
+| 🐧 Infrastructure Security | Secure administration | Linux, SSH, firewalling, auditing |
+| 📋 Risk & Controls | Security assurance | NIST SP 800-171, CMMC, POA&M |
+
+---
+
+# 🗂️ Repository Map
+
+<details>
+<summary><strong>🌐 Weeks 1–6 | Networking, Packet Analysis & Network Defense</strong></summary>
+
+<br>
+
+### 🌐 [Week 1 — OSI Model & TCP/IP](./Week1_OSI_TCPIP)
+
+**Focus:** Network communication fundamentals
+
+- OSI model
+- TCP/IP model
+- Network communication
+- Protocol behavior
+
+### 🧮 [Week 2 — Subnetting & Cisco Packet Tracer](./Week2_Subnetting_PacketTracer)
+
+**Focus:** Addressing, segmentation, and connectivity
+
+- IPv4
+- Subnet masks
+- Network ranges
+- Host ranges
+- Cisco Packet Tracer
+- Connectivity validation
+
+### 🌍 [Week 3 — DNS, HTTP & DHCP](./Week3_DNS_HTTP_DHCP)
+
+**Focus:** Core network services
+
+- DNS
+- HTTP
+- DHCP
+- DHCP DORA
+- Client/server communication
+
+### 🔬 [Week 4 — Wireshark Deep Dive](./Week4_WiresharkDeepDive)
+
+**Focus:** Packet-level analysis
+
+- TCP three-way handshake
+- TCP versus UDP
+- DNS packet analysis
+- HTTP analysis
+- HTTPS visibility
+- Wireshark filters
+
+### 🔥 [Week 5 — pfSense Firewall Security](./Week5_pfSense)
+
+**Focus:** Network defense
+
+- Firewall policies
+- Rule creation
+- ICMP filtering
+- NAT
+- Segmentation
+- Suricata IDS
+- Security validation
+
+### 🔒 [Week 6 — Advanced Firewall & VPN Security](./Week6_Firewall_Advanced_VPN)
+
+**Focus:** Layered network security
+
+- Advanced firewall rules
+- Rule priority
+- VPN deployment
+- IDS/IPS integration
+- Encrypted communication
+- Packet validation
+
+</details>
+
+---
+
+<details>
+<summary><strong>🪟 Weeks 7–8 | Windows Identity & Cryptography</strong></summary>
+
+<br>
+
+### 👥 [Week 7 — Windows Active Directory](./Week7_Windows_Active_Directory)
+
+**Focus:** Enterprise Windows identity
+
+- Active Directory Domain Services
+- Organizational Units
+- Users and groups
+- Group Policy
+- Password policy
+- Authentication
+- Windows administration
+
+### 🔐 [Week 8 — Cryptography Fundamentals](./Week8_CryptographyFundamentals)
+
+**Focus:** Cryptographic protection
+
+- SHA-256
+- MD5
+- Hashing
+- AES
+- Certificates
+- TLS
+- PKI concepts
+- Encrypted communications
+
+</details>
+
+---
+
+<details>
+<summary><strong>📊 Weeks 9–12 | SIEM & Security Investigation</strong></summary>
+
+<br>
+
+### 📊 [Week 9 — Splunk SIEM](./Week9_Splunk_SIEM)
+
+- Splunk
+- Event ingestion
+- Index discovery
+- SPL
+- Security telemetry
+- Investigation fundamentals
+
+### 🔎 [Week 10 — Splunk Investigation Workflows](./Week10_Splunk2)
+
+Expanded Splunk security analysis and investigative workflows.
+
+### 🚨 Week 11 — SIEM Investigations & Alert Prioritization
+
+Focused on:
+
+- Alert interpretation
+- Evidence validation
+- Investigation priority
+- Security context
+- Decision-making
+
+### 📤 [Week 12 — Potential Data Exfiltration](./Week12_Potential_Data_Exfiltration)
+
+Focused on investigating suspicious outbound activity and determining whether the available telemetry supported an exfiltration hypothesis.
+
+</details>
+
+---
+
+<details>
+<summary><strong>🚨 Weeks 13–16 | Incident Response & Endpoint Investigation</strong></summary>
+
+<br>
+
+### 🪟 [Week 13 — Windows Event Logs & Incident Response](./Week13_Windows_EventLogs_IncidentResponse)
+
+- Windows Event Viewer
+- Authentication events
+- Event ID analysis
+- Failed-login investigation
+- Event correlation
+- Incident response reporting
+
+### 🎯 Week 14 — Incident Response, Detection & Analysis
+
+Expanded investigation workflows through telemetry correlation, detection review, and incident analysis.
+
+### 🛡️ [Week 15 — Endpoint Investigation Workflows](./Week15_Endpoint_Investigation_Workflows)
+
+Focused on endpoint-centered investigation and process-level evidence.
+
+### 🚨 [Week 16 — Incident Response Investigations](./Week16_Incident_Response_Investigations)
+
+Focused on structured triage, evidence collection, correlation, scoping, and security decisions.
+
+</details>
+
+---
+
+<details>
+<summary><strong>☁️ Week 17 | Microsoft Defender XDR, Sentinel, Azure & Detection Engineering</strong></summary>
+
+<br>
+
+### ☁️ [Week 17 — Microsoft Security Platform Investigations](./Week17_Defender_XDR_Sentinel_Investigations)
+
+Week 17 includes six major labs:
+
+1. **Microsoft Security Environment Deployment, Defender for Endpoint Onboarding, Sentinel Integration & EDR Investigation**
+2. **Microsoft Defender XDR Fundamentals, Incident Investigation & Enterprise Security Operations**
+3. **Microsoft Sentinel SIEM, Azure Activity Telemetry, KQL Threat Hunting & Detection Engineering Fundamentals**
+4. **Microsoft Entra Failed Login Investigation, KQL Threat Hunting, Sentinel Detection Engineering & Defender Incident Response**
+5. **Suspicious PowerShell Endpoint Investigation, Advanced Hunting, Telemetry Correlation & Endpoint Response**
+6. **Azure Cloud Security Operations: Identity, RBAC, Azure Activity Monitoring, KQL Threat Hunting, Sentinel Detection Engineering, Least-Privilege Remediation & Security Automation**
+
+This section brings together:
+
+- ☁️ Cloud security
+- 🛡️ Endpoint security
+- 👤 Identity
+- 🔐 RBAC
+- 📊 SIEM
+- 🚨 EDR
+- 🔎 Threat hunting
+- 🎯 Detection engineering
+- 🧠 Investigation
+- ⚙️ Security automation
+- ✅ Least privilege
+
+</details>
+
+---
+
+<details>
+<summary><strong>🧰 Weeks 18–21 | Troubleshooting, Response, Automation & Linux Security</strong></summary>
+
+<br>
+
+### 🧰 [Week 18 — IT & Network Troubleshooting](./Week18_IT_Network_Troubleshooting)
+
+Focuses on troubleshooting the underlying systems security depends on.
+
+Areas include:
+
+- Networking
+- DNS
+- Routing
+- Services
+- Authentication
+- Firewall configuration
+- Operating system behavior
+- Application behavior
+
+### 🚨 Week 19 — Incident Response Triage & Investigation
+
+Focused on:
+
+- Alert triage
+- Scope
+- Evidence correlation
+- Investigation
+- Response decisions
+
+### ⚙️ [Week 20 — Python & Security Automation](./Week20_Python_%26_Security_Automation)
+
+Focused on:
+
+- Python
+- File handling
+- CSV
+- JSON
+- Regex
+- IOC processing
+- API interaction
+- Logging
+- Error handling
+- Structured reporting
+
+### 🐧 [Week 21 — Linux Administration & Scripting](./Week21_Linux_Administration_%26_Scripting)
+
+Focused on:
+
+- Linux administration
+- Users and groups
+- Permissions
+- SSH
+- Firewalling
+- Services
+- Logging
+- Auditing
+- Hardening
+- Bash
+- Security validation
+
+</details>
+
+---
+
+<details>
+<summary><strong>📋 Technical-to-GRC | Risk, Controls & Security Assurance</strong></summary>
+
+<br>
+
+### 📋 [Technical-to-GRC Risk Bridge Projects](./Technical_To_GRC_Risk_Bridge_Projects)
+
+Connects technical cybersecurity work to:
+
+- NIST SP 800-171 Rev. 2
+- CMMC Level 2
+- Security control implementation
+- Evidence validation
+- Risk assessment
+- Security gaps
+- Remediation
+- POA&M-style tracking
+- Control re-validation
+
+</details>
+
+---
+
+# 🧪 Investigation Methodology
+
+Across the portfolio, I use an evidence-driven investigation process.
+
+```text
+┌──────────────────────────────────────┐
+│  1. Understand the Environment       │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│  2. Define the Question / Hypothesis │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│  3. Identify Relevant Telemetry      │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│  4. Review Raw Evidence              │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│  5. Filter & Correlate Activity      │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│  6. Determine Scope                  │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│  7. Add Technical Context            │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│  8. Compare Expected vs. Observed    │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│  9. Classify the Finding             │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│ 10. Respond / Recommend Action       │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│ 11. Validate the Result              │
+└──────────────────┬───────────────────┘
+                   ↓
+┌──────────────────────────────────────┐
+│ 12. Document Evidence & Limitations  │
+└──────────────────────────────────────┘
+```
+
+This process helps keep conclusions tied to evidence instead of assumptions.
+
+---
+
+# 🔎 Evidence & Documentation Standard
+
+A major goal of this portfolio is to make the work **verifiable**.
+
+Depending on the project, evidence may include:
+
+| Evidence Type | Examples |
+|---|---|
+| 📸 **Visual Evidence** | Screenshots, dashboards, configuration views |
+| 📑 **Logs** | Windows Security Events, SIEM events, endpoint telemetry |
+| 🌐 **Network Evidence** | Packet captures, firewall logs, IDS alerts |
+| 💻 **Endpoint Evidence** | Processes, command lines, file activity, timelines |
+| 🔎 **Queries** | KQL, SPL, PowerShell queries |
+| 🎯 **Detection Evidence** | Analytics rules, alert logic, thresholds, ATT&CK mappings |
+| ⚙️ **Automation** | Python, PowerShell, Bash, APIs |
+| ☁️ **Cloud Evidence** | Azure Activity, Entra sign-ins, RBAC changes |
+| 📋 **Risk Evidence** | Control assessments, gaps, remediation records |
+| 📝 **Documentation** | Investigation reports, conclusions, limitations |
+
+I also try to clearly distinguish between four levels of certainty:
+
+### ✅ Observed
+
+Directly supported by collected evidence.
+
+### 🧠 Inferred
+
+Reasonably supported by several pieces of evidence but not directly proven.
+
+### 🧪 Expected / Test Activity
+
+Behavior intentionally generated in the controlled lab environment.
+
+### ⚠️ Not Verified
+
+Something that could not be fully confirmed with the available telemetry, permissions, licensing, or environment.
+
+> **Cybersecurity analysis should not present assumptions as facts.**
+
+---
+
+# 🛠️ Technical Toolkit
+
+## 📊 SIEM, Security Monitoring & EDR
+
+`Microsoft Sentinel` · `Microsoft Defender XDR` · `Microsoft Defender for Endpoint` · `Microsoft Defender Antivirus` · `Splunk Enterprise` · `Splunk Enterprise Security` · `Elastic Security` · `Elastic Defend` · `Suricata` · `Windows Event Viewer`
+
+## ☁️ Cloud & Identity
+
+`Microsoft Azure` · `Microsoft Entra ID` · `Azure RBAC` · `Azure Activity Logs` · `Log Analytics` · `Active Directory Domain Services` · `Windows Server` · `Group Policy` · `Windows DNS`
+
+## 🌐 Networking & Infrastructure
+
+`pfSense` · `Cisco Packet Tracer` · `Wireshark` · `tcpdump` · `TCP/IP` · `DNS` · `DHCP` · `NAT` · `VLANs` · `VPNs` · `Firewalls` · `IDS/IPS`
+
+## 💻 Operating Systems
+
+`Windows 11` · `Windows 11 Enterprise` · `Windows Server 2022` · `Ubuntu Linux` · `Kali Linux`
+
+## ⚙️ Querying, Scripting & Automation
+
+`KQL` · `SPL` · `PowerShell` · `Python` · `Bash`
+
+## 🧭 Frameworks & Security Methodologies
+
+`MITRE ATT&CK` · `NIST SP 800-171 Rev. 2` · `CMMC Level 2` · `Least Privilege` · `Defense in Depth` · `Incident Response` · `Risk Assessment` · `Security Control Validation` · `POA&M-style Remediation Tracking`
+
+## 📦 Virtualization
+
+`Oracle VirtualBox`
+
+---
+
+# 🧠 Security Capabilities Demonstrated
+
+## 🌐 Network Security
+
+Projects demonstrate understanding of how systems communicate and how defensive controls influence that communication.
+
+This includes:
+
+**TCP/IP · subnetting · VLANs · DNS · DHCP · routing · firewalling · NAT · IDS/IPS · VPNs · packet analysis**
+
+---
+
+## 🛡️ Endpoint Security
+
+Endpoint investigations focus on understanding system behavior through operating system and EDR telemetry.
+
+This includes:
+
+**process execution · parent/child relationships · command lines · files · authentication · device timelines · Defender telemetry · Elastic endpoint telemetry**
+
+---
+
+## 👤 Identity & Access Security
+
+Projects explore how users authenticate, receive authorization, and gain privileges.
+
+This includes:
+
+**Active Directory · Group Policy · Microsoft Entra ID · Azure RBAC · authentication monitoring · failed logins · privileged access · least privilege**
+
+---
+
+## 🚨 Incident Response
+
+Investigation projects focus on answering:
+
+1. **What happened?**
+2. **Which systems, users, or processes were involved?**
+3. **When did it happen?**
+4. **What evidence supports the conclusion?**
+5. **What is the scope?**
+6. **Is the activity malicious, suspicious, benign, or expected?**
+7. **What action should be taken?**
+8. **How can remediation be validated?**
+
+---
+
+## 🎯 Detection Engineering
+
+Detection-focused work moves beyond consuming alerts into understanding how detections are created and tested.
+
+This includes:
+
+**detection logic · KQL · SPL · analytics rules · thresholds · lookback periods · ATT&CK mapping · validation · false-positive considerations**
+
+---
+
+## ☁️ Cloud Security
+
+Cloud projects focus on identity, permissions, activity, detection, and least privilege.
+
+This includes:
+
+**Azure · Entra ID · Azure RBAC · Azure Activity · Sign-in Logs · Log Analytics · Sentinel · KQL · cloud detection engineering**
+
+---
+
+## ⚙️ Security Automation
+
+Automation projects focus on making repetitive work more consistent and scalable.
+
+This includes:
+
+**Python · PowerShell · Bash · APIs · JSON · CSV · regex · IOC processing · logging · structured reporting**
+
+---
+
+## 🏗️ Security Engineering
+
+Many projects involve building, configuring, troubleshooting, testing, and validating defensive technologies.
+
+This includes:
+
+**firewalls · IDS/IPS · VPNs · endpoint protection · EDR · SIEM · identity · RBAC · Linux hardening · Windows security · logging · detection rules**
+
+---
+
+## 📋 Technical Risk & Control Validation
+
+The Technical-to-GRC work connects infrastructure and security controls to evidence and risk.
+
+```text
+Control Requirement
+       ↓
+Technical Implementation
+       ↓
+Evidence
+       ↓
+Assessment
+       ↓
+Security Gap
+       ↓
+Risk
+       ↓
+Remediation
+       ↓
+Validation
+```
+
+---
+
+# 📊 From Alert to Evidence
+
+An alert is only the beginning of an investigation.
+
+```text
+🚨 Alert
+   ↓
+📑 Raw Event
+   ↓
+🖥️ Host / 👤 User / ⚙️ Process / 🌐 Network Context
+   ↓
+🔗 Related Events
+   ↓
+🕒 Timeline
+   ↓
+🔭 Scope
+   ↓
+🧩 Evidence Correlation
+   ↓
+🏷️ Classification
+   ↓
+🛠️ Response
+   ↓
+✅ Validation
+```
+
+The same principle applies to security controls:
+
+```text
+📋 Requirement
+   ↓
+🛡️ Technical Control
+   ↓
+⚙️ Configuration
+   ↓
+📎 Evidence
+   ↓
+🔎 Assessment
+   ↓
+⚠️ Gap
+   ↓
+📊 Risk
+   ↓
+🛠️ Remediation
+   ↓
+✅ Validation
+```
+
+In both cases, the objective is the same:
+
+> **Make defensible decisions based on evidence.**
+
+---
+
+# 🧩 Troubleshooting as a Security Skill
+
+Security work depends heavily on understanding the systems underneath the security tools.
+
+Unexpected behavior can result from:
+
+- ⚙️ Unsupported software
+- 🌐 Incorrect network configuration
+- 📉 Missing telemetry
+- 🛑 Disabled services
+- 🔐 Authentication problems
+- 🔥 Firewall behavior
+- 🌍 DNS issues
+- 👤 Permission problems
+- 💳 Licensing limitations
+- 📑 Logging problems
+- 🛡️ Misconfigured controls
+
+This matters because not every technical failure represents malicious activity.
+
+The Microsoft Defender for Endpoint onboarding problem in Week 17 is one example.
+
+Instead of stopping at the failed deployment, I investigated the endpoint, identified the platform limitation, rebuilt the system using a supported operating system, validated MDE services and telemetry, and then continued the security investigation.
+
+---
+
+# 🛡️ Security Principles Used Throughout the Portfolio
+
+### 🔎 Evidence Before Assumptions
+
+Security conclusions should be supported by observable evidence.
+
+### 🔐 Least Privilege
+
+Users, administrators, and services should receive only the access required for their purpose.
+
+### 🧱 Defense in Depth
+
+Security should not depend on a single defensive control.
+
+### ✅ Validate the Control
+
+A configuration existing does not automatically mean the control works.
+
+### 🧠 Understand Normal Behavior
+
+Expected system behavior should be understood before activity is classified as suspicious or malicious.
+
+### ⚠️ Document Limitations
+
+If something cannot be confirmed, the limitation should be stated clearly.
+
+### 🔄 Remediate & Re-Validate
+
+Security work should not end when a problem is discovered.
+
+### ⚙️ Build Repeatable Processes
+
+Queries, scripts, documentation, and workflows should make future security work more efficient and consistent.
+
+---
+
+# 🎯 What This Portfolio Demonstrates
+
+The work in this repository increasingly requires me to:
+
+- 🏗️ Build technical environments
+- 🧩 Troubleshoot deployment and configuration problems
+- 🌐 Understand network and protocol behavior
+- 🔐 Configure access and identity controls
+- 🛡️ Implement defensive security technologies
+- 🧪 Generate controlled security activity
+- 📑 Identify useful telemetry
+- 🔎 Query and analyze security data
+- 🚨 Investigate alerts
+- 🔗 Correlate evidence across data sources
+- 🖥️ Analyze endpoint behavior
+- 👤 Investigate identity activity
+- ☁️ Analyze cloud administrative activity
+- 🎯 Develop detection logic
+- ✅ Validate detections
+- ⚙️ Automate repeatable security tasks
+- 🐧 Harden Linux systems
+- 🪟 Secure Windows environments
+- 📋 Assess technical controls
+- ⚠️ Identify security gaps
+- 📊 Translate technical gaps into risk
+- 🛠️ Recommend remediation
+- 🔄 Validate security improvements
+- 📝 Document conclusions clearly
+
+The objective is continued progression from isolated technical exercises toward **complete, evidence-driven security workflows**.
+
+---
+
+# 🔬 Lab Environment
+
+Projects throughout the repository use isolated or controlled environments containing combinations of:
+
+- 📦 Oracle VirtualBox
+- 🪟 Windows 11
+- 🪟 Windows 11 Enterprise
+- 🖥️ Windows Server 2022
+- 🐧 Ubuntu Linux
+- 🐉 Kali Linux
+- 🔥 pfSense
+- ☁️ Microsoft Azure
+- 🛡️ Microsoft Defender
+- 📊 Microsoft Sentinel
+- 🔎 Splunk
+- 🛡️ Elastic Security
+- 🌐 Cisco Packet Tracer
+
+Security testing, authentication testing, network scanning, EDR detection testing, malware simulations, and similar activity were performed within **authorized and controlled lab environments**.
+
+No project in this repository is intended to demonstrate unauthorized access to real-world systems.
+
+---
+
+# ⚠️ Lab Scope & Documentation Notice
+
+This repository represents hands-on technical cybersecurity lab work.
+
+Some environments are intentionally smaller and more controlled than production enterprise environments.
+
+Where relevant, project documentation identifies limitations involving:
+
+- Licensing
+- Available telemetry
+- Lab architecture
+- Data volume
+- User population
+- Endpoint count
+- Cloud resources
+- Testing scope
+
+A successful result inside a lab should not automatically be interpreted as proof that the exact same behavior would occur in every production environment.
+
+The purpose of the portfolio is to demonstrate the **technical process, investigation methodology, security reasoning, validation approach, troubleshooting ability, and quality of documentation behind the work**.
+
+---
+
+# 🚀 Recommended Starting Points
+
+If you are reviewing this repository for the first time, I recommend beginning with these areas:
+
+| Area | Project |
+|---|---|
+| ☁️ **Microsoft Security & Cloud** | [Week 17 — Defender XDR, Sentinel & Azure](./Week17_Defender_XDR_Sentinel_Investigations) |
+| 📋 **Risk & Control Validation** | [Technical-to-GRC Risk Bridge](./Technical_To_GRC_Risk_Bridge_Projects) |
+| 🐧 **Linux Security** | [Week 21 — Linux Administration & Scripting](./Week21_Linux_Administration_%26_Scripting) |
+| ⚙️ **Security Automation** | [Week 20 — Python & Security Automation](./Week20_Python_%26_Security_Automation) |
+| 🚨 **Incident Response** | [Week 13 — Windows Event Logs & IR](./Week13_Windows_EventLogs_IncidentResponse) |
+| 🛡️ **Endpoint Investigation** | [Week 15 — Endpoint Investigation Workflows](./Week15_Endpoint_Investigation_Workflows) |
+| 🔥 **Network Defense** | [Week 5 — pfSense](./Week5_pfSense) |
+| 📊 **SIEM** | [Week 9 — Splunk SIEM](./Week9_Splunk_SIEM) |
+
+---
+
+# 📚 Repository Philosophy
+
+This portfolio is designed to provide more than screenshots or a list of tools.
+
+For each project, I try to answer:
+
+```text
+🏗️ What did I build?
+
+🎯 Why did I build it?
+
+⚙️ How does it work?
+
+📎 What evidence did I collect?
+
+🔎 What does the evidence actually prove?
+
+⚠️ What does the evidence NOT prove?
+
+🧠 What did I conclude?
+
+🛠️ What action did I take or recommend?
+
+✅ How did I validate the final result?
+
+📚 What did I learn?
+```
+
+That approach makes each project both a technical learning record and evidence of practical cybersecurity work.
+
+---
+
+# 👤 About This Portfolio
+
+This repository is maintained by **Fitzgerald Afari-Minta**.
+
+🐙 **GitHub:** [@iamfitz7](https://github.com/iamfitz7)
+
+I continue to expand this portfolio through hands-on work involving **infrastructure security, endpoint security, cloud security, identity, detection engineering, incident response, automation, Linux administration, and technical risk/control validation**.
+
+---
+
+# 🙏 Thank You for Reviewing My Work
+
+Thank you for taking the time to explore this portfolio.
+
+Each project represents continued hands-on practice across:
+
+**building → troubleshooting → investigating → validating → documenting → improving**
+
+For the strongest representation of my current technical work, I recommend reviewing the **newer projects alongside the foundational labs**, since the repository is intentionally structured to show progression over time.
+
+---
+
+### 🔐 Build it. 🔎 Investigate it. 📎 Prove it. 🛠️ Improve it.
