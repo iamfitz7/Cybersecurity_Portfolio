@@ -1,6 +1,6 @@
 # NIST SP 800-171 / CMMC Evidence & Control Assessment Lab
 
-## Week 20 Lab 2
+## Technical To GRC Risk Bridge Projects
 
 ### Technical Security Controls | Evidence Collection | Risk Assessment | Compliance Documentation | Remediation Tracking
 
