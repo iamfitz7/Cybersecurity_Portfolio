@@ -4,9 +4,9 @@
 
 Welcome to my cybersecurity portfolio!
 
-This repository documents hands-on cybersecurity work across **network security, endpoint security, identity and access management, incident response, detection engineering, cloud security, security automation, Linux administration, infrastructure security, and technical risk/control validation**.
+This repository documents my hands-on cybersecurity work across **network security, endpoint security, identity and access management, incident response, detection engineering, cloud security, security automation, Linux administration, infrastructure security, and technical risk/control validation**.
 
-The purpose of this portfolio is not simply to show which tools I have used. Each project is designed to demonstrate how I approach technical security work through **implementation, investigation, validation, troubleshooting, evidence collection, decision-making, remediation, and documentation**.
+The purpose of my portfolio is not simply to show which tools I have used. Each project is designed to demonstrate how I approach technical security work through **implementation, investigation, validation, troubleshooting, evidence collection, decision-making, remediation, and documentation**.
 
 My general workflow is:
 
