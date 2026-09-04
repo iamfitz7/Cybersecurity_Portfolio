@@ -1,4 +1,3 @@
-````markdown
 # 🐧 Week 20 — Lab 1: Enterprise Linux Server Administration, Hardening & Secure Remote Access
 
 ![Linux](https://img.shields.io/badge/Linux-Ubuntu-E95420?logo=ubuntu&logoColor=white)
