@@ -1,206 +1,386 @@
-# 🐧 Week 20 — Lab 1: Enterprise Linux Server Administration, Hardening & Secure Remote Access
+# 🐧 Linux Systems Administration, Security Hardening & Secure Application Operations
 
 ![Linux](https://img.shields.io/badge/Linux-Ubuntu-E95420?logo=ubuntu&logoColor=white)
 ![Bash](https://img.shields.io/badge/Scripting-Bash-4EAA25?logo=gnubash&logoColor=white)
-![Security](https://img.shields.io/badge/Focus-System%20Hardening-blue)
+![Python](https://img.shields.io/badge/Python-FastAPI-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
+![Nginx](https://img.shields.io/badge/Web-Nginx-009639?logo=nginx&logoColor=white)
 ![SSH](https://img.shields.io/badge/Remote%20Access-OpenSSH-black)
 ![Firewall](https://img.shields.io/badge/Firewall-UFW-red)
 ![Auditd](https://img.shields.io/badge/Auditing-Auditd-purple)
-![AppArmor](https://img.shields.io/badge/Access%20Control-AppArmor-orange)
+![TLS](https://img.shields.io/badge/Encryption-TLS-blue)
 ![VirtualBox](https://img.shields.io/badge/Virtualization-VirtualBox-183A61?logo=virtualbox&logoColor=white)
 
----
+## Enterprise Linux Administration → Security Hardening → Secure Application Deployment → Failure Recovery
 
-## 📌 Project Overview
+This repository documents a multi-stage hands-on Linux engineering and security project completed in a controlled virtual lab.
 
-This project focused on building, administering, hardening, monitoring, automating, and validating an Ubuntu Linux server inside a controlled virtual environment.
+The project progresses through two major environments:
 
-I created a two-system Linux lab consisting of:
+**Week 21 — Lab 1: Enterprise Linux Server Administration, Hardening & Secure Remote Access**
 
-- **Ubuntu Server — `linux-srv01`**
-- **Kali Linux Administration Workstation — `kali-admin01`**
+**Week 21 — Lab 2: Secure FastAPI Production Web Application Deployment & Recovery**
 
-Both systems were connected through a dedicated VirtualBox internal management network while keeping separate NAT interfaces for Internet access, updates, and package installation.
+Together, the labs demonstrate practical experience with:
 
-The goal was not simply to practice Linux commands. I wanted to build a Linux environment that demonstrated how system administration, access control, network security, secure remote administration, logging, auditing, automation, and security validation work together.
+- Linux system administration
+- Linux networking
+- Identity and access management
+- Least privilege
+- Filesystem permissions and ACLs
+- SSH administration and hardening
+- Public-key authentication
+- Host-based firewall configuration
+- Network exposure validation
+- Linux auditing and logging
+- AppArmor
+- Bash security automation
+- Cron scheduling
+- Python application deployment
+- FastAPI and Uvicorn
+- systemd service engineering
+- Nginx reverse proxying
+- HTTPS/TLS
+- Application health monitoring
+- Controlled failure simulation
+- Log-based troubleshooting
+- Automatic service recovery
+- Post-reboot persistence validation
 
-During the project, I:
+The goal was not simply to execute Linux commands.
 
-- Established and documented a Linux system baseline
-- Configured a dedicated private management network
-- Created role-based users and groups
-- Implemented least-privilege sudo administration
-- Secured sensitive files and shared directories
-- Tested Linux permissions and ACL-based access
-- Managed packages and services
-- Configured and hardened OpenSSH
-- Implemented ED25519 public-key authentication
-- Disabled SSH password authentication
-- Disabled direct root SSH login
-- Restricted SSH access to an authorized administrative group
-- Configured a default-deny UFW firewall
-- Validated exposed services from Kali Linux using Nmap
-- Reviewed automatic security-update mechanisms
-- Configured Auditd monitoring for sensitive resources
-- Investigated authentication and privileged activity
-- Reviewed AppArmor mandatory access controls
-- Built Bash scripts for security health checks and reporting
-- Scheduled recurring reports with cron
-- Performed a final security and attack-surface assessment
-
-A major part of this project was **validation**. I did not assume a security control worked just because its configuration file looked correct. Controls were tested through effective configuration checks, access attempts, service inspection, log review, audit events, and external validation from Kali Linux.
-
----
-
-## 🎯 Project Goals
-
-The main goals of this project were to:
-
-1. Build a structured Linux server environment
-2. Apply secure Linux administration practices
-3. Implement role-based access and least privilege
-4. Secure remote administration with SSH keys
-5. Reduce unnecessary network exposure
-6. Improve visibility through logging and auditing
-7. Automate repeatable security checks
-8. Validate security controls from both local and remote perspectives
-9. Document the final server security posture
-10. Better understand how Linux administration creates useful security evidence
-
----
-
-## 🏗️ Lab Environment
-
-| System | Purpose | Management IP |
-|---|---|---|
-| Ubuntu Linux | Server Administration & Hardening | `192.168.50.10` |
-| Kali Linux | Administration & Security Validation | `192.168.50.20` |
-| Oracle VirtualBox | Virtualization Platform | N/A |
-
-Each virtual machine used two network adapters:
-
-| Interface | Purpose |
-|---|---|
-| NAT | Internet access, updates, and package installation |
-| `LinuxLab` Internal Network | Private administration and security testing |
-
----
-
-## 🌐 Network Architecture
+The larger goal was to understand how a Linux system moves from:
 
 ```text
-                              INTERNET
-                                 |
-                        +--------+--------+
-                        |  VirtualBox NAT |
-                        +--------+--------+
-                                 |
-                   +-------------+-------------+
-                   |                           |
-             Ubuntu Server                 Kali Linux
-              linux-srv01                 kali-admin01
-                   |                           |
-          192.168.50.10                192.168.50.20
-                   |                           |
-                   +-------------+-------------+
-                                 |
-                         LinuxLab Network
-                          192.168.50.0/24
+Basic Operating System
+        |
+        v
+Configured Server
+        |
+        v
+Hardened Server
+        |
+        v
+Monitored Server
+        |
+        v
+Automated Server
+        |
+        v
+Application Host
+        |
+        v
+Secure Service Architecture
+        |
+        v
+Failure-Resilient Environment
 ```
 
-The two-interface design separated Internet connectivity from private management traffic.
+A major theme throughout both labs was **evidence-based validation**.
 
-The NAT interfaces were used for:
+I did not treat a configuration as successful simply because a command completed without an error.
 
-- Operating system updates
-- Package installation
-- Internet connectivity
+I repeatedly compared:
 
-The `LinuxLab` interfaces were used for:
-
-- SSH administration
-- Internal connectivity testing
-- Firewall validation
-- Nmap scanning
-- Security testing
-
-This allowed administrative traffic to remain on a dedicated private network.
+```text
+Intended Configuration
+        |
+        v
+Effective Configuration
+        |
+        v
+Actual System State
+        |
+        v
+Real Access / Network Test
+        |
+        v
+Logs & Evidence
+        |
+        v
+Validated Result
+```
 
 ---
 
-## 🧰 Technologies & Tools
+# 📌 Executive Summary
+
+This project demonstrates my ability to build and operate a Linux environment from the operating-system layer through the application layer.
+
+In the first lab, I built and hardened an Ubuntu Linux server and a separate Kali Linux administration workstation. I implemented role-based identities, least-privilege sudo access, filesystem permissions, ACLs, ED25519 SSH authentication, SSH hardening, UFW firewall rules, Auditd monitoring, AppArmor validation, Bash security automation, scheduled reporting, and external service validation.
+
+In the second lab, I used those Linux administration foundations to deploy and operate a FastAPI application. The application ran through Uvicorn under a dedicated `webapp` service account, was managed by systemd, proxied through Nginx, protected with UFW, served over HTTPS, and restricted so the backend listened only on localhost.
+
+I then intentionally terminated the application's main Uvicorn process with `SIGKILL`.
+
+Instead of manually restarting it, I investigated what happened through systemd and journald.
+
+The service automatically recovered because of its configured restart policy. A replacement Uvicorn process started, and the `/health` endpoint returned successfully afterward.
+
+This provided practical experience across the full lifecycle:
+
+```text
+Build
+  |
+  v
+Configure
+  |
+  v
+Harden
+  |
+  v
+Deploy
+  |
+  v
+Validate
+  |
+  v
+Monitor
+  |
+  v
+Break
+  |
+  v
+Investigate
+  |
+  v
+Recover
+  |
+  v
+Validate Again
+```
+
+---
+
+# 🧠 What This Repository Demonstrates
+
+From a technical perspective, this project demonstrates experience across four closely related areas.
+
+| Area | Demonstrated Experience |
+|---|---|
+| Linux Administration | Users, groups, permissions, packages, processes, services, networking, systemd |
+| Linux Security | Least privilege, SSH hardening, UFW, ACLs, Auditd, AppArmor, secure service accounts |
+| Application Operations | FastAPI, Uvicorn, Nginx, TLS, reverse proxying, health checks |
+| Troubleshooting & Reliability | Logs, process analysis, port analysis, failure testing, automatic recovery |
+
+---
+
+# 🗺️ Project Progression
+
+```text
+WEEK 21 — LAB 1
+Enterprise Linux Administration & Hardening
+            |
+            |
+            +--> System Baseline
+            |
+            +--> Private Management Network
+            |
+            +--> Users & Groups
+            |
+            +--> Least Privilege
+            |
+            +--> Filesystem Security
+            |
+            +--> SSH Hardening
+            |
+            +--> UFW Firewall
+            |
+            +--> External Nmap Validation
+            |
+            +--> Auditd
+            |
+            +--> AppArmor
+            |
+            +--> Bash Automation
+            |
+            +--> Cron Reporting
+            |
+            v
+
+WEEK 21 — LAB 2
+Secure Application Operations
+            |
+            |
+            +--> FastAPI
+            |
+            +--> Uvicorn
+            |
+            +--> Dedicated Service Account
+            |
+            +--> systemd
+            |
+            +--> Nginx
+            |
+            +--> HTTPS/TLS
+            |
+            +--> UFW
+            |
+            +--> Health Monitoring
+            |
+            +--> Failure Simulation
+            |
+            +--> Log Investigation
+            |
+            +--> Automatic Recovery
+            |
+            v
+
+     SECURE LINUX APPLICATION ENVIRONMENT
+```
+
+---
+
+# 🧰 Core Technologies
 
 | Technology | Purpose |
 |---|---|
-| Ubuntu Linux | Server administration and hardening |
-| Kali Linux | Remote administration and validation |
-| Oracle VirtualBox | Virtualized lab infrastructure |
-| Bash | Administration and security automation |
+| Ubuntu Linux | Server operating system |
+| Kali Linux | Administrative and validation workstation |
+| Oracle VirtualBox | Virtualized infrastructure |
+| Bash | Linux administration and automation |
+| Python | Application runtime |
+| FastAPI | Web API framework |
+| Uvicorn | ASGI application server |
+| systemd | Service management and recovery |
+| Nginx | Reverse proxy and HTTPS entry point |
 | OpenSSH | Secure remote administration |
-| ED25519 | Public-key SSH authentication |
+| ED25519 | SSH public-key authentication |
 | UFW | Host-based firewall |
 | Auditd | Security auditing |
 | AppArmor | Mandatory access control |
-| systemd | Service management |
-| journalctl | System and service log review |
-| Netplan | Ubuntu network configuration |
-| NetworkManager | Kali network configuration |
-| APT / DPKG | Package management and inventory |
-| Nginx | Service administration and exposure testing |
-| Nmap | External service validation |
-| ACL | Granular filesystem permissions |
+| OpenSSL | TLS certificate generation and inspection |
+| TLS | HTTPS encryption |
+| Nmap | External service exposure validation |
+| ACLs | Granular filesystem authorization |
 | Cron | Scheduled automation |
-| `ss` | Network socket inspection |
-| `ps` / `top` / `pgrep` | Process administration |
-| `grep` / `awk` / `cut` / `sed` | Log and text processing |
+| journald / `journalctl` | System and service logging |
+| `ss` | Listening socket inspection |
+| `curl` | HTTP/HTTPS validation |
+| Netplan | Ubuntu networking |
+| NetworkManager | Kali networking |
+| APT / DPKG | Package management |
 
 ---
 
-## 🛡️ Security Controls Implemented
+# ============================================================
+# 🐧 WEEK 21 — LAB 1
+# Enterprise Linux Server Administration, Hardening & Secure Remote Access
+# ============================================================
 
-The final server used multiple security layers instead of depending on one control.
+# 📌 Lab Overview
+
+The first phase of the project focused on building, administering, hardening, monitoring, and validating an Ubuntu Linux server.
+
+I created two Linux virtual machines:
+
+| System | Role | Management Address |
+|---|---|---|
+| `linux-srv01` | Ubuntu application/server environment | `192.168.50.10` |
+| `kali-admin01` | Administration and security validation | `192.168.50.20` |
+
+The systems used a dedicated VirtualBox internal network:
 
 ```text
-                  Private Management Network
-                             |
-                             v
-                       UFW Firewall
-                             |
-                             v
-                       OpenSSH Server
-                             |
-                             v
-                 ED25519 Authentication
-                             |
-                             v
-                    AllowGroups Control
-                             |
-                             v
-                  Role-Based Linux Users
-                             |
-                             v
-                  Least-Privilege sudo
-                             |
-                             v
-              File Permissions + ACLs
-                             |
-                             v
-                         AppArmor
-                             |
-                             v
-                 Auditd + System Logging
-                             |
-                             v
-                  Bash Security Checks
+192.168.50.0/24
 ```
 
-This project reinforced that server security is strongest when network, identity, privilege, filesystem, application, logging, and monitoring controls support each other.
+while maintaining separate NAT interfaces for Internet connectivity.
+
+This created a simple enterprise-style separation between:
+
+```text
+Internet / Package Access
+        |
+        v
+VirtualBox NAT
+
+
+Private Administration
+        |
+        v
+LinuxLab 192.168.50.0/24
+```
+
+The goal was to learn not only **how to configure Linux**, but also how to verify that security controls actually behaved as expected.
 
 ---
 
-## 1️⃣ System Baseline & Host Configuration
+# 🎯 Lab 1 Objectives
 
-Before making changes, I collected a baseline of the Ubuntu server.
+The main objectives were to:
+
+1. Establish a documented Linux baseline.
+2. Configure a private management network.
+3. Create role-based Linux identities.
+4. Implement least-privilege administration.
+5. Harden filesystem permissions.
+6. Practice ACL-based authorization.
+7. Manage packages and services.
+8. Configure secure SSH administration.
+9. Implement ED25519 authentication.
+10. Harden the OpenSSH server.
+11. Restrict remote administration.
+12. Configure a default-deny firewall.
+13. Validate exposure externally.
+14. Review automatic security updates.
+15. Implement Auditd monitoring.
+16. Investigate authentication activity.
+17. Validate AppArmor.
+18. Practice process and network troubleshooting.
+19. Automate security checks with Bash.
+20. Schedule security reporting.
+21. Perform a final attack-surface review.
+
+---
+
+# 🌐 Lab 1 Network Architecture
+
+```text
+                           INTERNET
+                              |
+                     +--------+--------+
+                     | VirtualBox NAT |
+                     +--------+--------+
+                              |
+               +--------------+--------------+
+               |                             |
+               v                             v
+        Ubuntu Server                    Kali Linux
+         linux-srv01                    kali-admin01
+               |                             |
+       192.168.50.10                  192.168.50.20
+               |                             |
+               +--------------+--------------+
+                              |
+                              v
+                    LinuxLab Internal Network
+                       192.168.50.0/24
+```
+
+The NAT interfaces provided:
+
+- Operating-system updates
+- Package installation
+- Internet connectivity
+
+The private `LinuxLab` interfaces provided:
+
+- SSH administration
+- Connectivity testing
+- Firewall testing
+- Nmap validation
+- Security testing
+
+This separated private administrative traffic from normal Internet connectivity.
+
+---
+
+# 1️⃣ System Baseline & Host Configuration
+
+Before hardening the server, I documented its starting state.
+
+Commands included:
 
 ```bash
 whoami
@@ -214,74 +394,88 @@ df -h
 free -h
 ```
 
-The baseline documented:
+This established information about:
 
 - Current user
 - Hostname
-- Operating system
+- Linux distribution
 - Kernel
 - Network interfaces
-- Routing
+- Routes
 - Storage
 - Filesystem usage
 - Memory
 
-The server was then assigned a clear hostname:
-
-```bash
-sudo hostnamectl set-hostname linux-srv01
-```
-
-Final hostname:
+The Ubuntu server was assigned the hostname:
 
 ```text
 linux-srv01
 ```
 
-This established an important habit that I followed throughout the project:
+using:
 
-> **Observe first, change second, and verify afterward.**
+```bash
+sudo hostnamectl set-hostname linux-srv01
+```
+
+This established one of the most important workflows used throughout the project:
+
+```text
+Observe
+   |
+   v
+Change
+   |
+   v
+Verify
+```
 
 ---
 
-## 2️⃣ Private Management Network
+# 2️⃣ Private Management Network
 
-A dedicated internal network named `LinuxLab` was configured in VirtualBox.
+A dedicated VirtualBox internal network named:
+
+```text
+LinuxLab
+```
+
+was configured.
+
+Addressing:
 
 ```text
 Network: 192.168.50.0/24
 
-Ubuntu: 192.168.50.10
-Kali:   192.168.50.20
+Ubuntu:   192.168.50.10
+Kali:     192.168.50.20
 ```
 
-Ubuntu maintained its NAT interface for Internet connectivity while the internal interface handled private administrative traffic.
+The private interface did not receive another default gateway.
 
-The internal interface was configured without another default gateway so Internet traffic continued using NAT.
+That allowed Internet traffic to continue using the NAT adapter while administrative traffic used the private network.
 
-Connectivity was tested in both directions.
-
-From Kali:
+Connectivity was tested from Kali:
 
 ```bash
 ping -c 4 192.168.50.10
 ```
 
-From Ubuntu:
+and from Ubuntu:
 
 ```bash
 ping -c 4 192.168.50.20
 ```
 
-Successful communication confirmed that the private management network was functioning before additional controls were applied.
+Successful two-way communication established the management path before additional security controls were introduced.
 
 ---
 
-## 3️⃣ Role-Based Linux Identity Administration
+# 3️⃣ Role-Based Identity Administration
 
-I created separate users and groups to represent different responsibilities instead of giving every account the same level of access.
+Instead of treating every Linux account the same, I created identities representing different responsibilities.
 
-### Groups
+## Groups
 
 ```text
 linux-admins
@@ -290,16 +484,16 @@ web-team
 backup-team
 ```
 
-### Users
+## Users
 
-| User | Group | Purpose |
-|---|---|---|
-| `linuxadmin` | `linux-admins` | Server administration |
-| `securityanalyst` | `security-team` | Security data and log access |
-| `webadmin` | `web-team` | Web service administration |
-| `backupsvc` | `backup-team` | Backup-related access |
+| User | Primary Responsibility |
+|---|---|
+| `linuxadmin` | Linux administration |
+| `securityanalyst` | Security information access |
+| `webadmin` | Web administration |
+| `backupsvc` | Backup operations |
 
-Example commands included:
+Example creation:
 
 ```bash
 sudo groupadd linux-admins
@@ -315,7 +509,7 @@ sudo useradd -m -s /bin/bash webadmin
 sudo useradd -m -s /bin/bash backupsvc
 ```
 
-Group membership was verified using:
+Identity and membership were verified using:
 
 ```bash
 id linuxadmin
@@ -324,13 +518,19 @@ id webadmin
 id backupsvc
 ```
 
-This created a clearer access model where permissions could be assigned according to responsibility.
+The purpose was to create an authorization model based on responsibility instead of giving every account broad access.
 
 ---
 
-## 4️⃣ Least-Privilege Sudo Administration
+# 4️⃣ Least-Privilege Sudo Administration
 
-Administrative elevation was limited to the `linux-admins` group.
+Administrative privilege was limited to the:
+
+```text
+linux-admins
+```
+
+group.
 
 A dedicated sudoers configuration was created:
 
@@ -338,7 +538,7 @@ A dedicated sudoers configuration was created:
 /etc/sudoers.d/linux-admins
 ```
 
-with:
+containing:
 
 ```text
 %linux-admins ALL=(ALL:ALL) ALL
@@ -350,33 +550,37 @@ The file was protected:
 sudo chmod 440 /etc/sudoers.d/linux-admins
 ```
 
-Sudo configuration was validated before use:
+Before relying on the configuration, I validated sudoers syntax:
 
 ```bash
 sudo visudo -c
 ```
 
-The `linuxadmin` account was then tested:
+I then tested privilege elevation through:
 
 ```bash
 sudo whoami
 ```
 
-Expected result:
+Expected output:
 
 ```text
 root
 ```
 
-This allowed administration to occur through an individual user account while requiring privilege elevation only when necessary.
+The key security concept was that the user normally operates as:
 
-This provides better accountability than routinely working through a shared or directly logged-in root account.
+```text
+linuxadmin
+```
+
+and elevates privileges only when necessary.
 
 ---
 
-## 5️⃣ Filesystem Permission Hardening
+# 5️⃣ Filesystem Security & Least Privilege
 
-I created a simulated organizational directory structure:
+A simulated organizational structure was created:
 
 ```text
 /srv/company/
@@ -385,7 +589,7 @@ I created a simulated organizational directory structure:
 └── backups/
 ```
 
-Ownership was assigned according to the appropriate group.
+Group ownership reflected functional responsibilities:
 
 ```bash
 sudo chown root:security-team /srv/company/security
@@ -393,116 +597,133 @@ sudo chown root:web-team /srv/company/web
 sudo chown root:backup-team /srv/company/backups
 ```
 
-The directories were configured with:
+Shared directories used:
 
 ```bash
-sudo chmod 2770 /srv/company/security
-sudo chmod 2770 /srv/company/web
-sudo chmod 2770 /srv/company/backups
+chmod 2770
 ```
 
-The `2` enabled the **setgid** bit so new files created inside a shared directory could inherit the directory's group ownership.
+The `2` enabled the setgid bit so files created inside the directory could inherit its group.
 
-### 🚨 Insecure Permission Before Hardening
+---
 
-A sensitive test file was intentionally given insecure permissions:
+## 🚨 Deliberately Insecure State
 
-```text
-security-investigation.txt
-```
-
-Before remediation:
+A security-related test file was intentionally assigned:
 
 ```text
 777
 rwxrwxrwx
 ```
 
-This meant every user could read, modify, or execute the file.
+This represented an overly permissive configuration.
 
-### 🔒 Hardened Permission
+Every user could potentially:
 
-The file was remediated using:
-
-```bash
-sudo chown root:security-team /srv/company/security/security-investigation.txt
-sudo chmod 640 /srv/company/security/security-investigation.txt
+```text
+Read
+Write
+Execute
 ```
 
-Final permissions:
+the file.
+
+---
+
+## 🔒 Hardened State
+
+The file was remediated:
+
+```bash
+sudo chown root:security-team \
+/srv/company/security/security-investigation.txt
+
+sudo chmod 640 \
+/srv/company/security/security-investigation.txt
+```
+
+Final state:
 
 ```text
 640
 rw-r-----
 ```
 
-| Identity | Permission |
+| Identity | Access |
 |---|---|
 | Owner | Read + Write |
 | `security-team` | Read |
-| Everyone Else | No Access |
+| Others | None |
 
 ---
 
-## 6️⃣ Permission Validation
+# 6️⃣ Permission Validation
 
-I tested the permissions using the actual user accounts.
+The permissions were tested using real accounts.
 
-`securityanalyst` could read the security file because the account belonged to `security-team`.
-
-A modification attempt was denied because the group had read-only access.
-
-`webadmin` was initially unable to read the file because it did not belong to `security-team`.
-
-This demonstrated an important difference between:
+The `securityanalyst` account could read the file because it belonged to:
 
 ```text
-Configuration says access should be denied
+security-team
+```
+
+A modification attempt was denied because the group received read-only permission.
+
+The `webadmin` account was unable to read the security file under the standard permission model.
+
+This demonstrated the difference between:
+
+```text
+Configured Permission
 ```
 
 and:
 
 ```text
-Testing proves access is denied
+Tested Authorization Behavior
 ```
 
-The second provides stronger evidence that the control actually works.
+The second provides stronger evidence.
 
 ---
 
-## 7️⃣ Granular Access with ACLs
+# 7️⃣ Granular Authorization with ACLs
 
-I used Access Control Lists to demonstrate more specific authorization.
+Access Control Lists were used to provide a temporary user-specific exception.
 
-The existing ACL was reviewed:
+Existing ACL:
 
 ```bash
 getfacl /srv/company/security/security-investigation.txt
 ```
 
-Temporary read-only access was granted to `webadmin`:
+Temporary read access:
 
 ```bash
-sudo setfacl -m u:webadmin:r /srv/company/security/security-investigation.txt
+sudo setfacl -m \
+u:webadmin:r \
+/srv/company/security/security-investigation.txt
 ```
 
-The permission was tested and verified.
+The access was tested.
 
-After validation, the temporary exception was removed:
+After validation, the exception was removed:
 
 ```bash
-sudo setfacl -x u:webadmin /srv/company/security/security-investigation.txt
+sudo setfacl -x \
+u:webadmin \
+/srv/company/security/security-investigation.txt
 ```
 
-This demonstrated how an individual account can receive a specific permission without permanently changing the main group structure.
+This demonstrated how ACLs can extend normal owner/group/other permissions without restructuring the primary group model.
 
 ---
 
-## 8️⃣ Package & Software Administration
+# 8️⃣ Package & Software Administration
 
-APT and DPKG were used to manage and inspect software.
+APT and DPKG were used for package management and software inventory.
 
-Examples included:
+Examples:
 
 ```bash
 sudo apt update
@@ -513,19 +734,20 @@ apt show nginx
 dpkg -l | grep nginx
 ```
 
-At the end of the project, security-related packages were reviewed with:
+Security-related packages were also reviewed:
 
 ```bash
-dpkg -l | grep -E 'nginx|openssh|audit|apparmor|ufw'
+dpkg -l | grep -E \
+'nginx|openssh|audit|apparmor|ufw'
 ```
 
-Knowing which software and versions are installed is important when reviewing system exposure, updates, and vulnerabilities.
+Package inventory matters because installed software contributes to the system's attack surface and maintenance requirements.
 
 ---
 
-## 9️⃣ Service Management with systemd
+# 9️⃣ Service Administration with systemd
 
-Nginx was used to practice service administration.
+Nginx was used to practice Linux service administration.
 
 ```bash
 systemctl status nginx
@@ -535,33 +757,43 @@ sudo systemctl restart nginx
 systemctl is-enabled nginx
 ```
 
-Logs were reviewed with:
+Logs:
 
 ```bash
 journalctl -u nginx
 ```
 
-This reinforced the difference between:
-
-- A service being installed
-- A service being running
-- A service being enabled at boot
-- A service listening on the network
-- A service being reachable by another system
-
-Listening sockets were reviewed using:
+Listening sockets:
 
 ```bash
 sudo ss -tulpn
 ```
 
+This reinforced that several different questions exist:
+
+```text
+Is the software installed?
+
+Is the service running?
+
+Is it enabled at boot?
+
+Is it listening?
+
+Is the firewall allowing it?
+
+Can another host actually reach it?
+```
+
+Those questions are related, but they are not interchangeable.
+
 ---
 
-## 🔑 1️⃣0️⃣ Secure SSH Remote Administration
+# 🔑 1️⃣0️⃣ Secure Remote Administration
 
-OpenSSH Server was installed on Ubuntu.
+OpenSSH Server was configured on Ubuntu.
 
-An initial remote connection was tested from Kali:
+Initial connection from Kali:
 
 ```bash
 ssh linuxadmin@192.168.50.10
@@ -574,48 +806,48 @@ whoami
 hostname
 ```
 
-Expected results:
+Expected:
 
 ```text
 linuxadmin
 linux-srv01
 ```
 
-This confirmed that the administration path between Kali and Ubuntu was working before SSH hardening began.
+This established a working remote-management baseline before SSH hardening.
 
 ---
 
-## 🔐 1️⃣1️⃣ ED25519 Public-Key Authentication
+# 🔐 1️⃣1️⃣ ED25519 Authentication
 
-An ED25519 SSH key pair was generated on Kali:
+An ED25519 key pair was created on Kali:
 
 ```bash
 ssh-keygen -t ed25519
 ```
 
-The public key was copied to Ubuntu:
+The public key was installed on Ubuntu:
 
 ```bash
 ssh-copy-id linuxadmin@192.168.50.10
 ```
 
-Key-based authentication was successfully tested **before** password authentication was disabled.
+Key-based authentication was tested successfully **before password authentication was disabled**.
 
-This order was important because disabling password authentication before validating the SSH key could have caused an administrative lockout.
+This order reduced the chance of locking myself out of the server.
 
-> **The private SSH key was never included in the project repository.**
+> The SSH private key was never added to the repository.
 
 ---
 
-## 🛡️ 1️⃣2️⃣ OpenSSH Hardening
+# 🛡️ 1️⃣2️⃣ OpenSSH Hardening
 
-SSH was hardened using a dedicated configuration snippet:
+A dedicated hardening file was used:
 
 ```text
 /etc/ssh/sshd_config.d/99-lab-hardening.conf
 ```
 
-Key settings included:
+Important settings included:
 
 ```text
 PermitRootLogin no
@@ -627,75 +859,77 @@ AllowGroups linux-admins
 X11Forwarding no
 ```
 
-These controls:
+These settings:
 
-- Disabled direct root login
+- Disabled direct root SSH access
 - Required public-key authentication
-- Disabled password authentication
-- Reduced allowed authentication attempts
+- Disabled SSH passwords
+- Reduced authentication attempts
 - Reduced login grace time
-- Restricted SSH access to `linux-admins`
+- Restricted SSH to authorized administrators
 - Disabled unnecessary X11 forwarding
 
-Before applying the configuration, syntax was checked:
+Syntax validation:
 
 ```bash
 sudo sshd -t
 ```
 
-The effective configuration was then verified:
+Effective configuration:
 
 ```bash
 sudo sshd -T | grep -E \
 'permitrootlogin|pubkeyauthentication|passwordauthentication|maxauthtries|logingracetime|allowgroups|x11forwarding'
 ```
 
-I also kept the existing SSH session open while testing a second connection so I had a recovery path if the new configuration caused a problem.
+I also kept an existing SSH connection open while validating a second session.
+
+That provided a recovery path if the new configuration caused a problem.
 
 ---
 
-## 🚫 1️⃣3️⃣ Unauthorized SSH Validation
+# 🚫 1️⃣3️⃣ Unauthorized SSH Test
 
-The `webadmin` account was used to test the SSH restriction.
+`webadmin` was a valid Linux account.
 
-Even though `webadmin` was a valid Linux account, it was not a member of:
+However, it was not a member of:
 
 ```text
 linux-admins
 ```
 
-Because SSH was configured with:
+Because OpenSSH used:
 
 ```text
 AllowGroups linux-admins
 ```
 
-the account was denied SSH access.
+the account was denied remote SSH access.
 
-This demonstrated that:
+This demonstrated:
 
 ```text
-Valid Linux Account
-        ≠
+Valid Operating-System Account
+             ≠
 Authorized Remote Administrator
 ```
 
-The final remote administration path became:
+The final administrative path became:
 
 ```text
 Kali Workstation
       |
       v
-LinuxLab Network
+Private LinuxLab Network
       |
       v
-UFW Firewall
+UFW
       |
       v
 OpenSSH
       |
       v
-ED25519 Key Authentication
+ED25519 Authentication
       |
       v
 AllowGroups linux-admins
@@ -709,19 +943,20 @@ sudo when required
 
 ---
 
-## 🔥 1️⃣4️⃣ UFW Firewall Hardening
+# 🔥 1️⃣4️⃣ UFW Firewall Hardening
 
-UFW was configured with a default-deny inbound policy.
+UFW was configured with:
 
 ```bash
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 ```
 
-SSH access was restricted to the private management network:
+SSH was restricted to the private network:
 
 ```bash
-sudo ufw allow from 192.168.50.0/24 to any port 22 proto tcp
+sudo ufw allow from 192.168.50.0/24 \
+to any port 22 proto tcp
 ```
 
 The firewall was enabled:
@@ -730,13 +965,13 @@ The firewall was enabled:
 sudo ufw enable
 ```
 
-The final policy was reviewed:
+Final state:
 
 ```bash
 sudo ufw status verbose
 ```
 
-The firewall strategy followed:
+The strategy was:
 
 ```text
 Incoming Traffic
@@ -744,71 +979,70 @@ Incoming Traffic
        v
 DENY by Default
        |
-       +---- Required Management Traffic
-       |
-       +---- Required Service Traffic
+       +---- Explicitly Required Traffic
        |
        +---- Everything Else Denied
 ```
 
-This reduced unnecessary network exposure while keeping required lab services available.
-
 ---
 
-## 🔍 1️⃣5️⃣ External Service Validation with Nmap
+# 🔍 1️⃣5️⃣ External Exposure Validation with Nmap
 
-I validated the server from Kali instead of relying only on Ubuntu's local configuration.
+Local configuration was not treated as proof of remote exposure.
+
+From Kali:
 
 ```bash
 nmap -sT 192.168.50.10
 ```
 
-This allowed me to compare:
+This allowed comparison between:
 
 ```text
-Ubuntu Local View
-        |
-        v
+LOCAL VIEW
 ss -tulpn
 ```
 
-against:
+and:
 
 ```text
-Remote Network View
-        |
-        v
-Nmap from Kali
+REMOTE VIEW
+Nmap
 ```
 
-This helped answer an important security question:
+The purpose was to answer:
 
 > **What can another system actually reach?**
 
-If an unexpected service appeared remotely, I could return to Ubuntu and identify the responsible process or service.
+This distinction is important because a running service does not automatically mean the service is reachable from another host.
 
 ---
 
-## 🔄 1️⃣6️⃣ Automatic Security Update Review
+# 🔄 1️⃣6️⃣ Automatic Security Update Review
 
-The server's automatic update mechanisms were reviewed.
+Ubuntu's update mechanisms were inspected:
 
 ```bash
 dpkg -l | grep unattended-upgrades
+
 cat /etc/apt/apt.conf.d/20auto-upgrades
+
 systemctl status apt-daily.timer
+
 systemctl status apt-daily-upgrade.timer
 ```
 
-This connected server hardening with ongoing maintenance rather than treating security as a one-time configuration task.
+This connected hardening with ongoing maintenance.
+
+Security is not only an initial configuration activity; systems also need mechanisms for continued maintenance.
 
 ---
 
-## 👁️ 1️⃣7️⃣ Auditd Security Monitoring
+# 👁️ 1️⃣7️⃣ Auditd Security Monitoring
 
-Auditd was configured to provide additional visibility into changes involving sensitive resources.
+Auditd was configured to monitor sensitive resources.
 
-Persistent audit rules included:
+Persistent rules included:
 
 ```text
 -w /etc/passwd -p wa -k identity_changes
@@ -821,12 +1055,12 @@ Persistent audit rules included:
 -w /srv/company/security/ -p wa -k security_data_changes
 ```
 
-The rules provided monitoring for changes involving:
+These monitored:
 
-- User identities
-- Groups
-- Credentials
-- Privilege configuration
+- Identity changes
+- Group changes
+- Credential-related files
+- Sudo configuration
 - SSH configuration
 - Sensitive security data
 
@@ -844,36 +1078,36 @@ sudo auditctl -l
 
 ---
 
-## 🕵️ 1️⃣8️⃣ Audit Event Investigation
+# 🕵️ 1️⃣8️⃣ Audit Event Investigation
 
-I generated an authorized test event inside the monitored security directory:
+A controlled event was created:
 
 ```bash
 sudo touch /srv/company/security/audit-test.txt
 ```
 
-The event was then investigated:
+The corresponding audit data was investigated:
 
 ```bash
 sudo ausearch -k security_data_changes -i
 ```
 
-Audit summaries were also reviewed using:
+Summary information:
 
 ```bash
 sudo aureport
 ```
 
-This demonstrated the monitoring cycle:
+This demonstrated:
 
 ```text
 Sensitive Resource
        |
        v
-Activity Occurs
+Activity
        |
        v
-Auditd Captures Event
+Auditd
        |
        v
 Audit Record
@@ -887,61 +1121,59 @@ Investigation
 
 ---
 
-## 📜 1️⃣9️⃣ Authentication & Privileged Activity Review
+# 📜 1️⃣9️⃣ Authentication & Privileged Activity
 
-SSH activity was reviewed using:
+SSH events were reviewed:
 
 ```bash
 sudo journalctl -u ssh --since today
 ```
 
-Authentication logs were also reviewed where available.
-
-A controlled failed SSH attempt was generated from Kali using an account that was not authorized for SSH.
+A controlled failed SSH attempt was generated from Kali using an account that was not authorized for remote access.
 
 The resulting activity was reviewed for:
 
-- Account name
+- Username
 - Source system
 - Timestamp
 - Authentication result
 - Related SSH activity
 
-Privileged activity was also reviewed through sudo-related logging.
+Privileged sudo activity was also reviewed.
 
-This showed how normal administrative activity creates evidence that can later support troubleshooting, auditing, and security investigation.
+This connected normal Linux administration with the evidence required for security investigation.
 
 ---
 
-## 🧱 2️⃣0️⃣ AppArmor Validation
+# 🧱 2️⃣0️⃣ AppArmor Validation
 
-AppArmor status was reviewed using:
+AppArmor was reviewed using:
 
 ```bash
 sudo aa-status
 ```
 
-This confirmed that the AppArmor framework was loaded and that profiles were being enforced.
+This confirmed that the framework was loaded and profiles were being enforced.
 
-Traditional Linux permissions answer questions such as:
-
-```text
-Can this user access this file?
-```
-
-AppArmor adds another layer:
+Traditional Linux permissions answer:
 
 ```text
-What is this application allowed to access?
+Can this USER access this resource?
 ```
 
-This demonstrated the difference between standard Linux permissions and mandatory access controls.
+AppArmor adds another question:
+
+```text
+Can this APPLICATION access this resource?
+```
+
+This introduced another layer of Linux access control.
 
 ---
 
-## ⚙️ 2️⃣1️⃣ Process & Network Administration
+# ⚙️ 2️⃣1️⃣ Process & Network Administration
 
-Process activity was reviewed using:
+Process inspection included:
 
 ```bash
 ps aux
@@ -952,7 +1184,7 @@ pstree -p
 top
 ```
 
-Network state was reviewed using:
+Network inspection included:
 
 ```bash
 ip -br address
@@ -963,36 +1195,39 @@ ping
 getent hosts
 ```
 
-Rather than memorizing commands individually, I used them to answer questions such as:
+Instead of memorizing commands in isolation, I used them to answer operational questions:
 
 ```text
 What is running?
 
-Who owns the process?
+Who owns it?
 
-What is consuming resources?
+What is consuming CPU?
 
-Which process is listening?
+What is consuming memory?
 
-Which interface has this address?
+What process owns this port?
+
+What interface has this address?
 
 Where will traffic go?
 
 Is DNS working?
 
-Can another host reach the server?
+Can another host reach this system?
 ```
 
 ---
 
-## 🤖 2️⃣2️⃣ Bash Security Health Check
+# 🤖 2️⃣2️⃣ Bash Security Health Check
 
-I built a Bash script to combine multiple security and administration checks into one repeatable workflow.
+I built a Bash script to automate recurring security and administration checks.
 
-The script collected information including:
+The script gathered:
 
-- Hostname and system information
-- Filesystem usage
+- Hostname
+- System information
+- Filesystem utilization
 - Memory utilization
 - IP addresses
 - Listening sockets
@@ -1000,7 +1235,7 @@ The script collected information including:
 - Failed systemd units
 - SSH state
 - Nginx state
-- AppArmor status
+- AppArmor state
 - Recent failed authentication activity
 
 The script used:
@@ -1010,31 +1245,28 @@ The script used:
 - Pipes
 - `grep`
 - `tail`
-- Output formatting
-- Standard-error redirection
+- Redirection
 - Linux administration commands
 
-Syntax was checked using:
+Syntax was validated:
 
 ```bash
 bash -n ~/scripts/security-health-check.sh
 ```
 
-Permissions were restricted:
+Execution permission was restricted:
 
 ```bash
 chmod 750 ~/scripts/security-health-check.sh
 ```
 
-The script turned several separate commands into one reusable server health-check process.
+The script converted multiple manual checks into a repeatable workflow.
 
 ---
 
-## 📊 2️⃣3️⃣ Automated Linux Security Reporting
+# 📊 2️⃣3️⃣ Automated Security Reporting
 
-A second Bash script generated timestamped Linux security reports.
-
-The report included:
+A second Bash script created timestamped reports containing:
 
 ```text
 System Information
@@ -1047,57 +1279,51 @@ Disk Usage
 Recent SSH Events
 ```
 
-Reports were written using timestamped filenames such as:
+Report naming:
 
 ```text
 linux-security-report-YYYYMMDD-HHMMSS.txt
 ```
 
-This created repeatable evidence that could be reviewed later instead of requiring every check to be performed manually.
+This created historical security evidence that could be reviewed later.
 
 ---
 
-## ⏰ 2️⃣4️⃣ Scheduled Reporting with Cron
+# ⏰ 2️⃣4️⃣ Scheduled Reporting
 
-A report directory was created:
+Reports were stored under:
 
-```bash
-mkdir -p ~/admin-reports
+```text
+~/admin-reports
 ```
 
-A dedicated scheduled reporting script was used with cron.
-
-The lab schedule was:
+The lab cron schedule was:
 
 ```text
 */15 * * * * /home/fitzgerald/scripts/scheduled-health-report.sh >> /home/fitzgerald/admin-reports/cron.log 2>&1
 ```
 
-For the lab, this generated a report every 15 minutes.
+The 15-minute frequency was used for lab validation.
 
-Cron configuration was verified with:
+Cron configuration:
 
 ```bash
 crontab -l
 ```
 
-Cron service state was checked:
+Service status:
 
 ```bash
 systemctl is-active cron
 ```
 
-Generated report files were then reviewed to confirm that the scheduled automation actually executed.
-
-> **Note:** The 15-minute schedule was used for lab validation. A real environment would use a schedule based on actual operational requirements.
+Generated reports were inspected to prove that the scheduled job actually executed.
 
 ---
 
-## 🔎 2️⃣5️⃣ Final Security Assessment
+# 🔎 2️⃣5️⃣ Final Security Assessment
 
-After completing the configuration, I performed a final review instead of ending the project immediately after the last change.
-
-Key checks included:
+The final review included:
 
 ```bash
 sudo ufw status verbose
@@ -1112,515 +1338,2066 @@ systemctl is-active cron
 systemctl --failed --no-pager
 ```
 
-The final review checked:
+The assessment reviewed:
 
 - Firewall state
-- Effective SSH configuration
+- Effective SSH policy
 - Audit rules
-- AppArmor status
+- AppArmor
 - Listening services
 - SSH availability
-- Nginx availability
-- Cron availability
-- Failed systemd units
+- Nginx
+- Cron
+- Failed systemd services
 
-The server was also checked remotely from Kali Linux.
+Remote validation was also performed from Kali.
 
 ---
 
-## ✅ Final Security Posture
+# ✅ Lab 1 Final Security Posture
 
 | Security Area | Final State |
 |---|---|
-| Server Hostname | `linux-srv01` |
-| Private Management Network | `192.168.50.0/24` |
-| Server Management IP | `192.168.50.10` |
-| Administration Workstation | `192.168.50.20` |
+| Hostname | `linux-srv01` |
+| Private Network | `192.168.50.0/24` |
+| Server IP | `192.168.50.10` |
+| Admin Workstation | `192.168.50.20` |
 | Internet Connectivity | Separate NAT interface |
-| Identity Management | Role-based users and groups |
-| Privileged Administration | Controlled through sudo |
-| Sensitive File Access | Least-privilege permissions |
-| Shared Directories | setgid group inheritance |
-| Granular Authorization | ACL testing completed |
-| SSH Authentication | ED25519 public keys |
-| SSH Password Authentication | Disabled |
-| Root SSH Login | Disabled |
-| SSH Authorization | Restricted to `linux-admins` |
-| SSH Authentication Attempts | Limited |
-| X11 Forwarding | Disabled |
-| Host Firewall | UFW active |
-| Inbound Firewall Policy | Deny by default |
-| Management Access | Restricted to private network |
-| Security Auditing | Auditd active with custom rules |
-| Authentication Visibility | SSH and authentication logs reviewed |
-| Mandatory Access Control | AppArmor validated |
-| Service Management | systemd |
-| Security Automation | Bash health checks |
-| Security Reporting | Automated Bash reports |
-| Scheduled Automation | Cron |
-| External Validation | Kali Linux + Nmap |
-| Final System Review | Completed |
-| Recovery Point | Final VirtualBox snapshot created |
+| Identity | Role-based users/groups |
+| Privilege | Controlled sudo |
+| Sensitive File Access | Least privilege |
+| Shared Directories | `2770` + setgid |
+| ACLs | Tested |
+| SSH Authentication | ED25519 |
+| Password SSH | Disabled |
+| Root SSH | Disabled |
+| SSH Authorization | `linux-admins` |
+| Host Firewall | UFW |
+| Incoming Policy | Deny by default |
+| Management Access | Private network |
+| Auditing | Auditd |
+| MAC | AppArmor |
+| Automation | Bash |
+| Reporting | Automated |
+| Scheduling | Cron |
+| Remote Validation | Kali + Nmap |
 
 ---
 
-## 📈 Before vs. After
-
-| Area | Before | After |
-|---|---|---|
-| Host Identity | Initial VM configuration | Named `linux-srv01` |
-| Network | Basic VM connectivity | Dedicated management network |
-| User Structure | Standard accounts | Role-based identities |
-| Privileged Access | General administration | Controlled sudo elevation |
-| Sensitive File Test | `777` | `640` |
-| Shared Directories | Basic permissions | `2770` + setgid |
-| Granular Access | Standard permissions | ACL testing |
-| SSH | Initial password testing | ED25519 keys |
-| Root SSH | Not explicitly hardened | Disabled |
-| SSH Passwords | Initially available | Disabled |
-| SSH Authorization | General access | `AllowGroups linux-admins` |
-| Firewall | Initial state | Default-deny inbound |
-| Management Exposure | General | Private network restriction |
-| Audit Visibility | Standard logging | Custom Auditd rules |
-| Security Checks | Manual | Bash automation |
-| Reporting | Manual review | Timestamped reports |
-| Scheduling | Manual | Cron automation |
-| Exposure Validation | Local checks | External Nmap validation |
-
----
-
-## 🧪 How I Validated the Controls
-
-One of the most important parts of this project was testing each major control after configuration.
+# 🧪 Lab 1 Validation Matrix
 
 | Control | Configuration | Validation |
 |---|---|---|
-| Network | Netplan / NetworkManager | `ip`, `ip route`, `ping` |
-| Users & Groups | `useradd`, `groupadd`, `usermod` | `id`, `getent` |
-| Sudo | `/etc/sudoers.d/` | `visudo -c`, `sudo whoami` |
-| File Permissions | `chmod`, `chown` | `ls -l`, user access tests |
-| ACLs | `setfacl` | `getfacl`, access tests |
-| Services | systemd | `systemctl`, `journalctl` |
-| SSH | `sshd_config.d` | `sshd -t`, `sshd -T`, remote login |
-| SSH Authorization | `AllowGroups` | Unauthorized user test |
-| Firewall | UFW | `ufw status`, Nmap |
-| Network Exposure | Local service state | `ss` + remote Nmap |
-| Auditd | Audit rules | `auditctl`, `ausearch`, `aureport` |
-| Authentication Logging | SSH activity | `journalctl`, authentication logs |
-| AppArmor | Existing profiles | `aa-status` |
-| Bash Automation | Scripts | `bash -n`, execution results |
-| Cron | User crontab | `crontab -l`, generated reports |
+| Networking | Netplan / NetworkManager | `ip`, `ping`, routes |
+| Identities | Users & groups | `id`, `getent` |
+| Privilege | sudoers | `visudo -c`, access test |
+| Permissions | chmod/chown | Actual user tests |
+| ACL | `setfacl` | `getfacl`, user test |
+| SSH | sshd config | `sshd -t`, `sshd -T`, remote test |
+| SSH Authorization | `AllowGroups` | Unauthorized login test |
+| Firewall | UFW | UFW + Nmap |
+| Exposure | Services | `ss` + Nmap |
+| Auditd | Audit rules | Test event + `ausearch` |
+| AppArmor | Profiles | `aa-status` |
+| Automation | Bash | Syntax + execution |
+| Scheduling | Cron | Generated reports |
 
-The general validation process was:
+---
+
+# 🚧 Lab 1 Troubleshooting Experience
+
+The environment did not work perfectly on every first attempt.
+
+Issues I worked through included:
+
+- Identifying correct network interface names
+- Separating NAT and management traffic
+- Preventing an unwanted second default route
+- Testing SSH keys before disabling passwords
+- Maintaining an existing SSH session during hardening
+- Confirming effective SSH settings
+- Testing firewall behavior remotely
+- Validating permissions with actual users
+- Identifying processes behind listening ports
+- Validating Bash syntax
+- Correcting script paths and permissions
+- Creating required reporting directories
+- Correcting scheduled-reporting behavior
+- Confirming cron generated actual reports
+- Understanding SSH socket activation
+
+These problems were useful because troubleshooting required understanding the system rather than only following a command sequence.
+
+---
+
+# 🏁 Week 21 Lab 1 Outcome
+
+By the end of the lab, the environment had progressed through:
 
 ```text
-Configure
-    |
-    v
-Check Syntax
-    |
-    v
-Apply
-    |
-    v
-Inspect Effective State
-    |
-    v
-Test the Control
-    |
-    v
-Generate Activity
-    |
-    v
-Review Evidence
-    |
-    v
-Confirm Final State
+Baseline
+   |
+   v
+Networking
+   |
+   v
+Identity
+   |
+   v
+Least Privilege
+   |
+   v
+Filesystem Security
+   |
+   v
+Secure Remote Administration
+   |
+   v
+Firewall Hardening
+   |
+   v
+Logging & Auditing
+   |
+   v
+Application Restrictions
+   |
+   v
+Automation
+   |
+   v
+External Validation
+   |
+   v
+Final Security Assessment
+```
+
+The lab established the Linux administration and security foundation required for the next stage.
+
+---
+
+# ============================================================
+# 🔐 WEEK 21 — LAB 2
+# Secure FastAPI Production Web Application Deployment & Recovery
+# ============================================================
+
+# 📌 Lab Overview
+
+The second phase moved from general Linux server hardening into **secure application operations**.
+
+I deployed a FastAPI application and built the Linux infrastructure required to manage it.
+
+The service stack became:
+
+```text
+FastAPI
+   |
+   v
+Uvicorn
+   |
+   v
+systemd
+   |
+   v
+Nginx
+   |
+   v
+TLS
+   |
+   v
+UFW
+```
+
+The application was deliberately designed so Uvicorn was **not directly exposed to the network**.
+
+Instead:
+
+```text
+Client
+   |
+   v
+Nginx :443
+   |
+   v
+127.0.0.1:8000
+   |
+   v
+Uvicorn
+   |
+   v
+FastAPI
+```
+
+I also tested what happened when the application's main process unexpectedly died.
+
+systemd detected the failure and automatically recovered the application.
+
+---
+
+# 🎯 Lab 2 Objectives
+
+The objectives were to:
+
+1. Deploy FastAPI on Ubuntu.
+2. Run the application through Uvicorn.
+3. Create a dedicated application identity.
+4. Avoid running the application as root.
+5. Manage the application through systemd.
+6. Configure automatic recovery.
+7. Place Nginx in front of Uvicorn.
+8. Keep the backend off the external network.
+9. Configure HTTPS.
+10. Redirect HTTP to HTTPS.
+11. Protect the host with UFW.
+12. Validate listening sockets.
+13. Implement an application health endpoint.
+14. Review service and web logs.
+15. Simulate process failure.
+16. Investigate failure evidence.
+17. Verify automatic recovery.
+18. Confirm application-level recovery.
+19. Verify service persistence after reboot.
+
+---
+
+# 🏗️ Lab 2 Environment
+
+| Component | Configuration |
+|---|---|
+| Server | Ubuntu Linux |
+| Hostname | `linux-web01` |
+| Application | FastAPI |
+| Application Server | Uvicorn |
+| Application Directory | `/opt/webapp` |
+| Service Account | `webapp` |
+| Service Manager | systemd |
+| Reverse Proxy | Nginx |
+| Backend | `127.0.0.1:8000` |
+| HTTP | `80` |
+| HTTPS | `443` |
+| Firewall | UFW |
+| Lab Network | `192.168.50.0/24` |
+| TLS | Self-signed lab certificate |
+
+---
+
+# 🌐 Application Architecture
+
+```text
+                    CLIENT / LAB NETWORK
+                              |
+                   +----------+----------+
+                   |                     |
+                   v                     v
+                HTTP :80              HTTPS :443
+                   |                     |
+                   |                Encrypted Traffic
+                   |                     |
+                   +----------+----------+
+                              |
+                              v
+                       +-------------+
+                       |    NGINX    |
+                       |-------------|
+                       | Redirect    |
+                       | TLS         |
+                       | Reverse     |
+                       | Proxy       |
+                       +------+------+
+                              |
+                              v
+                       127.0.0.1:8000
+                              |
+                              v
+                       +-------------+
+                       |   Uvicorn   |
+                       +------+------+
+                              |
+                              v
+                       +-------------+
+                       |   FastAPI   |
+                       +------+------+
+                              |
+                      +-------+-------+
+                      |               |
+                      v               v
+                     `/`          `/health`
+```
+
+Supporting controls:
+
+```text
+                       linux-web01
+                            |
+        +-------------------+-------------------+
+        |                   |                   |
+        v                   v                   v
+     systemd               UFW               journald
+        |                   |                   |
+        v                   v                   v
+ Service Lifecycle     Network Policy       Event Evidence
+ Auto-Recovery         Default Deny         Failure Logs
+ Boot Persistence      Port Control         Recovery Logs
+ Hardening             Lab Restrictions     Troubleshooting
 ```
 
 ---
 
-## 🚧 Troubleshooting & Problem Solving
+# 🐍 FastAPI Application
 
-Not every part of the project worked perfectly on the first attempt.
+The application returned basic service information.
 
-Some of the issues I worked through included:
+Example:
 
-- Identifying the correct network interface names
-- Keeping NAT and private management traffic separated
-- Preventing the management interface from creating another default route
-- Testing SSH keys before disabling password authentication
-- Keeping an existing SSH session open during hardening
-- Confirming effective SSH settings after configuration
-- Verifying firewall rules from another system
-- Testing permissions with actual user accounts
-- Checking which process owned a listening port
-- Validating Bash syntax before execution
-- Correcting script paths and permissions
-- Creating required report directories
-- Correcting the scheduled reporting workflow before cron testing
-- Confirming cron generated actual report files
-- Reviewing service state when Ubuntu used SSH socket activation
+```json
+{
+  "status": "online",
+  "server": "linux-web01",
+  "service": "Week 21 Lab 2 Production Web Application"
+}
+```
 
-These troubleshooting steps were valuable because they required me to understand **why** something was not working rather than only repeating commands.
+A separate endpoint was created:
+
+```text
+/health
+```
+
+Successful response:
+
+```json
+{
+  "status": "healthy"
+}
+```
+
+This was important because:
+
+```text
+Process Exists
+      ≠
+Application Is Healthy
+```
+
+The health endpoint allowed validation at the application layer.
 
 ---
 
-## 🧠 What I Learned
+# 👤 Dedicated `webapp` Service Identity
 
-This project improved my understanding of Linux far beyond basic command usage.
+The application ran as:
 
-The biggest lesson was that Linux administration and Linux security are closely connected.
+```text
+webapp
+```
 
-A secure Linux server depends on understanding:
+rather than:
 
+```text
+root
+```
+
+or my normal Linux user.
+
+Verification:
+
+```bash
+id webapp
+```
+
+Application directory:
+
+```text
+/opt/webapp
+```
+
+Process ownership was also inspected to confirm that Uvicorn actually ran as the intended service identity.
+
+This applied least privilege to an application service, not just to human users.
+
+---
+
+# ⚙️ systemd Application Service
+
+The application was managed through:
+
+```text
+webapp.service
+```
+
+Configuration:
+
+```ini
+[Unit]
+Description=Week 21 Lab 2 FastAPI Production Web Application
+After=network.target
+
+[Service]
+Type=simple
+User=webapp
+Group=webapp
+WorkingDirectory=/opt/webapp
+ExecStart=/opt/webapp/venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+```
+
+---
+
+## Least-Privilege Identity
+
+```ini
+User=webapp
+Group=webapp
+```
+
+The application did not require root for normal operation.
+
+---
+
+## Localhost Backend
+
+```text
+--host 127.0.0.1 --port 8000
+```
+
+Uvicorn listened only on the loopback interface.
+
+This reduced direct backend exposure.
+
+---
+
+## Automatic Recovery
+
+```ini
+Restart=on-failure
+RestartSec=5
+```
+
+systemd was configured to recover the application after an unexpected process failure.
+
+---
+
+## Service Hardening
+
+```ini
+NoNewPrivileges=true
+PrivateTmp=true
+```
+
+These added restrictions beyond the service account itself.
+
+---
+
+# 🌐 Nginx Reverse Proxy
+
+Nginx became the network-facing web server.
+
+Instead of:
+
+```text
+Client ------> Uvicorn
+```
+
+the architecture used:
+
+```text
+Client
+   |
+   v
+Nginx
+   |
+   v
+Uvicorn
+   |
+   v
+FastAPI
+```
+
+The backend target:
+
+```nginx
+proxy_pass http://127.0.0.1:8000;
+```
+
+Proxy headers included:
+
+```nginx
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+```
+
+Configuration validation:
+
+```bash
+sudo nginx -t
+```
+
+This reinforced another operational workflow:
+
+```text
+Edit
+  |
+  v
+Validate Syntax
+  |
+  v
+Apply
+  |
+  v
+Test
+```
+
+---
+
+# 🚫 Backend Exposure Reduction
+
+The final listening state included:
+
+```text
+0.0.0.0:80
+0.0.0.0:443
+127.0.0.1:8000
+```
+
+The important distinction:
+
+```text
+NETWORK-FACING
+
+:80  → Nginx
+:443 → Nginx
+```
+
+versus:
+
+```text
+LOCAL ONLY
+
+127.0.0.1:8000 → Uvicorn
+```
+
+Validation:
+
+```bash
+sudo ss -lntp
+```
+
+This checked the **actual operating-system socket state**, not merely the intended configuration.
+
+---
+
+# 🔒 HTTPS & TLS
+
+Nginx provided HTTPS using a self-signed TLS certificate.
+
+The certificate was appropriate for this controlled lab and was not presented as a publicly trusted production certificate.
+
+The exercise provided experience with:
+
+- TLS
+- HTTPS
+- Certificate files
+- TLS termination
+- Private-key permissions
+- Certificate inspection
+- HTTP-to-HTTPS redirection
+
+Certificate information was inspected with OpenSSL.
+
+Example:
+
+```bash
+openssl s_client \
+-connect 127.0.0.1:443 \
+-servername linux-web01 \
+</dev/null 2>/dev/null |
+openssl x509 -noout -subject -issuer -dates
+```
+
+The certificate and private key were stored separately under system certificate locations.
+
+Private-key permissions were restricted.
+
+---
+
+# ↪️ HTTP → HTTPS Redirect
+
+HTTP requests were redirected to HTTPS.
+
+Test:
+
+```bash
+curl -I http://127.0.0.1/
+```
+
+Result:
+
+```text
+HTTP/1.1 301 Moved Permanently
+```
+
+Request flow:
+
+```text
+HTTP :80
+   |
+   v
+Nginx
+   |
+   | 301
+   v
+HTTPS :443
+   |
+   v
+TLS
+   |
+   v
+Nginx Reverse Proxy
+   |
+   v
+Uvicorn
+   |
+   v
+FastAPI
+```
+
+---
+
+# 🔥 UFW Firewall
+
+The server used a default-deny inbound firewall strategy.
+
+Required traffic from:
+
+```text
+192.168.50.0/24
+```
+
+included:
+
+| Port | Service | Purpose |
+|---:|---|---|
+| `22` | SSH | Administration |
+| `80` | HTTP | HTTPS redirect |
+| `443` | HTTPS | Application access |
+
+Port:
+
+```text
+8000
+```
+
+was not opened to the network.
+
+That created two separate protections around the backend:
+
+```text
+UFW
+  +
+Loopback Binding
+```
+
+or:
+
+```text
+Layer 1
+Firewall Policy
+
+Layer 2
+127.0.0.1 Application Binding
+```
+
+Firewall validation:
+
+```bash
+sudo ufw status verbose
+```
+
+Socket validation:
+
+```bash
+sudo ss -lntp
+```
+
+---
+
+# 🧪 Application Validation
+
+Main endpoint:
+
+```bash
+curl -k https://127.0.0.1/
+```
+
+Successful response:
+
+```json
+{
+  "status": "online",
+  "server": "linux-web01",
+  "service": "Week 21 Lab 2 Production Web Application"
+}
+```
+
+Health endpoint:
+
+```bash
+curl -k https://127.0.0.1/health
+```
+
+Successful response:
+
+```json
+{
+  "status": "healthy"
+}
+```
+
+This validated:
+
+```text
+HTTPS
+   |
+   v
+Nginx
+   |
+   v
+Reverse Proxy
+   |
+   v
+Uvicorn
+   |
+   v
+FastAPI
+```
+
+---
+
+# 📊 Multi-Layer Validation
+
+I validated the application at several levels.
+
+| Layer | Question | Tool |
+|---|---|---|
+| Process | Is Uvicorn running? | `ps` |
+| Service | Is `webapp.service` active? | `systemctl` |
+| Network | Is the expected socket listening? | `ss` |
+| Proxy | Is Nginx functioning? | `nginx -t`, `curl` |
+| Firewall | Is expected traffic allowed? | `ufw` |
+| HTTPS | Can I make an encrypted request? | `curl` |
+| Application | Is the app healthy? | `/health` |
+| Logs | What happened? | `journalctl` |
+
+This was stronger than relying on only:
+
+```bash
+systemctl status webapp
+```
+
+---
+
+# 💥 Controlled Failure Simulation
+
+The most important reliability test was deliberately terminating the application's main Uvicorn process.
+
+First:
+
+```bash
+systemctl show webapp -p MainPID
+```
+
+Original process:
+
+```text
+MainPID=1092
+```
+
+The process was then intentionally terminated inside the lab:
+
+```bash
+sudo systemctl kill \
+--signal=SIGKILL \
+--kill-who=main \
+webapp
+```
+
+This simulated an unexpected application process failure.
+
+---
+
+# 🔄 Automatic Recovery
+
+Because the service contained:
+
+```ini
+Restart=on-failure
+RestartSec=5
+```
+
+the expected sequence was:
+
+```text
+Uvicorn
+   |
+   v
+SIGKILL
+   |
+   v
+Process Terminates
+   |
+   v
+systemd Detects Failure
+   |
+   v
+Failure Logged
+   |
+   v
+Restart Scheduled
+   |
+   v
+5-Second Delay
+   |
+   v
+Replacement Uvicorn Process
+   |
+   v
+FastAPI Starts
+   |
+   v
+Health Check
+```
+
+After recovery, systemd reported:
+
+```text
+active (running)
+```
+
+The replacement process was:
+
+```text
+Main PID: 1930
+```
+
+Therefore:
+
+```text
+BEFORE
+PID 1092
+   |
+   X
+
+AFTER
+PID 1930
+```
+
+The PID change provided evidence that the original process was actually terminated and replaced.
+
+---
+
+# 🔎 Failure Investigation with `journalctl`
+
+The journal recorded:
+
+```text
+Main process exited, code=killed, status=9/KILL
+```
+
+followed by:
+
+```text
+Failed with result 'signal'.
+```
+
+systemd then scheduled a restart.
+
+Afterward, Uvicorn started under a new PID.
+
+The application subsequently recorded:
+
+```text
+GET /health
+```
+
+with:
+
+```text
+200 OK
+```
+
+This created an evidence chain:
+
+```text
+Healthy Application
+       |
+       v
+SIGKILL
+       |
+       v
+Process Termination
+       |
+       v
+systemd Failure Event
+       |
+       v
+Restart Scheduled
+       |
+       v
+New PID
+       |
+       v
+Application Startup
+       |
+       v
+GET /health
+       |
+       v
+200 OK
+```
+
+This was more informative than simply observing that the service was running again.
+
+---
+
+# 🩺 Application-Level Recovery Validation
+
+A service manager can report:
+
+```text
+active (running)
+```
+
+while an application still has a problem.
+
+Because of that, recovery was not considered complete until:
+
+```bash
+curl -k https://127.0.0.1/health
+```
+
+returned:
+
+```json
+{
+  "status": "healthy"
+}
+```
+
+The test therefore validated:
+
+```text
+Process Recovery
+       +
+Service Recovery
+       +
+Network Recovery
+       +
+Application Recovery
+```
+
+---
+
+# 📜 Nginx & Application Log Review
+
+Nginx access logs were reviewed to confirm requests such as:
+
+```text
+GET /
+GET /health
+GET /does-not-exist
+```
+
+Application/systemd logs provided evidence about:
+
+- Uvicorn startup
+- HTTP requests
+- Application process state
+- Process failure
+- systemd restart activity
+- Recovery
+
+This connected network requests with backend service behavior.
+
+---
+
+# 🔁 Post-Reboot Persistence
+
+The Ubuntu system was rebooted after the environment was configured.
+
+I did **not** manually start the application or Nginx after reboot.
+
+Instead, I verified:
+
+```bash
+systemctl is-active webapp
+systemctl is-active nginx
+
+systemctl is-enabled webapp
+systemctl is-enabled nginx
+```
+
+I then retested:
+
+```bash
+curl -k https://127.0.0.1/
+curl -k https://127.0.0.1/health
+```
+
+and inspected listening sockets again.
+
+This demonstrated:
+
+```text
+Works During Current Session
+             ≠
+Configured for Persistent Operation
+```
+
+The services returned automatically after boot.
+
+---
+
+# 🛡️ Lab 2 Security Controls
+
+| Security Control | Implementation |
+|---|---|
+| Dedicated Service Identity | `webapp` |
+| Least Privilege | Application not running as root |
+| Backend Isolation | `127.0.0.1:8000` |
+| Reverse Proxy | Nginx |
+| Firewall | UFW |
+| Default Inbound Policy | Deny |
+| Lab Restrictions | `192.168.50.0/24` |
+| Encryption | HTTPS/TLS |
+| HTTP Protection | Redirect to HTTPS |
+| Private-Key Protection | Restricted permissions |
+| systemd Hardening | `NoNewPrivileges=true` |
+| Temporary Directory Isolation | `PrivateTmp=true` |
+| Recovery | `Restart=on-failure` |
+| Health Monitoring | `/health` |
+| Logging | journald + Nginx logs |
+
+---
+
+# 🧭 Troubleshooting Method
+
+One of the most important outcomes of Lab 2 was developing a structured troubleshooting process.
+
+Different tools answer different questions:
+
+| Question | Tool |
+|---|---|
+| Is the service running? | `systemctl` |
+| Is it enabled? | `systemctl is-enabled` |
+| Why did it fail? | `journalctl` |
+| What process is running? | `ps` |
+| What PID does systemd manage? | `systemctl show` |
+| What ports are listening? | `ss` |
+| Is Nginx valid? | `nginx -t` |
+| Does HTTPS work? | `curl` |
+| Is the application healthy? | `/health` |
+| What does the firewall permit? | `ufw` |
+| What certificate is served? | `openssl` |
+| Who owns the files/process? | `id`, `ls`, `stat`, `ps` |
+
+The workflow became:
+
+```text
+Problem
+   |
+   v
+Check Service State
+   |
+   v
+Review Logs
+   |
+   v
+Inspect Process
+   |
+   v
+Inspect Listening Ports
+   |
+   v
+Test Network/Application
+   |
+   v
+Inspect Proxy
+   |
+   v
+Inspect Firewall
+   |
+   v
+Identify Cause
+   |
+   v
+Make Smallest Required Change
+   |
+   v
+Validate Again
+```
+
+---
+
+# 🧪 Lab 2 Validation Matrix
+
+| Control | Intended State | Validation |
+|---|---|---|
+| FastAPI | Responding | `curl` |
+| Health Endpoint | Healthy | `/health` |
+| Uvicorn | Running | `ps`, `systemctl` |
+| Service Account | `webapp` | `id`, `ps` |
+| Backend | Localhost only | `ss` |
+| systemd | Active/enabled | `systemctl` |
+| Recovery | Restart on failure | Controlled `SIGKILL` |
+| Recovery Evidence | Logged | `journalctl` |
+| Nginx | Valid/running | `nginx -t`, `systemctl` |
+| HTTP Redirect | 301 → HTTPS | `curl -I` |
+| HTTPS | Functional | `curl -k` |
+| TLS Certificate | Served | `openssl` |
+| Firewall | Expected rules | `ufw status verbose` |
+| Boot Persistence | Automatic startup | Reboot test |
+
+---
+
+# 📈 Lab 2 Before vs. After
+
+| Area | Before | After |
+|---|---|---|
+| Application | Basic Python application | Managed FastAPI service |
+| Runtime | Manual | Uvicorn |
+| Identity | User context | Dedicated `webapp` |
+| Backend Exposure | Potentially broad | `127.0.0.1:8000` |
+| Service Management | Manual | systemd |
+| Web Entry Point | Direct | Nginx |
+| HTTP | Basic | Redirected |
+| HTTPS | Not configured | TLS |
+| Firewall | Initial state | Default-deny UFW |
+| Recovery | Manual | Automatic |
+| Health | Process-centric | `/health` |
+| Failure Testing | None | Controlled `SIGKILL` |
+| Investigation | Basic | journald evidence |
+| Persistence | Session-based concern | Boot validated |
+
+---
+
+# 🏁 Week 21 Lab 2 Outcome
+
+The completed service architecture was:
+
+```text
+                          CLIENT
+                             |
+                             v
+                            UFW
+                             |
+                             v
+                      Nginx :80/:443
+                             |
+                          HTTPS
+                             |
+                             v
+                       Reverse Proxy
+                             |
+                             v
+                     127.0.0.1:8000
+                             |
+                             v
+                          Uvicorn
+                             |
+                             v
+                          FastAPI
+                             |
+                             v
+                          /health
+
+
+                    SUPPORTING CONTROLS
+                             |
+            +----------------+----------------+
+            |                |                |
+            v                v                v
+         systemd          journald       Permissions
+            |                |
+            v                v
+     Auto-Recovery      Failure Evidence
+```
+
+The application:
+
+- Ran under a dedicated service account
+- Did not require root for normal operation
+- Was managed by systemd
+- Started automatically
+- Automatically recovered from unexpected process failure
+- Used Nginx as a reverse proxy
+- Redirected HTTP to HTTPS
+- Used TLS
+- Kept Uvicorn on localhost
+- Used UFW for inbound restrictions
+- Exposed a health endpoint
+- Produced service logs
+- Recovered after controlled failure
+- Returned after system reboot
+
+---
+
+# ============================================================
+# 📊 COMBINED PROJECT ANALYSIS
+# ============================================================
+
+# 🔗 How the Two Labs Connect
+
+The two labs were designed around different technical goals, but together they created a much more complete Linux project.
+
+Lab 1 answered questions such as:
+
+```text
+How do I administer Linux?
+
+How do I control users?
+
+How do I restrict privileges?
+
+How do I protect files?
+
+How do I secure SSH?
+
+How do I restrict network traffic?
+
+How do I monitor important changes?
+
+How do I automate security checks?
+```
+
+Lab 2 extended those concepts:
+
+```text
+How do I securely run an application?
+
+What user should the application run as?
+
+What should be exposed to the network?
+
+How should the application be managed?
+
+How should HTTPS be provided?
+
+How do I know the application is healthy?
+
+What happens when its process fails?
+
+How can I investigate the failure?
+
+Can the environment recover automatically?
+```
+
+Together:
+
+```text
+LINUX ADMINISTRATION
+        |
+        v
+LINUX SECURITY
+        |
+        v
+APPLICATION DEPLOYMENT
+        |
+        v
+SERVICE SECURITY
+        |
+        v
+MONITORING
+        |
+        v
+TROUBLESHOOTING
+        |
+        v
+RECOVERY
+```
+
+---
+
+# 💼 Skills Demonstrated
+
+## Linux Administration
+
+- Ubuntu administration
+- Kali Linux
 - Users and groups
-- Privileges
-- File ownership
-- Permissions
-- Processes
-- Services
+- Service accounts
+- Filesystem permissions
+- ACLs
+- Package management
+- Process management
+- systemd
 - Network interfaces
-- Routes
-- Listening ports
-- Authentication
-- Logs
-- Packages
-- Scheduled tasks
-- Application restrictions
-- Audit records
+- Routing
+- DNS troubleshooting
+- Listening socket analysis
+- Cron
+- Linux logs
 
-I also learned that configuration alone is not enough.
+## Security Engineering Foundations
+
+- Least privilege
+- Role-based access
+- SSH hardening
+- Public-key authentication
+- Root-login restriction
+- Firewall configuration
+- Default-deny policy
+- Network segmentation
+- Reduced service exposure
+- Audit logging
+- AppArmor
+- TLS
+- Private-key protection
+- Service hardening
+
+## Application & Web Operations
+
+- Python
+- FastAPI
+- Uvicorn
+- Nginx
+- Reverse proxying
+- HTTP
+- HTTPS
+- TLS termination
+- Health endpoints
+- Backend isolation
+
+## Troubleshooting & Incident Analysis
+
+- `systemctl`
+- `journalctl`
+- `ss`
+- `ps`
+- `top`
+- `pgrep`
+- `curl`
+- `openssl`
+- `ufw`
+- `nmap`
+- `ausearch`
+- `aureport`
+- Authentication log review
+- PID analysis
+- Port analysis
+- Failure reconstruction
+- Recovery validation
+
+## Automation
+
+- Bash
+- Variables
+- Pipes
+- Text processing
+- Automated health checks
+- Automated security reports
+- Cron scheduling
+
+---
+
+# 🔎 Operational Mindset Developed
+
+The biggest improvement across these projects was not learning one specific command.
+
+It was learning to ask the right technical questions.
+
+Instead of only asking:
+
+```text
+"Is the server working?"
+```
+
+I now break that into:
+
+```text
+What is running?
+
+Who is running it?
+
+What privileges does it have?
+
+What files can it access?
+
+What ports is it listening on?
+
+Which interfaces are those ports bound to?
+
+What does the firewall permit?
+
+Can another host reach it?
+
+How is authentication handled?
+
+Is traffic encrypted?
+
+What logs are generated?
+
+What happens if the service fails?
+
+Does it restart?
+
+Is the application actually healthy afterward?
+
+Will everything return after reboot?
+
+How can I prove each answer?
+```
+
+---
+
+# 🧠 Major Lessons Learned
+
+## 1. Configuration Is Not Proof
+
+A configuration file represents intended behavior.
+
+It does not always prove actual behavior.
 
 For example:
 
 ```text
 sshd_config
-```
-
-shows what I intended to configure.
-
-```bash
+     |
+     v
 sshd -T
+     |
+     v
+Remote SSH Test
 ```
 
-shows the effective SSH configuration.
-
-And:
-
-```bash
-ssh
-```
-
-from another system shows whether the control behaves correctly in practice.
-
-The same idea applied to the firewall:
+or:
 
 ```text
-UFW Configuration
+UFW Rule
+   |
+   v
+ufw status
+   |
+   v
+Nmap
+```
+
+or:
+
+```text
+systemd Restart Policy
        |
        v
-Local Firewall Status
+Controlled Failure
        |
        v
-Remote Nmap Validation
-```
-
-And to auditing:
-
-```text
-Audit Rule
-    |
-    v
-Test Activity
-    |
-    v
-Audit Event
-    |
-    v
-Investigation
-```
-
-This project helped me think less in terms of isolated commands and more in terms of complete technical workflows.
-
----
-
-## 💡 Key Takeaways
-
-### Security Is Layered
-
-The server was not protected by one setting. Network controls, authentication, authorization, permissions, firewall rules, auditing, logging, and application controls all worked together.
-
-### Least Privilege Must Be Tested
-
-Creating groups and setting permissions is only part of the process. Testing allowed and denied access provides stronger proof that authorization works.
-
-### Running Does Not Mean Reachable
-
-A service can be running without being accessible remotely.
-
-```text
-systemctl → Is it running?
-
-ss → Is it listening?
-
-UFW → Is traffic allowed?
-
-Nmap → Can another host reach it?
-```
-
-### Logs Provide Evidence
-
-Authentication events, sudo activity, Auditd records, and systemd logs help explain what happened on a system.
-
-### Automation Improves Repeatability
-
-Bash scripts reduced the need to manually run the same checks repeatedly.
-
-### Hardening Should Be Validated
-
-Security changes can cause outages or lockouts if they are applied without testing.
-
-The workflow I followed was:
-
-```text
-Understand → Configure → Validate → Test → Review
+Journal Evidence
+       |
+       v
+Replacement PID
+       |
+       v
+Health Check
 ```
 
 ---
 
-## 📂 Repository Structure
+## 2. Security Is Layered
+
+No single control secured these environments.
+
+The combined security model included:
 
 ```text
-Enterprise-Linux-Server-Hardening/
+Network Segmentation
+        +
+Firewall
+        +
+Authentication
+        +
+Authorization
+        +
+Least Privilege
+        +
+Filesystem Permissions
+        +
+Service Accounts
+        +
+Application Binding
+        +
+TLS
+        +
+Logging
+        +
+Auditing
+        +
+Application Restrictions
+        +
+Validation
+```
+
+---
+
+## 3. Running Does Not Mean Reachable
+
+```text
+systemctl
+```
+
+answers whether a service is running.
+
+```text
+ss
+```
+
+answers whether something is listening.
+
+```text
+ufw
+```
+
+helps answer whether traffic is permitted.
+
+```text
+nmap
+```
+
+shows what another system can reach.
+
+```text
+curl
+```
+
+shows whether the application responds.
+
+These are different layers of evidence.
+
+---
+
+## 4. Running Does Not Mean Healthy
+
+Lab 2 reinforced another distinction:
+
+```text
+Process Running
+      ≠
+Application Healthy
+```
+
+That is why the `/health` endpoint was useful.
+
+---
+
+## 5. Logs Tell the Story
+
+Logs turned failures into timelines.
+
+For the application failure:
+
+```text
+Process Running
+      |
+      v
+SIGKILL
+      |
+      v
+Failure Recorded
+      |
+      v
+Restart Scheduled
+      |
+      v
+New Process
+      |
+      v
+Health Check
+      |
+      v
+200 OK
+```
+
+That sequence could be reconstructed from evidence instead of guessed.
+
+---
+
+## 6. Least Privilege Applies to Humans and Applications
+
+Lab 1 applied least privilege to human accounts.
+
+Lab 2 applied it to an application service.
+
+```text
+Human Administrator
+        |
+        v
+linuxadmin
+        |
+        v
+sudo only when required
+```
+
+and:
+
+```text
+Application
+     |
+     v
+webapp account
+     |
+     v
+Only required permissions
+```
+
+---
+
+## 7. Recovery Should Be Tested
+
+A restart configuration is only a configuration until it is tested.
+
+The controlled failure proved that systemd could:
+
+```text
+Detect
+  |
+  v
+Record
+  |
+  v
+Restart
+  |
+  v
+Recover
+```
+
+the application.
+
+---
+
+# 📂 Recommended Repository Structure
+
+```text
+Linux-Systems-Security-Portfolio/
 │
 ├── README.md
 │
-├── Screenshots/
-│   ├── linux-baseline-system-info.png
-│   ├── private-management-network-connectivity.png
-│   ├── role-based-users-and-groups.png
-│   ├── insecure-permission-before.png
-│   ├── least-privilege-permissions-after.png
-│   ├── file-acl-granular-access-control.png
-│   ├── systemd-service-management.png
-│   ├── successful-ssh-remote-administration.png
-│   ├── openssh-hardening-configuration.png
-│   ├── ssh-hardening-effective-controls.png
-│   ├── ufw-host-firewall-hardening.png
-│   ├── auditd-sensitive-file-monitoring.png
-│   ├── ssh-authentication-log-investigation.png
-│   ├── apparmor-status.png
-│   ├── bash-security-health-check.png
-│   ├── automated-linux-security-report.png
-│   ├── cron-security-report-automation.png
-│   ├── external-service-exposure-validation.png
-│   └── final-hardened-server-security-posture.png
+├── Week20-Lab1/
+│   │
+│   ├── Configs/
+│   │   ├── ssh-hardening.conf
+│   │   └── audit-hardening.rules
+│   │
+│   ├── Scripts/
+│   │   ├── security-health-check.sh
+│   │   ├── linux-security-report.sh
+│   │   └── scheduled-health-report.sh
+│   │
+│   ├── Documentation/
+│   │   ├── commands-used.md
+│   │   └── lessons-learned.md
+│   │
+│   └── Screenshots/
+│       ├── linux-baseline-system-info.png
+│       ├── private-management-network-connectivity.png
+│       ├── role-based-users-and-groups.png
+│       ├── least-privilege-permissions-after.png
+│       ├── ssh-hardening-effective-controls.png
+│       ├── ufw-host-firewall-hardening.png
+│       ├── auditd-sensitive-file-monitoring.png
+│       ├── bash-security-health-check.png
+│       └── final-hardened-server-security-posture.png
 │
-├── Scripts/
-│   ├── security-health-check.sh
-│   ├── linux-security-report.sh
-│   └── scheduled-health-report.sh
+├── Week21-Lab2/
+│   │
+│   ├── app/
+│   │   └── app.py
+│   │
+│   ├── Configs/
+│   │   ├── webapp.service
+│   │   └── nginx-linux-web01.conf
+│   │
+│   ├── Documentation/
+│   │   ├── technical-analysis.md
+│   │   └── recovery-case-study.md
+│   │
+│   └── Screenshots/
+│       ├── systemd-service-configuration.png
+│       ├── nginx-reverse-proxy.png
+│       ├── https-application-validation.png
+│       ├── firewall-and-listening-ports.png
+│       ├── service-account-permissions.png
+│       ├── tls-certificate-validation.png
+│       ├── systemd-failure-recovery.png
+│       ├── post-reboot-validation.png
+│       └── final-production-validation.png
 │
-├── Configs/
-│   ├── ssh-hardening.conf
-│   └── audit-hardening.rules
-│
-└── Documentation/
-    ├── commands-used.md
-    └── lessons-learned.md
+└── LICENSE
 ```
 
 ---
 
-## 📸 Project Evidence
+# 📸 Evidence Strategy
 
-| Evidence | What It Shows |
+The screenshots in this repository are intended to prove major technical outcomes rather than document every command typed.
+
+Strong evidence includes:
+
+| Evidence | Demonstrates |
 |---|---|
-| System Baseline | Original Ubuntu system state |
-| Private Management Network | Kali and Ubuntu connectivity |
-| Role-Based Accounts | Users, groups, and responsibilities |
-| Permission Before Hardening | Insecure `777` test state |
-| Permission After Hardening | Least-privilege `640` state |
-| ACL Validation | Temporary user-specific access |
-| systemd Administration | Service management |
-| SSH Connection | Successful remote administration |
-| SSH Hardening | Hardened SSH configuration |
-| Effective SSH Policy | Loaded SSH security settings |
-| UFW Configuration | Host firewall policy |
-| External Nmap Scan | Network-visible services |
-| Auditd Rules | Sensitive-resource monitoring |
-| Audit Event | Recorded sensitive-resource change |
-| Authentication Investigation | SSH activity review |
-| AppArmor | Mandatory access control status |
-| Bash Health Check | Automated security checks |
-| Automated Report | Timestamped system report |
-| Cron | Scheduled report execution |
-| Final Assessment | Hardened server state |
+| Linux baseline | Initial system state |
+| Private network | Network configuration |
+| User/group configuration | Identity management |
+| Permission testing | Least privilege |
+| SSH effective configuration | SSH hardening |
+| UFW state | Host firewall |
+| Nmap | External exposure |
+| Auditd events | Security monitoring |
+| Bash output | Automation |
+| systemd service | Application management |
+| Uvicorn process ownership | Dedicated service account |
+| Listening sockets | Backend isolation |
+| Nginx configuration | Reverse proxy |
+| TLS certificate | HTTPS |
+| Health endpoint | Application health |
+| Failure journal | Failure detection |
+| PID change | Process replacement |
+| Post-reboot state | Persistence |
+| Final validation | Completed environment |
 
 ---
 
-## 🔐 Repository Security
+# 🔐 Repository Security
 
-Sensitive authentication material was not included in the repository.
+Sensitive material should never be committed.
 
-The following should never be publicly committed:
+This repository should not contain:
 
 ```text
 SSH private keys
+TLS private keys
 Passwords
 API keys
 Access tokens
 Authentication secrets
-Sensitive production configurations
+Production credentials
+Sensitive private configurations
 ```
 
-For this project, the ED25519 private key remained on the administration workstation:
+For example, the ED25519 private key remains on the administration workstation.
 
-```text
-~/.ssh/id_ed25519
-```
+The TLS private key remains under the protected Linux certificate directory.
 
-Only safe project documentation, screenshots, scripts, and configuration examples should be included.
+Only safe examples, scripts, screenshots, application code, and sanitized configurations should be published.
 
 ---
 
-## 🏁 Final Project Outcome
+# 🚧 Limitations
 
-By the end of this project, I had taken an Ubuntu Linux system through a complete administration and hardening workflow:
+These projects were completed in a controlled virtual home lab.
 
-```text
-System Baseline
-      |
-      v
-Network Configuration
-      |
-      v
-Identity Administration
-      |
-      v
-Least Privilege
-      |
-      v
-Filesystem Security
-      |
-      v
-Package Management
-      |
-      v
-Service Administration
-      |
-      v
-Secure Remote Access
-      |
-      v
-SSH Hardening
-      |
-      v
-Firewall Hardening
-      |
-      v
-Logging & Auditing
-      |
-      v
-Mandatory Access Control
-      |
-      v
-Bash Automation
-      |
-      v
-Scheduled Reporting
-      |
-      v
-External Validation
-      |
-      v
-Final Security Assessment
-```
+Several design decisions reflect that environment.
 
-The finished environment demonstrated the ability to build and manage a Linux server, secure administrative access, control privileges, protect sensitive resources, reduce network exposure, monitor important system changes, investigate activity through logs, automate repeatable checks, and validate that the final controls worked as intended.
+For example:
 
-More importantly, this project changed the way I approach Linux systems.
+- TLS used a self-signed certificate.
+- IP addressing was private lab addressing.
+- Firewall restrictions were designed around the lab network.
+- Failure testing was intentionally performed against systems I controlled.
+- The architecture did not include external load balancing.
+- Monitoring remained primarily local.
+- There was no production certificate authority.
+- The application was not intended as an Internet-facing production service.
 
-Instead of seeing Linux as a list of commands to memorize, I now approach a server by asking:
-
-```text
-What is this system supposed to do?
-
-Who should have access?
-
-What privileges do they actually need?
-
-What services are running?
-
-What is exposed to the network?
-
-How is remote access protected?
-
-What sensitive resources need monitoring?
-
-What evidence will be available if something changes?
-
-What checks can be automated?
-
-How can I prove the controls are working?
-```
-
-That mindset was one of the most valuable outcomes of the project.
-
-> **A security control is not complete just because it was configured. It should also be tested, validated, and supported by evidence.**
+These limitations are important because the project demonstrates the **technical concepts and validation process**, not a claim that the lab is equivalent to a full enterprise production environment.
 
 ---
 
-## ⚠️ Disclaimer
+# 🔮 Future Improvements
 
-This project was completed in a controlled virtual lab using systems that I owned and configured for educational and portfolio purposes.
+Potential extensions include:
 
-The configurations shown in this repository were designed for this lab environment. Real systems should be configured according to their specific technical requirements, approved policies, change procedures, and security standards.
+- Centralized log collection
+- SIEM integration
+- Splunk or Elastic ingestion
+- Security alerting
+- Application metrics
+- Infrastructure monitoring
+- Resource monitoring
+- Automated service-failure notifications
+- Nginx rate limiting
+- Additional HTTP security headers
+- Automated certificate management
+- Publicly trusted TLS certificates in an appropriate environment
+- Configuration management
+- Ansible automation
+- Infrastructure as Code
+- Automated deployment
+- Backup automation
+- Restore testing
+- Dependency monitoring
+- Vulnerability scanning
+- File integrity monitoring
+- Additional systemd hardening
+- Application-level structured logging
+- Automated health monitoring
+- External availability checks
+
+A future security-monitoring extension could follow:
+
+```text
+Linux Server / Application
+           |
+           v
+        Logs
+           |
+           v
+Centralized Collection
+           |
+           v
+      SIEM Platform
+           |
+           v
+ Detection / Correlation
+           |
+           v
+         Alert
+           |
+           v
+     Investigation
+           |
+           v
+       Response
+```
 
 ---
 
-## ✅ Project Status
+# 🎯 Relevance to Security Operations
 
-**Completed**
+Although these projects focus heavily on Linux administration, they also build skills that transfer directly into security operations.
 
-- [x] Linux server baseline
-- [x] Dedicated server hostname
+Examples include:
+
+```text
+Authentication Logs
+        |
+        v
+Failed Login Investigation
+```
+
+```text
+Auditd Event
+     |
+     v
+Sensitive File Change
+     |
+     v
+Investigation
+```
+
+```text
+Listening Port
+      |
+      v
+Process Identification
+      |
+      v
+Exposure Analysis
+```
+
+```text
+Service Failure
+      |
+      v
+journalctl
+      |
+      v
+Timeline Reconstruction
+      |
+      v
+Recovery Validation
+```
+
+These are useful foundations for work involving:
+
+- SOC analysis
+- Incident response
+- Detection engineering
+- Linux security
+- Security engineering
+- Cloud security
+- Infrastructure security
+
+---
+
+# 🏆 Final Combined Outcome
+
+Across these labs, I moved from administering an operating system to securely operating an application on top of it.
+
+The full progression was:
+
+```text
+                    LINUX SERVER
+                         |
+                         v
+                 System Baseline
+                         |
+                         v
+                    Networking
+                         |
+                         v
+                 Identity & Access
+                         |
+                         v
+                  Least Privilege
+                         |
+                         v
+                Filesystem Security
+                         |
+                         v
+               Secure Remote Access
+                         |
+                         v
+                 Firewall Security
+                         |
+                         v
+                Logging & Auditing
+                         |
+                         v
+                    Automation
+                         |
+                         v
+               External Validation
+                         |
+                         v
+               APPLICATION SERVER
+                         |
+                         v
+                      FastAPI
+                         |
+                         v
+                      Uvicorn
+                         |
+                         v
+                     systemd
+                         |
+                         v
+                       Nginx
+                         |
+                         v
+                     HTTPS/TLS
+                         |
+                         v
+                  Backend Isolation
+                         |
+                         v
+                   Health Checking
+                         |
+                         v
+                  Failure Testing
+                         |
+                         v
+                 Log Investigation
+                         |
+                         v
+                Automatic Recovery
+                         |
+                         v
+                Final Validation
+```
+
+The most important lesson from the entire project was:
+
+> **A system is not secure, reliable, or healthy simply because it appears to be running. Its identity, privileges, network exposure, configuration, logs, failure behavior, and recovery should also be understood and validated.**
+
+---
+
+# ✅ Overall Project Status
+
+## Week 21 — Lab 1
+
+- [x] Linux baseline
+- [x] Dedicated hostname
 - [x] Dual-interface networking
 - [x] Private management network
-- [x] Role-based users and groups
-- [x] Password-aging practice
+- [x] Role-based identities
 - [x] Least-privilege sudo
-- [x] Filesystem permission hardening
-- [x] setgid shared directories
-- [x] ACL access testing
+- [x] Filesystem hardening
+- [x] setgid directories
+- [x] ACL testing
 - [x] Package administration
-- [x] systemd service management
-- [x] OpenSSH remote administration
+- [x] systemd administration
+- [x] OpenSSH
 - [x] ED25519 authentication
-- [x] SSH password authentication disabled
-- [x] Direct root SSH disabled
-- [x] SSH group restriction
-- [x] UFW default-deny firewall
-- [x] Management traffic restriction
-- [x] External Nmap validation
+- [x] Password SSH disabled
+- [x] Root SSH disabled
+- [x] SSH group restrictions
+- [x] UFW
+- [x] Default-deny inbound policy
+- [x] Nmap validation
 - [x] Automatic update review
-- [x] Auditd monitoring
-- [x] Audit event investigation
+- [x] Auditd
+- [x] Audit investigation
 - [x] Authentication log review
-- [x] Privileged activity review
-- [x] AppArmor validation
+- [x] AppArmor
 - [x] Process administration
 - [x] Network administration
-- [x] Bash health-check automation
-- [x] Automated security reporting
+- [x] Bash security automation
+- [x] Automated reporting
 - [x] Cron scheduling
-- [x] Final package review
 - [x] Final attack-surface assessment
-- [x] Final hardened-server verification
-- [x] Final VirtualBox snapshot
+
+## Week 21 — Lab 2
+
+- [x] FastAPI application
+- [x] Python virtual environment
+- [x] Uvicorn
+- [x] Dedicated `webapp` service account
+- [x] Application permissions
+- [x] systemd service
+- [x] Boot enablement
+- [x] Automatic restart
+- [x] `NoNewPrivileges`
+- [x] `PrivateTmp`
+- [x] Localhost-only backend
+- [x] Nginx reverse proxy
+- [x] Nginx validation
+- [x] HTTP-to-HTTPS redirect
+- [x] HTTPS/TLS
+- [x] Certificate inspection
+- [x] Private-key permission validation
+- [x] UFW
+- [x] Backend port isolation
+- [x] `/health` endpoint
+- [x] HTTPS validation
+- [x] Listening-port validation
+- [x] Service log investigation
+- [x] Controlled `SIGKILL`
+- [x] Failure detection
+- [x] Automatic process replacement
+- [x] Recovery validation
+- [x] Post-reboot validation
+- [x] Final production-style validation
 
 ---
 
-**Week 20 — Lab 1 Complete** ✅
-````
+# ⚠️ Disclaimer
+
+All configuration, administration, network testing, failure simulation, and security validation documented in this repository were performed inside a controlled virtual lab using systems I owned and configured for educational and portfolio purposes.
+
+The configurations are designed to demonstrate technical concepts in this environment. Production systems should be configured according to organizational requirements, approved security policies, architecture standards, change-management procedures, and risk requirements.
+
+---
+
+# 📬 Project Focus
+
+**Linux Administration | Linux Security | Security Operations | Infrastructure Security | Application Security Foundations | Troubleshooting | Automation | Reliability**
+
+---
+
+**Week 21 — Lab 1: Complete** ✅  
+**Week 21 — Lab 2: Complete** ✅
