@@ -1,0 +1,18 @@
+WEEK 21 LAB 3 — LINUX HOST INVESTIGATION TIMELINE
+Host: linux-srv01
+Lab source: Kali, 192.168.56.20
+Time zone for journal and stat entries below: UTC (+00:00)
+
+18:42:22 — SSH request for irguest21 rejected: account not in an AllowGroups group.
+18:57:36 — Another SSH request for irguest21 rejected for the same reason.
+19:05:31 — SSH accepted an ED25519 public key for irguest21 from 192.168.56.20.
+19:16:11 — Sudo log records irguest21 creating /opt/ir-lab21.
+19:16:49 — Marker file modified: /opt/ir-lab21/change-marker.txt.
+[Check your sudo log] — Cron entry added for irguest21. Exact creation time may not be established.
+19:33:26 — /etc/systemd/system/ir-lab21.service file modified.
+19:34:12 — Sudo log records irguest21 enabling the systemd service.
+19:38:34 — Sudo log records the first service start. It failed because the Python file had an indentation error.
+19:49:34 — Sudo log records installation of the corrected Python file.
+19:53:23 — Sudo log records a service restart.
+[Use service/Kali evidence] — Service ran and Ubuntu connected to Kali at 192.168.56.20:8000.
+[Use your investigation time] — Host investigation linked python3 to the network connection with ps, ss, and lsof.
